@@ -55,6 +55,72 @@
           <section class="mb-3 mb-lg-5">
           <!-- Horários de trabalho -->
             <div class="row mb-3">
+          		<!-- <Marcações de Horario>-->
+              <div class="col-lg-8 mb-4">
+                <div class="card card-table h-100">
+                  <div class="card-header">
+                    <h5 class="card-heading">Marcações de Horário</h5>
+                        <div class="card-header-more">
+                          <button class="btn-header-more" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                          <div class="dropdown-menu dropdown-menu-end text-sm"><a class="dropdown-item" href="#!"><i class="fas fa-expand-arrows-alt opacity-5 me-2"></i>Expand</a><a class="dropdown-item" href="#!"><i class="far fa-window-minimize opacity-5 me-2"></i>Minimize</a><a class="dropdown-item" href="#!"><i class="fas fa-redo opacity-5 me-2"></i> Reload</a><a class="dropdown-item" href="#!"><i class="far fa-trash-alt opacity-5 me-2"></i> Remove        </a></div>
+                        </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-borderless table-hover mb-0">
+                        <thead class="light">
+                          <tr>
+                            <th>Assigned </th>
+                            <th>Name</th>
+                            <th>Due </th>
+                            <th class="text-end">Priority</th>
+                          </tr>
+                        </thead>
+                        <tbody class="align-middle">
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-0.jpg" alt="Nielsen Cobb"><span class="d-inline-block"><strong>Nielsen Cobb</strong><br><span class="text-muted text-sm">Graniteville</span></span></span></td>
+                            <td>Memora</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-success-light">Medium</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-1.jpg" alt="Margret Cote"><span class="d-inline-block"><strong>Margret Cote</strong><br><span class="text-muted text-sm">Foxworth</span></span></span></td>
+                            <td>Zilidium</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-danger-light">High</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-2.jpg" alt="Rachel Vinson"><span class="d-inline-block"><strong>Rachel Vinson</strong><br><span class="text-muted text-sm">Eastmont</span></span></span></td>
+                            <td>Chorizon</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-warning-light">Low</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-3.jpg" alt="Gabrielle Aguirre"><span class="d-inline-block"><strong>Gabrielle Aguirre</strong><br><span class="text-muted text-sm">Whitewater</span></span></span></td>
+                            <td>Comverges</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-info-light">New</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-4.jpg" alt="Spears Collier"><span class="d-inline-block"><strong>Spears Collier</strong><br><span class="text-muted text-sm">Hebron</span></span></span></td>
+                            <td>Remold</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-success-light">Medium</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-5.jpg" alt="Keisha Thomas"><span class="d-inline-block"><strong>Keisha Thomas</strong><br><span class="text-muted text-sm">Levant</span></span></span></td>
+                            <td>Euron</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-danger-light">High</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="card-footer text-end"><a class="btn btn-primary" href="#!">View all projects</a></div>
+                </div>
+              </div>
+              <!-- </Marcações de Horario>-->
               <!-- <Projects Table>-->
               <div class="col-lg-8 mb-4">
                 <div class="card card-table h-100">
@@ -122,72 +188,6 @@
               </div>
               <!-- </Horarios de trabalho>-->
               <div class="row mb-3">
-              <!-- <Marcações de Horario>-->
-              <div class="col-lg-8 mb-4">
-                <div class="card card-table h-100">
-                  <div class="card-header">
-                    <h5 class="card-heading">Marcações de Horário</h5>
-                        <div class="card-header-more">
-                          <button class="btn-header-more" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
-                          <div class="dropdown-menu dropdown-menu-end text-sm"><a class="dropdown-item" href="#!"><i class="fas fa-expand-arrows-alt opacity-5 me-2"></i>Expand</a><a class="dropdown-item" href="#!"><i class="far fa-window-minimize opacity-5 me-2"></i>Minimize</a><a class="dropdown-item" href="#!"><i class="fas fa-redo opacity-5 me-2"></i> Reload</a><a class="dropdown-item" href="#!"><i class="far fa-trash-alt opacity-5 me-2"></i> Remove        </a></div>
-                        </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="table-responsive">
-                      <table class="table table-borderless table-hover mb-0">
-                        <thead class="light">
-                          <tr>
-                            <th>Assigned </th>
-                            <th>Name</th>
-                            <th>Due </th>
-                            <th class="text-end">Priority</th>
-                          </tr>
-                        </thead>
-                        <tbody class="align-middle">
-                          <tr>
-                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-0.jpg" alt="Nielsen Cobb"><span class="d-inline-block"><strong>Nielsen Cobb</strong><br><span class="text-muted text-sm">Graniteville</span></span></span></td>
-                            <td>Memora</td>
-                            <td>January 25</td>
-                            <td class="text-end"><span class="badge badge-success-light">Medium</span></td>
-                          </tr>
-                          <tr>
-                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-1.jpg" alt="Margret Cote"><span class="d-inline-block"><strong>Margret Cote</strong><br><span class="text-muted text-sm">Foxworth</span></span></span></td>
-                            <td>Zilidium</td>
-                            <td>January 25</td>
-                            <td class="text-end"><span class="badge badge-danger-light">High</span></td>
-                          </tr>
-                          <tr>
-                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-2.jpg" alt="Rachel Vinson"><span class="d-inline-block"><strong>Rachel Vinson</strong><br><span class="text-muted text-sm">Eastmont</span></span></span></td>
-                            <td>Chorizon</td>
-                            <td>January 25</td>
-                            <td class="text-end"><span class="badge badge-warning-light">Low</span></td>
-                          </tr>
-                          <tr>
-                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-3.jpg" alt="Gabrielle Aguirre"><span class="d-inline-block"><strong>Gabrielle Aguirre</strong><br><span class="text-muted text-sm">Whitewater</span></span></span></td>
-                            <td>Comverges</td>
-                            <td>January 25</td>
-                            <td class="text-end"><span class="badge badge-info-light">New</span></td>
-                          </tr>
-                          <tr>
-                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-4.jpg" alt="Spears Collier"><span class="d-inline-block"><strong>Spears Collier</strong><br><span class="text-muted text-sm">Hebron</span></span></span></td>
-                            <td>Remold</td>
-                            <td>January 25</td>
-                            <td class="text-end"><span class="badge badge-success-light">Medium</span></td>
-                          </tr>
-                          <tr>
-                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-5.jpg" alt="Keisha Thomas"><span class="d-inline-block"><strong>Keisha Thomas</strong><br><span class="text-muted text-sm">Levant</span></span></span></td>
-                            <td>Euron</td>
-                            <td>January 25</td>
-                            <td class="text-end"><span class="badge badge-danger-light">High</span></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <div class="card-footer text-end"><a class="btn btn-primary" href="#!">View all projects</a></div>
-                </div>
-              </div>
-              <!-- </Marcações de Horario>-->
               <!-- <Atrasos>-->
               <div class="col-lg-4 mb-4">
                 <div class="card h-100">
@@ -239,8 +239,7 @@
                 </div>
               </div>
               <!-- </Atrasos>-->
-            </div>
-            <!-- <Horas Extra>-->
+               <!-- <Horas Extra>-->
               <div class="col-lg-4 mb-4">
                 <div class="card h-100">
                   <div class="card-header">
@@ -291,6 +290,8 @@
                 </div>
               </div>
               <!-- </Horas Extra>-->
+            </div>
+           
             </div>
             <div class="row mb-3">
                   <!-- Cálculo de horas-->
