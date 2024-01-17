@@ -40,7 +40,7 @@
               <div class="dropdown-header text-gray-700">
                 <h6 class="text-uppercase font-weight-bold">Marcos Vinicius</h6><small>FullStack Developer</small>
               </div>
-              <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Acessar meu Portfólio</a>
+              <div class="dropdown-divider"></div><a class="dropdown-item" href="https://portfolio-marcos-vinicius.netlify.app" target="_blank">Acessar meu Portfólio</a>
             </div>
           </li>
         </ul>
@@ -50,73 +50,16 @@
         <div class="container-fluid px-lg-4 px-xl-5">
               <!-- Page Header-->
               <div class="page-header">
-                <h1 class="page-heading">Projects Dashboard</h1>
+                <h1 class="page-heading">Controle de Horários(Revisar este nome....)</h1>
               </div>
           <section class="mb-3 mb-lg-5">
-            <div class="row mb-3">
-              <div class="col-md-6 col-lg-3">
-                <div class="card mb-4">
-                  <div class="card-body">
-                    <div class="icon icon-lg bg-red-light" style="position: absolute; top: 1rem; right: 1rem;">
-                          <svg class="svg-icon text-red svg-icon-md svg-icon-heavy">
-                            <use xlink:href="icons/orion-svg-sprite.71e9f5f2.svg#speed-1"> </use>
-                          </svg>
-                    </div>
-                    <h6>Earnings</h6>
-                    <h3 class="text-red" style="inline-size: min-content;">$10,500</h3>
-                    <p class="text-muted text-sm mb-0">May 23 - June 01 (2018)</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 col-lg-3">
-                <div class="card mb-4">
-                  <div class="card-body">
-                    <div class="icon icon-lg bg-blue-light" style="position: absolute; top: 1rem; right: 1rem;">
-                          <svg class="svg-icon text-blue svg-icon-md svg-icon-heavy">
-                            <use xlink:href="icons/orion-svg-sprite.71e9f5f2.svg#news-1"> </use>
-                          </svg>
-                    </div>
-                    <h6>Readers</h6>
-                    <h3 class="text-blue" style="inline-size: min-content;">584</h3>
-                    <p class="text-muted text-sm mb-0">May 23 - June 01 (2018)</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 col-lg-3">
-                <div class="card mb-4">
-                  <div class="card-body">
-                    <div class="icon icon-lg bg-primary-light" style="position: absolute; top: 1rem; right: 1rem;">
-                          <svg class="svg-icon text-primary svg-icon-md svg-icon-heavy">
-                            <use xlink:href="icons/orion-svg-sprite.71e9f5f2.svg#bookmark-1"> </use>
-                          </svg>
-                    </div>
-                    <h6>Bookmarks</h6>
-                    <h3 class="text-primary" style="inline-size: min-content;">876</h3>
-                    <p class="text-muted text-sm mb-0">May 23 - June 01 (2018)</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 col-lg-3">
-                <div class="card mb-4">
-                  <div class="card-body">
-                    <div class="icon icon-lg bg-green-light" style="position: absolute; top: 1rem; right: 1rem;">
-                          <svg class="svg-icon text-green svg-icon-md svg-icon-heavy">
-                            <use xlink:href="icons/orion-svg-sprite.71e9f5f2.svg#world-map-1"> </use>
-                          </svg>
-                    </div>
-                    <h6>Visitors</h6>
-                    <h3 class="text-green" style="inline-size: min-content;">3,500</h3>
-                    <p class="text-muted text-sm mb-0">May 23 - June 01 (2018)</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <!-- Horários de trabalho -->
             <div class="row mb-3">
               <!-- <Projects Table>-->
               <div class="col-lg-8 mb-4">
                 <div class="card card-table h-100">
                   <div class="card-header">
-                    <h5 class="card-heading">Projects</h5>
+                    <h5 class="card-heading">Horários de Trabalho</h5>
                         <div class="card-header-more">
                           <button class="btn-header-more" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
                           <div class="dropdown-menu dropdown-menu-end text-sm"><a class="dropdown-item" href="#!"><i class="fas fa-expand-arrows-alt opacity-5 me-2"></i>Expand</a><a class="dropdown-item" href="#!"><i class="far fa-window-minimize opacity-5 me-2"></i>Minimize</a><a class="dropdown-item" href="#!"><i class="fas fa-redo opacity-5 me-2"></i> Reload</a><a class="dropdown-item" href="#!"><i class="far fa-trash-alt opacity-5 me-2"></i> Remove        </a></div>
@@ -177,12 +120,79 @@
                   <div class="card-footer text-end"><a class="btn btn-primary" href="#!">View all projects</a></div>
                 </div>
               </div>
-              <!-- </Projects Table>-->
-              <!-- <Team Members>-->
+              <!-- </Horarios de trabalho>-->
+              <div class="row mb-3">
+              <!-- <Marcações de Horario>-->
+              <div class="col-lg-8 mb-4">
+                <div class="card card-table h-100">
+                  <div class="card-header">
+                    <h5 class="card-heading">Marcações de Horário</h5>
+                        <div class="card-header-more">
+                          <button class="btn-header-more" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                          <div class="dropdown-menu dropdown-menu-end text-sm"><a class="dropdown-item" href="#!"><i class="fas fa-expand-arrows-alt opacity-5 me-2"></i>Expand</a><a class="dropdown-item" href="#!"><i class="far fa-window-minimize opacity-5 me-2"></i>Minimize</a><a class="dropdown-item" href="#!"><i class="fas fa-redo opacity-5 me-2"></i> Reload</a><a class="dropdown-item" href="#!"><i class="far fa-trash-alt opacity-5 me-2"></i> Remove        </a></div>
+                        </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-borderless table-hover mb-0">
+                        <thead class="light">
+                          <tr>
+                            <th>Assigned </th>
+                            <th>Name</th>
+                            <th>Due </th>
+                            <th class="text-end">Priority</th>
+                          </tr>
+                        </thead>
+                        <tbody class="align-middle">
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-0.jpg" alt="Nielsen Cobb"><span class="d-inline-block"><strong>Nielsen Cobb</strong><br><span class="text-muted text-sm">Graniteville</span></span></span></td>
+                            <td>Memora</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-success-light">Medium</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-1.jpg" alt="Margret Cote"><span class="d-inline-block"><strong>Margret Cote</strong><br><span class="text-muted text-sm">Foxworth</span></span></span></td>
+                            <td>Zilidium</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-danger-light">High</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-2.jpg" alt="Rachel Vinson"><span class="d-inline-block"><strong>Rachel Vinson</strong><br><span class="text-muted text-sm">Eastmont</span></span></span></td>
+                            <td>Chorizon</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-warning-light">Low</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-3.jpg" alt="Gabrielle Aguirre"><span class="d-inline-block"><strong>Gabrielle Aguirre</strong><br><span class="text-muted text-sm">Whitewater</span></span></span></td>
+                            <td>Comverges</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-info-light">New</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-4.jpg" alt="Spears Collier"><span class="d-inline-block"><strong>Spears Collier</strong><br><span class="text-muted text-sm">Hebron</span></span></span></td>
+                            <td>Remold</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-success-light">Medium</span></td>
+                          </tr>
+                          <tr>
+                            <td> <span class="d-flex align-items-center"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-5.jpg" alt="Keisha Thomas"><span class="d-inline-block"><strong>Keisha Thomas</strong><br><span class="text-muted text-sm">Levant</span></span></span></td>
+                            <td>Euron</td>
+                            <td>January 25</td>
+                            <td class="text-end"><span class="badge badge-danger-light">High</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="card-footer text-end"><a class="btn btn-primary" href="#!">View all projects</a></div>
+                </div>
+              </div>
+              <!-- </Marcações de Horario>-->
+              <!-- <Atrasos>-->
               <div class="col-lg-4 mb-4">
                 <div class="card h-100">
                   <div class="card-header">
-                    <h5 class="card-heading"> Team Members</h5>
+                    <h5 class="card-heading"> Atrasos</h5>
                         <div class="card-header-more">
                           <button class="btn-header-more" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
                           <div class="dropdown-menu dropdown-menu-end text-sm"><a class="dropdown-item" href="#!"><i class="fas fa-expand-arrows-alt opacity-5 me-2"></i>Expand</a><a class="dropdown-item" href="#!"><i class="far fa-window-minimize opacity-5 me-2"></i>Minimize</a><a class="dropdown-item" href="#!"><i class="fas fa-redo opacity-5 me-2"></i> Reload</a><a class="dropdown-item" href="#!"><i class="far fa-trash-alt opacity-5 me-2"></i> Remove        </a></div>
@@ -228,201 +238,72 @@
                   <div class="card-footer text-end"><a class="btn btn-outline-primary" href="#!">View all people</a></div>
                 </div>
               </div>
-              <!-- </Team Members>-->
+              <!-- </Atrasos>-->
             </div>
-            <div class="row mb-3">
-                  <!-- Widget Type 7-->
-                  <div class="col-md-6 mb-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <button class="btn float-end btn-primary">Completed</button>
-                        <h4 class="h6">Publish New Theme</h4>
-                        <p class="text-primary">Web Design</p>
-                        <p class="text-muted">One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like ba</p>
-                        <div class="mb-3">
-                          <div class="d-inline-block me-3">
-                            <div class="h3 mb-1">23</div>
-                            <div class="text-muted text-sm">Updates</div>
-                          </div>
-                          <div class="d-inline-block">
-                            <div class="h3 mb-1">2</div>
-                            <div class="text-muted text-sm">Milestones</div>
-                          </div>
-                        </div>
-                        <div class="mb-4"><img class="avatar avatar-sm avatar-stacked p-1" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-0.jpg" alt="" data-bs-toggle="tooltip" data-placement="top" aria-label="User 0" data-bs-original-title="User 0"><img class="avatar avatar-sm avatar-stacked p-1" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-1.jpg" alt="" data-bs-toggle="tooltip" data-placement="top" aria-label="User 1" data-bs-original-title="User 1">
-                        </div>
-                        <p class="sr-only">Progress</p>
-                        <div class="progress">
-                          <div class="progress-bar bg-primary" style="width:70%"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- /Widget Type 7-->
-                  <!-- Widget Type 7-->
-                  <div class="col-md-6 mb-4">
-                    <div class="card">
-                      <div class="card-body">
-                        <button class="btn float-end btn-info">Completed</button>
-                        <h4 class="h6">Internal Linkbuilding</h4>
-                        <p class="text-info">Marketing</p>
-                        <p class="text-muted">The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of </p>
-                        <div class="mb-3">
-                          <div class="d-inline-block me-3">
-                            <div class="h3 mb-1">23</div>
-                            <div class="text-muted text-sm">Updates</div>
-                          </div>
-                          <div class="d-inline-block">
-                            <div class="h3 mb-1">2</div>
-                            <div class="text-muted text-sm">Milestones</div>
-                          </div>
-                        </div>
-                        <div class="mb-4"><img class="avatar avatar-sm avatar-stacked p-1" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-1.jpg" alt="" data-bs-toggle="tooltip" data-placement="top" aria-label="User 0" data-bs-original-title="User 0"><img class="avatar avatar-sm avatar-stacked p-1" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-2.jpg" alt="" data-bs-toggle="tooltip" data-placement="top" aria-label="User 1" data-bs-original-title="User 1"><img class="avatar avatar-sm avatar-stacked p-1" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-3.jpg" alt="" data-bs-toggle="tooltip" data-placement="top" aria-label="User 2" data-bs-original-title="User 2"><img class="avatar avatar-sm avatar-stacked p-1" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-4.jpg" alt="" data-bs-toggle="tooltip" data-placement="top" aria-label="User 3" data-bs-original-title="User 3">
-                        </div>
-                        <p class="sr-only">Progress</p>
-                        <div class="progress">
-                          <div class="progress-bar bg-info" style="width:48%"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- /Widget Type 7-->
-            </div>
-            <div class="row mb-3">
-              <div class="col-lg-7 mb-4">
+            <!-- <Horas Extra>-->
+              <div class="col-lg-4 mb-4">
                 <div class="card h-100">
                   <div class="card-header">
-                    <h4 class="card-heading">Closed Projects</h4>
+                    <h5 class="card-heading"> Horas Extra</h5>
+                        <div class="card-header-more">
+                          <button class="btn-header-more" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                          <div class="dropdown-menu dropdown-menu-end text-sm"><a class="dropdown-item" href="#!"><i class="fas fa-expand-arrows-alt opacity-5 me-2"></i>Expand</a><a class="dropdown-item" href="#!"><i class="far fa-window-minimize opacity-5 me-2"></i>Minimize</a><a class="dropdown-item" href="#!"><i class="fas fa-redo opacity-5 me-2"></i> Reload</a><a class="dropdown-item" href="#!"><i class="far fa-trash-alt opacity-5 me-2"></i> Remove        </a></div>
+                        </div>
                   </div>
-                  <div class="card-body d-flex align-items-center">
-                    <div class="chart-holder w-100"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                      <canvas id="lineChart1" style="display: block; width: 295px; height: 147px;" width="590" height="294" class="chartjs-render-monitor"></canvas>
+                  <div class="card-body pb-2">
+                    <div class="d-flex align-items-center mb-3"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-0.jpg" alt="Nielsen Cobb">
+                      <div class="mt-1"><a class="text-dark fw-bold text-decoration-none" href="#!">Nielsen Cobb</a>
+                        <p class="text-muted text-sm mb-0">Memora</p>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-5 mb-4">
-                <div class="h-50 pb-4 pb-lg-2">
-                  <div class="card h-100">
-                    <div class="card-body d-flex">
-                      <div class="row w-100 align-items-center">
-                        <div class="col-sm-5 mb-4 mb-sm-0">
-                          <h2 class="mb-0 d-flex align-items-center"><span>86.4</span><span class="dot bg-green d-inline-block ms-3"></span></h2><span class="text-muted text-uppercase small">Work hours</span>
-                          <hr><small class="text-muted">Hours worked this month</small>
-                        </div>
-                        <div class="col-sm-7"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                          <canvas id="pieChartHome1" style="display: block; width: 271px; height: 135px;" width="542" height="270" class="chartjs-render-monitor"></canvas>
-                        </div>
+                    <div class="d-flex align-items-center mb-3"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-1.jpg" alt="Margret Cote">
+                      <div class="mt-1"><a class="text-dark fw-bold text-decoration-none" href="#!">Margret Cote</a>
+                        <p class="text-muted text-sm mb-0">Zilidium</p>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-2.jpg" alt="Rachel Vinson">
+                      <div class="mt-1"><a class="text-dark fw-bold text-decoration-none" href="#!">Rachel Vinson</a>
+                        <p class="text-muted text-sm mb-0">Chorizon</p>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-3.jpg" alt="Gabrielle Aguirre">
+                      <div class="mt-1"><a class="text-dark fw-bold text-decoration-none" href="#!">Gabrielle Aguirre</a>
+                        <p class="text-muted text-sm mb-0">Comverges</p>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-4.jpg" alt="Spears Collier">
+                      <div class="mt-1"><a class="text-dark fw-bold text-decoration-none" href="#!">Spears Collier</a>
+                        <p class="text-muted text-sm mb-0">Remold</p>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-5.jpg" alt="Keisha Thomas">
+                      <div class="mt-1"><a class="text-dark fw-bold text-decoration-none" href="#!">Keisha Thomas</a>
+                        <p class="text-muted text-sm mb-0">Euron</p>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-6.jpg" alt="Elisabeth Key">
+                      <div class="mt-1"><a class="text-dark fw-bold text-decoration-none" href="#!">Elisabeth Key</a>
+                        <p class="text-muted text-sm mb-0">Netagy</p>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="h-50 pt-lg-2">
-                  <div class="card h-100">
-                    <div class="card-body d-flex">
-                      <div class="row w-100 align-items-center">
-                        <div class="col-sm-5 mb-4 mb-sm-0">
-                          <h2 class="mb-0 d-flex align-items-center"><span>325</span><span class="dot bg-indigo d-inline-block ms-3"></span></h2><span class="text-muted text-uppercase small">Tasks Completed</span>
-                          <hr><small class="text-muted">Tasks Completed this months</small>
-                        </div>
-                        <div class="col-sm-7"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                          <canvas id="pieChartHome2" style="display: block; width: 271px; height: 135px;" width="542" height="270" class="chartjs-render-monitor"></canvas>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <div class="card-footer text-end"><a class="btn btn-outline-primary" href="#!">View all people</a></div>
                 </div>
               </div>
+              <!-- </Horas Extra>-->
             </div>
-            <div class="card card-table mb-4">
-              <div class="card-header">
-                <h5 class="card-heading"> Active Tickets</h5>
-                    <div class="card-header-more">
-                      <button class="btn-header-more" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
-                      <div class="dropdown-menu dropdown-menu-end text-sm"><a class="dropdown-item" href="#!"><i class="fas fa-expand-arrows-alt opacity-5 me-2"></i>Expand</a><a class="dropdown-item" href="#!"><i class="far fa-window-minimize opacity-5 me-2"></i>Minimize</a><a class="dropdown-item" href="#!"><i class="fas fa-redo opacity-5 me-2"></i> Reload</a><a class="dropdown-item" href="#!"><i class="far fa-trash-alt opacity-5 me-2"></i> Remove        </a></div>
+            <div class="row mb-3">
+                  <!-- Cálculo de horas-->
+                  <div class="col-md-6 mb-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="h6">Cálculadora de Horas</h4>
+                        <p class="text-muted">Realizar cálculo de horas extras ou faltantes </p>
+                        <button class="btn float-end btn-info">Calcular</button>
+                      </div>
                     </div>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-hover table-borderless align-middle mb-0">
-                    <thead>
-                      <tr>
-                        <th>
-                          <div class="position-relative form-check mb-0" style="top:2px;">
-                            <input class="form-check-input" id="activeCheckAll" type="checkbox" value="">
-                            <label class="form-check-label" for="activeCheckAll">Due</label>
-                          </div>
-                        </th>
-                        <th style="min-width: 200px;">User</th>
-                        <th style="min-width: 400px;">Description</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="ticketCheck0">
-                            <label class="form-check-label" for="ticketCheck0"><strong>4</strong><span class="text-muted">&nbsp;days</span></label>
-                          </div>
-                        </td>
-                        <td><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-0.jpg" alt="Nielsen Cobb"><span class="d-inline-block mb-0">Nielsen Cobb</span></td>
-                        <td><strong>[#2568]  License not recieved</strong>
-                          <p class="text-muted text-sm mb-0">One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed in</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="ticketCheck1">
-                            <label class="form-check-label" for="ticketCheck1"><strong>4</strong><span class="text-muted">&nbsp;days</span></label>
-                          </div>
-                        </td>
-                        <td><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-1.jpg" alt="Margret Cote"><span class="d-inline-block mb-0">Margret Cote</span></td>
-                        <td><strong>[#2569]  BSOD again</strong>
-                          <p class="text-muted text-sm mb-0">The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pit</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="ticketCheck2">
-                            <label class="form-check-label" for="ticketCheck2"><strong>4</strong><span class="text-muted">&nbsp;days</span></label>
-                          </div>
-                        </td>
-                        <td><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-2.jpg" alt="Rachel Vinson"><span class="d-inline-block mb-0">Rachel Vinson</span></td>
-                        <td><strong>[#2570]  Wrong Invoice</strong>
-                          <p class="text-muted text-sm mb-0">His room, a proper human room although a little too small, lay peacefully between its four familiar </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="ticketCheck3">
-                            <label class="form-check-label" for="ticketCheck3"><strong>4</strong><span class="text-muted">&nbsp;days</span></label>
-                          </div>
-                        </td>
-                        <td><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-3.jpg" alt="Gabrielle Aguirre"><span class="d-inline-block mb-0">Gabrielle Aguirre</span></td>
-                        <td><strong>[#2571]  Asking for a refund</strong>
-                          <p class="text-muted text-sm mb-0">Samsa was a travelling salesman - and above it there hung a picture that he had recently cut out of </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="ticketCheck4">
-                            <label class="form-check-label" for="ticketCheck4"><strong>4</strong><span class="text-muted">&nbsp;days</span></label>
-                          </div>
-                        </td>
-                        <td><img class="avatar p-1 me-2" src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/img/avatar-4.jpg" alt="Spears Collier"><span class="d-inline-block mb-0">Spears Collier</span></td>
-                        <td><strong>[#2572]  License not recieved</strong>
-                          <p class="text-muted text-sm mb-0">He must have tried it a hundred times, shut his eyes so that he wouldn't have to look at the flounde</p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="card-footer text-end"><a class="btn btn-primary" href="#!">View all tickets</a></div>
+                  </div>
+                  <!-- /Widget Type 7-->
             </div>
           </section>
         </div>
@@ -430,16 +311,15 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-6 text-center text-md-start fw-bold">
-                <p class="mb-2 mb-md-0 fw-bold">Your company © 2023</p>
+                <p class="mb-2 mb-md-0 fw-bold">Marcos Vinicius © 2024</p>
               </div>
               <div class="col-md-6 text-center text-md-end text-gray-400">
-                <p class="mb-0">Version 1.3.2</p>
+                <p class="mb-0">Version 1.0.0</p>
               </div>
             </div>
           </div>
         </footer>
       </div>
-    </div>
     <!-- JavaScript files-->
     <script src="https://d19m59y37dris4.cloudfront.net/bubbly/1-3-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
