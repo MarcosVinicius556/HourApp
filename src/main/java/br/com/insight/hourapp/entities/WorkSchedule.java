@@ -5,16 +5,18 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import br.com.insight.hourapp.entities.interfaces.BaseEntity;
 
 /**
  * @author Marcos Vinicius
@@ -24,15 +26,15 @@ import jakarta.persistence.Table;
 @Table(name = "worker_schedule", 
 	   indexes = @Index(name="idx_worker_schedule", columnList = "id") 
 	   )
-public class WorkSchedule implements Serializable {
+public class WorkSchedule implements BaseEntity, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name="id")
+	@Column(name="schedule_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "worker_schedule_id")
 	@SequenceGenerator(name = "worker_schedule_id", sequenceName = "worker_schedule_id", allocationSize = 1)
-	private long id;
+	private long scheduleId;
 	
 	@Column(name = "description", length = 128)
 	private String description;
@@ -43,22 +45,26 @@ public class WorkSchedule implements Serializable {
 	@Column(name = "departure_hour", length = 5)
 	private String departureTime;
 	
-	@OneToMany( mappedBy = "workerSchedule", fetch = FetchType.EAGER )
+	@OneToMany( mappedBy = "workSchedule", fetch = FetchType.EAGER )
 	private Set<HourMarker> hourMarkers = new HashSet<>();
 
 	public WorkSchedule() {
 		
 	}
 	
-	public WorkSchedule(long id, String description, String entryHour, String departureTime) {
-		this.id = id;
+	public WorkSchedule(long scheduleId, String description, String entryHour, String departureTime) {
+		this.scheduleId = scheduleId;
 		this.description = description;
 		this.entryHour = entryHour;
 		this.departureTime = departureTime;
 	}
-	
-	public long getId() {
-		return id;
+
+	public long getScheduleId() {
+		return scheduleId;
+	}
+
+	public void setScheduleId(long scheduleId) {
+		this.scheduleId = scheduleId;
 	}
 
 	public String getDescription() {
@@ -94,8 +100,18 @@ public class WorkSchedule implements Serializable {
 	}
 
 	@Override
+	public Object getId() {
+		return scheduleId;
+	}
+
+	@Override
+	public Class<? extends BaseEntity> ClassType() {
+		return this.getClass();
+	}
+	
+	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(scheduleId);
 	}
 
 	@Override
@@ -107,7 +123,9 @@ public class WorkSchedule implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		WorkSchedule other = (WorkSchedule) obj;
-		return id == other.id;
+		return scheduleId == other.scheduleId;
 	}
+
+	
 	
 }

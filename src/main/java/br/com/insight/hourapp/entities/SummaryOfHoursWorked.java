@@ -4,17 +4,19 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import br.com.insight.hourapp.entities.interfaces.BaseEntity;
 
 /**
  * @author Marcos Vinicius
@@ -25,15 +27,15 @@ import jakarta.persistence.Table;
 @Table( name = "summary_of_hours_worked", 
 		indexes = @Index(name = "idx_summary_hours_worked", columnList = "id")
 	   )
-public class SummaryOfHoursWorked implements Serializable {
+public class SummaryOfHoursWorked implements BaseEntity, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "summary_hours_worker_id")
 	@SequenceGenerator(name = "summary_hours_worker_id", sequenceName = "summary_hours_worker_id", allocationSize = 1)
-	@Column(name = "id")
-	private long id;
+	@Column(name = "summary_id")
+	private long summaryId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "work_schedule_id", nullable = false)
@@ -53,10 +55,9 @@ public class SummaryOfHoursWorked implements Serializable {
 		
 	}
 	
-	public SummaryOfHoursWorked(long id, WorkSchedule workSchedule, HourMarker hourMarker, GregorianCalendar created,
+	public SummaryOfHoursWorked(long summaryId, WorkSchedule workSchedule, HourMarker hourMarker, GregorianCalendar created,
 			String totalHours) {
-		super();
-		this.id = id;
+		this.summaryId = summaryId;
 		this.workSchedule = workSchedule;
 		this.hourMarker = hourMarker;
 		this.created = created;
@@ -95,13 +96,27 @@ public class SummaryOfHoursWorked implements Serializable {
 		this.totalHours = totalHours;
 	}
 
-	public long getId() {
-		return id;
+	public long getSummaryId() {
+		return summaryId;
+	}
+
+	public void setSummaryId(long summaryId) {
+		this.summaryId = summaryId;
 	}
 
 	@Override
+	public Object getId() {
+		return summaryId;
+	}
+
+	@Override
+	public Class<? extends BaseEntity> ClassType() {
+		return this.getClass();
+	}
+	
+	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(summaryId);
 	}
 
 	@Override
@@ -113,7 +128,7 @@ public class SummaryOfHoursWorked implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		SummaryOfHoursWorked other = (SummaryOfHoursWorked) obj;
-		return id == other.id;
+		return summaryId == other.summaryId;
 	}
 
 }

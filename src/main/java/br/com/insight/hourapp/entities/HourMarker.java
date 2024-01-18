@@ -3,17 +3,19 @@ package br.com.insight.hourapp.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import br.com.insight.hourapp.entities.interfaces.BaseEntity;
 
 /**
  * @author Marcos Vinicius
@@ -23,15 +25,15 @@ import jakarta.persistence.Table;
 @Table(name = "hour_marker", 
 	   indexes = @Index(name="idx_hour_marker", columnList = "id") 
 	   )
-public class HourMarker implements Serializable {
+public class HourMarker implements BaseEntity, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name="id")
+	@Column(name="marker_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hour_marker_id")
 	@SequenceGenerator(name = "hour_marker_id", sequenceName = "hour_marker_id", allocationSize = 1)
-	private long id;
+	private long markerId;
 	
 	@Column(name = "description", length = 128)
 	private String description;
@@ -50,20 +52,22 @@ public class HourMarker implements Serializable {
 		
 	}
 	
-	public HourMarker(long id, String description, String entryHour, String departureTime, WorkSchedule workSchedule) {
-		this.id = id;
+	public HourMarker(long markerId, String description, String entryHour, String departureTime, WorkSchedule workSchedule) {
+		this.markerId = markerId;
 		this.description = description;
 		this.entryHour = entryHour;
 		this.departureTime = departureTime;
 		this.workSchedule = workSchedule;
 	}
 
-	public long getId() {
-		return id;
+	
+
+	public long getMarkerId() {
+		return markerId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setMarkerId(long markerId) {
+		this.markerId = markerId;
 	}
 
 	public String getDescription() {
@@ -97,17 +101,20 @@ public class HourMarker implements Serializable {
 	public void setWorkSchedule(WorkSchedule workSchedule) {
 		this.workSchedule = workSchedule;
 	}
-
-	public HourMarker(long id, String description, String entryHour, String departureTime) {
-		this.id = id;
-		this.description = description;
-		this.entryHour = entryHour;
-		this.departureTime = departureTime;
+	
+	@Override
+	public Object getId() {
+		return markerId;
 	}
 	
 	@Override
+	public Class<? extends BaseEntity> ClassType() {
+		return this.getClass();
+	}
+
+	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(markerId);
 	}
 
 	@Override
@@ -119,7 +126,9 @@ public class HourMarker implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		HourMarker other = (HourMarker) obj;
-		return id == other.id;
+		return markerId == other.markerId;
 	}
+
+	
 	
 }
