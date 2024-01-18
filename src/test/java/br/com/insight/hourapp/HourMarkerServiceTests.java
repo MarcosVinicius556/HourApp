@@ -2,29 +2,25 @@ package br.com.insight.hourapp;
 
 import java.util.List;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 import br.com.insight.hourapp.entities.HourMarker;
+import br.com.insight.hourapp.entities.SummaryOfHoursWorked;
 import br.com.insight.hourapp.entities.WorkSchedule;
-import br.com.insight.hourapp.entities.interfaces.BaseEntity;
 import br.com.insight.hourapp.services.factory.ServiceFactory;
 import br.com.insight.hourapp.services.interfaces.HourMarkerService;
-import br.com.insight.hourapp.services.interfaces.SummaryOfHoursWorkedService;
 import br.com.insight.hourapp.services.interfaces.WorkScheduleService;
 import junit.framework.TestCase;
 
-public class HourAppApplicationTests extends TestCase {
+public class HourMarkerServiceTests extends TestCase {
 
 	private HourMarkerService hourService = null;
 	private WorkScheduleService scheduleService = null;
-	private SummaryOfHoursWorkedService summaryService = null;
 	
 	@BeforeEach
 	protected void setUp() throws Exception {
 		hourService = ServiceFactory.createHourMarkerService();
 		scheduleService = ServiceFactory.createWorkScheduleService();
-		summaryService = ServiceFactory.createSummaryOfHoursWorkedService();
 		
 		/**
 		 * Seeding do banco...
@@ -46,20 +42,101 @@ public class HourAppApplicationTests extends TestCase {
 		
 	}
 	
-	@Test
-	public void test() {
-		
-		List<WorkSchedule> lstSchedule = null;
-		lstSchedule = scheduleService.findAll(new WorkSchedule());
-		lstSchedule.forEach(System.out::println);
-		
-		List<HourMarker> lstHour = null;
-		lstHour = hourService.findAll(new HourMarker());
-		lstHour.forEach(System.out::println);
-		
-		assertNotNull("Não foi possível carregar a lista de horários de trabalho", lstSchedule);
-		
-		assertNotNull("Não foi possível carregar a lista de marcações", lstHour);
-	}
 
+	/**
+	 * INSERTS
+	 */
+	public void insertWithNonException() {
+		WorkSchedule wsTemp = new WorkSchedule("Primeiro Turno", "08:00", "12:00");
+		HourMarker hmTemp = new HourMarker("08:00", "12:00", wsTemp);
+		SummaryOfHoursWorked shw = new SummaryOfHoursWorked();
+	}
+	
+	public void insertWithException() {
+		
+	}
+	
+	public void insertTwoOrMoreObjects() {
+		
+	}
+	
+	public void insertOrUpdateWithNonException() {
+		
+	}
+	
+	public void insertOrUpdateWithException() {
+		
+	}
+	
+	public void insertOrUpdateTwoOrMoreObjects() {
+		
+	}
+	
+	public void insertWithExceptionWhenHasMoreThanThree() {
+		
+	}
+	
+	/**
+	 * DELETES
+	 */
+	
+	public void deleteWithNonException() {
+		
+	}
+	
+	public void deleteWithException() {
+		
+	}
+	
+	public void deleteTwoOrMoreObjects() {
+		
+	}
+	
+	/**
+	 * UPDATES
+	 */
+	
+	public void updateWithNonException() {
+		
+	}
+	
+	public void updateWithException() {
+		
+	}
+	
+	public void updateTwoOrMoreObjects() {
+		
+	}
+	
+	/**
+	 * SEARCH
+	 */
+	
+	public void findAllWithNonException() {
+		
+	}
+	
+	public void findAllWithException() {
+		
+	}
+	
+	public void findByIdWithNonException() {
+		
+	}
+	
+	public void findByIdWithException() {
+		
+	}
+	
+	public void findAllLike() {
+		
+	}
+	
+	public void exists() {
+		
+	}
+	
+	public void nonExists() {
+		
+	}
 }
