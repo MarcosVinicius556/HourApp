@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 
 import br.com.insight.hourapp.entities.HourMarker;
-import br.com.insight.hourapp.entities.SummaryOfHoursWorked;
+import br.com.insight.hourapp.entities.SummaryHours;
 import br.com.insight.hourapp.entities.WorkSchedule;
 import br.com.insight.hourapp.services.factory.ServiceFactory;
 import br.com.insight.hourapp.services.interfaces.HourMarkerService;
@@ -49,7 +49,7 @@ public class HourMarkerServiceTests extends TestCase {
 	public void insertWithNonException() {
 		WorkSchedule wsTemp = new WorkSchedule("Primeiro Turno", "08:00", "12:00");
 		HourMarker hmTemp = new HourMarker("08:00", "12:00", wsTemp);
-		SummaryOfHoursWorked shw = new SummaryOfHoursWorked();
+		SummaryHours shw = new SummaryHours();
 	}
 	
 	public void insertWithException() {

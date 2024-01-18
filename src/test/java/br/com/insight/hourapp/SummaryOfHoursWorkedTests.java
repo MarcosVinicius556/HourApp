@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.insight.hourapp.entities.HourMarker;
-import br.com.insight.hourapp.entities.SummaryOfHoursWorked;
+import br.com.insight.hourapp.entities.SummaryHours;
 import br.com.insight.hourapp.entities.WorkSchedule;
 import br.com.insight.hourapp.services.factory.ServiceFactory;
 import br.com.insight.hourapp.services.interfaces.HourMarkerService;
@@ -54,8 +54,8 @@ public class SummaryOfHoursWorkedTests extends TestCase {
 	public void insertAndFindWithNonException() {
 		WorkSchedule wsTemp = new WorkSchedule("Primeiro Turno", "08:00", "12:00");
 		HourMarker hmTemp= new HourMarker("08:00", "12:00", wsTemp);
-		SummaryOfHoursWorked shw = new SummaryOfHoursWorked();
-		SummaryOfHoursWorked find = null;
+		SummaryHours shw = new SummaryHours();
+		SummaryHours find = null;
 		
 		scheduleService.insert(wsTemp);
 		hourService.insert(hmTemp);

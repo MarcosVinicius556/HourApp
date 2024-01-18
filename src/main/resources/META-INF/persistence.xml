@@ -6,7 +6,7 @@
     <persistence-unit name="hourControll" transaction-type="RESOURCE_LOCAL">
         <class>br.com.insight.hourapp.entities.HourMarker</class>
         <class>br.com.insight.hourapp.entities.WorkSchedule</class>
-        <class>br.com.insight.hourapp.entities.SummaryOfHoursWorked</class>
+        <class>br.com.insight.hourapp.entities.SummaryHours</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />

@@ -47,6 +47,9 @@ public class WorkSchedule implements BaseEntity, Serializable {
 	
 	@OneToMany( mappedBy = "workSchedule", fetch = FetchType.EAGER )
 	private Set<HourMarker> hourMarkers = new HashSet<>();
+	
+	@OneToMany(mappedBy = "workSchedule", fetch = FetchType.EAGER)
+	private Set<SummaryHours> sumaryHours = new HashSet<>();
 
 	public WorkSchedule() {
 		
@@ -91,6 +94,14 @@ public class WorkSchedule implements BaseEntity, Serializable {
 	}
 
 	public void addHourMaker(HourMarker hourMarker) {
+		this.hourMarkers.add(hourMarker);
+	}
+	
+	public void removeHourMaker(HourMarker hourMarker) {
+		this.hourMarkers.remove(hourMarker);
+	}
+	
+	public void addSummaryHours(SummaryHours hourMarker) {
 		this.hourMarkers.add(hourMarker);
 	}
 	

@@ -24,16 +24,16 @@ import br.com.insight.hourapp.entities.interfaces.BaseEntity;
  * 			Como elas podendo ser do tipo EXTRA ou ATRASO... 
  */
 @Entity
-@Table( name = "summary_of_hours_worked", 
-		indexes = @Index(name = "idx_summary_hours_worked", columnList = "summary_id")
+@Table( name = "summary_hours", 
+		indexes = @Index(name = "idx_summary_hours", columnList = "summary_id")
 	   )
-public class SummaryOfHoursWorked implements BaseEntity, Serializable {
+public class SummaryHours implements BaseEntity, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "summary_hours_worker_id")
-	@SequenceGenerator(name = "summary_hours_worker_id", sequenceName = "summary_hours_worker_id", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "summary_hours_id")
+	@SequenceGenerator(name = "summary_hours_id", sequenceName = "summary_hours_id", allocationSize = 1)
 	@Column(name = "summary_id")
 	private long summaryId;
 	
@@ -51,11 +51,11 @@ public class SummaryOfHoursWorked implements BaseEntity, Serializable {
 	@Column(name = "total_hours", nullable = false, length = 5)
 	private String totalHours;
 
-	public SummaryOfHoursWorked() {
+	public SummaryHours() {
 		
 	}
 	
-	public SummaryOfHoursWorked(long summaryId, WorkSchedule workSchedule, HourMarker hourMarker, GregorianCalendar created,
+	public SummaryHours(long summaryId, WorkSchedule workSchedule, HourMarker hourMarker, GregorianCalendar created,
 			String totalHours) {
 		this.summaryId = summaryId;
 		this.workSchedule = workSchedule;
@@ -127,7 +127,7 @@ public class SummaryOfHoursWorked implements BaseEntity, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SummaryOfHoursWorked other = (SummaryOfHoursWorked) obj;
+		SummaryHours other = (SummaryHours) obj;
 		return summaryId == other.summaryId;
 	}
 
