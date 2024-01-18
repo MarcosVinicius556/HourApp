@@ -24,7 +24,7 @@ import br.com.insight.hourapp.entities.interfaces.BaseEntity;
  */
 @Entity
 @Table(name = "worker_schedule", 
-	   indexes = @Index(name="idx_worker_schedule", columnList = "id") 
+	   indexes = @Index(name="idx_worker_schedule", columnList = "schedule_id") 
 	   )
 public class WorkSchedule implements BaseEntity, Serializable {
 
@@ -52,8 +52,7 @@ public class WorkSchedule implements BaseEntity, Serializable {
 		
 	}
 	
-	public WorkSchedule(long scheduleId, String description, String entryHour, String departureTime) {
-		this.scheduleId = scheduleId;
+	public WorkSchedule(String description, String entryHour, String departureTime) {
 		this.description = description;
 		this.entryHour = entryHour;
 		this.departureTime = departureTime;
@@ -126,6 +125,11 @@ public class WorkSchedule implements BaseEntity, Serializable {
 		return scheduleId == other.scheduleId;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "WorkSchedule [scheduleId=" + scheduleId + ", description=" + description + ", entryHour=" + entryHour
+				+ ", departureTime=" + departureTime + "]";
+	}
+
 	
 }

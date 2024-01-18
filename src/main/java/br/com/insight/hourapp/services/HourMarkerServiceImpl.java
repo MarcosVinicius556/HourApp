@@ -8,7 +8,7 @@ import br.com.insight.hourapp.repositories.interfaces.BaseRepository;
 import br.com.insight.hourapp.repositories.interfaces.HourMarkerRepository;
 import br.com.insight.hourapp.services.interfaces.HourMarkerService;
 
-public class HourMarkerServiceImpl implements HourMarkerService{
+public class HourMarkerServiceImpl implements HourMarkerService {
 
 private static final Logger logger = Logger.getLogger(HourMarker.class);
 	

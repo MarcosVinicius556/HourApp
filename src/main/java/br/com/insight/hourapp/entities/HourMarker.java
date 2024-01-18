@@ -23,7 +23,7 @@ import br.com.insight.hourapp.entities.interfaces.BaseEntity;
  */
 @Entity
 @Table(name = "hour_marker", 
-	   indexes = @Index(name="idx_hour_marker", columnList = "id") 
+	   indexes = @Index(name="idx_hour_marker", columnList = "marker_id") 
 	   )
 public class HourMarker implements BaseEntity, Serializable {
 
@@ -34,9 +34,6 @@ public class HourMarker implements BaseEntity, Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hour_marker_id")
 	@SequenceGenerator(name = "hour_marker_id", sequenceName = "hour_marker_id", allocationSize = 1)
 	private long markerId;
-	
-	@Column(name = "description", length = 128)
-	private String description;
 	
 	@Column(name = "entry_hour", length = 5)
 	private String entryHour;
@@ -52,9 +49,7 @@ public class HourMarker implements BaseEntity, Serializable {
 		
 	}
 	
-	public HourMarker(long markerId, String description, String entryHour, String departureTime, WorkSchedule workSchedule) {
-		this.markerId = markerId;
-		this.description = description;
+	public HourMarker(String entryHour, String departureTime, WorkSchedule workSchedule) {
 		this.entryHour = entryHour;
 		this.departureTime = departureTime;
 		this.workSchedule = workSchedule;
@@ -68,14 +63,6 @@ public class HourMarker implements BaseEntity, Serializable {
 
 	public void setMarkerId(long markerId) {
 		this.markerId = markerId;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public String getEntryHour() {
@@ -129,6 +116,10 @@ public class HourMarker implements BaseEntity, Serializable {
 		return markerId == other.markerId;
 	}
 
-	
-	
+	@Override
+	public String toString() {
+		return "HourMarker [markerId=" + markerId + ", entryHour=" + entryHour + ", departureTime=" + departureTime
+				+ "]";
+	}
+
 }

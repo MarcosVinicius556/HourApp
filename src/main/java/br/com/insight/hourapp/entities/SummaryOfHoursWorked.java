@@ -25,7 +25,7 @@ import br.com.insight.hourapp.entities.interfaces.BaseEntity;
  */
 @Entity
 @Table( name = "summary_of_hours_worked", 
-		indexes = @Index(name = "idx_summary_hours_worked", columnList = "id")
+		indexes = @Index(name = "idx_summary_hours_worked", columnList = "summary_id")
 	   )
 public class SummaryOfHoursWorked implements BaseEntity, Serializable {
 
