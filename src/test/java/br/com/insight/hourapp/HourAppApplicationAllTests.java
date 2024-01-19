@@ -12,7 +12,7 @@ import br.com.insight.hourapp.entities.SummaryHour;
 import br.com.insight.hourapp.entities.WorkSchedule;
 import br.com.insight.hourapp.services.factory.ServiceFactory;
 import br.com.insight.hourapp.services.interfaces.HourMarkerService;
-import br.com.insight.hourapp.services.interfaces.SummaryOfHoursWorkedService;
+import br.com.insight.hourapp.services.interfaces.SummaryHoursService;
 import br.com.insight.hourapp.services.interfaces.WorkScheduleService;
 import junit.framework.TestCase;
 /**
@@ -22,11 +22,11 @@ public class HourAppApplicationAllTests extends TestCase {
 
 	private HourMarkerService hourService = null;
 	private WorkScheduleService scheduleService = null;
-	private SummaryOfHoursWorkedService summaryService = null;
+	private SummaryHoursService summaryService = null;
 	
 	@BeforeEach
 	protected void setUp() throws Exception {
-		summaryService = ServiceFactory.createSummaryOfHoursWorkedService();
+		summaryService = ServiceFactory.createSummaryHoursService();
 		hourService = ServiceFactory.createHourMarkerService();
 		scheduleService = ServiceFactory.createWorkScheduleService();
 		

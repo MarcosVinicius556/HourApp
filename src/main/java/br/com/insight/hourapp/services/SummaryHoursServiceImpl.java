@@ -7,9 +7,9 @@ import br.com.insight.hourapp.repositories.factory.RepositoryFactory;
 import br.com.insight.hourapp.repositories.interfaces.BaseRepository;
 import br.com.insight.hourapp.repositories.interfaces.SummaryHoursRepository;
 import br.com.insight.hourapp.services.interfaces.HourMarkerService;
-import br.com.insight.hourapp.services.interfaces.SummaryOfHoursWorkedService;
+import br.com.insight.hourapp.services.interfaces.SummaryHoursService;
 
-public class SummaryHoursServiceImpl implements SummaryOfHoursWorkedService {
+public class SummaryHoursServiceImpl implements SummaryHoursService {
 
 private static final Logger logger = Logger.getLogger(HourMarker.class);
 	

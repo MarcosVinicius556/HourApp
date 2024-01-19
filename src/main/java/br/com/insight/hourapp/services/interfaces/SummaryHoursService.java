@@ -5,6 +5,6 @@ import br.com.insight.hourapp.entities.SummaryHour;
 /**
  * @author Marcos Vinicius
  */
-public interface SummaryOfHoursWorkedService extends BaseService<SummaryHour>{
+public interface SummaryHoursService extends BaseService<SummaryHour>{
 	
 }

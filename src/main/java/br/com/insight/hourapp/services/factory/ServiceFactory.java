@@ -4,7 +4,7 @@ import br.com.insight.hourapp.services.HourMarkerServiceImpl;
 import br.com.insight.hourapp.services.SummaryHoursServiceImpl;
 import br.com.insight.hourapp.services.WorkScheduleServiceImpl;
 import br.com.insight.hourapp.services.interfaces.HourMarkerService;
-import br.com.insight.hourapp.services.interfaces.SummaryOfHoursWorkedService;
+import br.com.insight.hourapp.services.interfaces.SummaryHoursService;
 import br.com.insight.hourapp.services.interfaces.WorkScheduleService;
 
 /**
@@ -20,7 +20,7 @@ public class ServiceFactory {
 		return new HourMarkerServiceImpl();
 	}
 	
-	public static SummaryOfHoursWorkedService createSummaryOfHoursWorkedService() {
+	public static SummaryHoursService createSummaryHoursService() {
 		return new SummaryHoursServiceImpl();
 	}
 	
