@@ -8,7 +8,7 @@
             <i class="fas fa-receipt"></i>
             </div>
             <h6>TOTAL DE ACESSOS</h6>
-            <h3 class="text-blue" style="inline-size: min-content;">---</h3>
+            <h3 class="text-blue" style="inline-size: min-content;">-</h3>
             <p class="text-muted text-sm mb-0">01/01/2024</p>
         </div>
     </div>
