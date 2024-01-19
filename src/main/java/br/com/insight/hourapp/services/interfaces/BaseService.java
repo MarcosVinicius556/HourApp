@@ -158,6 +158,17 @@ public interface BaseService<Entity extends BaseEntity>{
 			throw new ServiceException("Não foi possível executar a busca por query. Motivo: " + e.getMessage());
 		}
 	}
+	
+	/**
+	 * @param String query
+	 */
+	default List<Object> loadByNativeQuery(String query) {
+		try {
+			return getRepository().loadByNativeQuery(query);
+		} catch (Exception e) {
+			throw new ServiceException("Não foi possível executar a busca por query. Motivo: " + e.getMessage());
+		}
+	}
 
 	/**
 	 * @param BaseEntity
@@ -173,6 +184,14 @@ public interface BaseService<Entity extends BaseEntity>{
 	default void executeQuery(String query) {
 		try {
 			getRepository().executeQuery(query);
+		} catch (Exception e) {
+			throw new ServiceException("Não foi possível executar a query. Motivo: " +e.getMessage());
+		}
+	}
+	
+	default void executeNativeQuery(String query) {
+		try {
+			getRepository().executeNativeQuery(query);
 		} catch (Exception e) {
 			throw new ServiceException("Não foi possível executar a query. Motivo: " +e.getMessage());
 		}

@@ -1,7 +1,9 @@
 package br.com.insight.hourapp.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -44,6 +47,9 @@ public class HourMarker implements BaseEntity, Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn( name = "worker_schedule_id", nullable = false )
 	private WorkSchedule workSchedule = new WorkSchedule();
+	
+	@OneToMany(mappedBy = "hourMarker", fetch = FetchType.EAGER)
+	private Set<SummaryHour> summaryHours = new HashSet<>();
 
 	public HourMarker() {
 		
@@ -87,6 +93,14 @@ public class HourMarker implements BaseEntity, Serializable {
 
 	public void setWorkSchedule(WorkSchedule workSchedule) {
 		this.workSchedule = workSchedule;
+	}
+	
+	public void addSummaryHour(SummaryHour summaryHour) {
+		this.summaryHours.add(summaryHour);
+	}
+	
+	public void removeSummaryHour(SummaryHour summaryHour) {
+		this.summaryHours.remove(summaryHour);
 	}
 	
 	@Override

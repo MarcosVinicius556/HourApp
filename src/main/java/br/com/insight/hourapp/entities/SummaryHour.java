@@ -24,16 +24,16 @@ import br.com.insight.hourapp.entities.interfaces.BaseEntity;
  * 			Como elas podendo ser do tipo EXTRA ou ATRASO... 
  */
 @Entity
-@Table( name = "summary_hours", 
-		indexes = @Index(name = "idx_summary_hours", columnList = "summary_id")
+@Table( name = "summary_hour", 
+		indexes = @Index(name = "idx_summary_hour", columnList = "summary_id")
 	   )
-public class SummaryHours implements BaseEntity, Serializable {
+public class SummaryHour implements BaseEntity, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "summary_hours_id")
-	@SequenceGenerator(name = "summary_hours_id", sequenceName = "summary_hours_id", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "summary_hour_id")
+	@SequenceGenerator(name = "summary_hour_id", sequenceName = "summary_hour_id", allocationSize = 1)
 	@Column(name = "summary_id")
 	private long summaryId;
 	
@@ -45,17 +45,17 @@ public class SummaryHours implements BaseEntity, Serializable {
 	@JoinColumn(name = "hour_marker_id", nullable = false)
 	private HourMarker hourMarker = new HourMarker();
 
-	@Column(name = "create", columnDefinition = "CALENDAR")
+	@Column(name = "created", columnDefinition = "TIMESTAMP")
 	private GregorianCalendar created;
 	
 	@Column(name = "total_hours", nullable = false, length = 5)
 	private String totalHours;
 
-	public SummaryHours() {
+	public SummaryHour() {
 		
 	}
 	
-	public SummaryHours(long summaryId, WorkSchedule workSchedule, HourMarker hourMarker, GregorianCalendar created,
+	public SummaryHour(long summaryId, WorkSchedule workSchedule, HourMarker hourMarker, GregorianCalendar created,
 			String totalHours) {
 		this.summaryId = summaryId;
 		this.workSchedule = workSchedule;
@@ -127,7 +127,7 @@ public class SummaryHours implements BaseEntity, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SummaryHours other = (SummaryHours) obj;
+		SummaryHour other = (SummaryHour) obj;
 		return summaryId == other.summaryId;
 	}
 

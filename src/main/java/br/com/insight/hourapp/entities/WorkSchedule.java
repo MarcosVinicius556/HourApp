@@ -23,8 +23,8 @@ import br.com.insight.hourapp.entities.interfaces.BaseEntity;
  * @apiNote Entidade que representa os horários de trabalho 
  */
 @Entity
-@Table(name = "worker_schedule", 
-	   indexes = @Index(name="idx_worker_schedule", columnList = "schedule_id") 
+@Table(name = "work_schedule", 
+	   indexes = @Index(name="idx_work_schedule", columnList = "schedule_id") 
 	   )
 public class WorkSchedule implements BaseEntity, Serializable {
 
@@ -32,8 +32,8 @@ public class WorkSchedule implements BaseEntity, Serializable {
 	
 	@Id
 	@Column(name="schedule_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "worker_schedule_id")
-	@SequenceGenerator(name = "worker_schedule_id", sequenceName = "worker_schedule_id", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "work_schedule_id")
+	@SequenceGenerator(name = "work_schedule_id", sequenceName = "work_schedule_id", allocationSize = 1)
 	private long scheduleId;
 	
 	@Column(name = "description", length = 128)
@@ -49,7 +49,7 @@ public class WorkSchedule implements BaseEntity, Serializable {
 	private Set<HourMarker> hourMarkers = new HashSet<>();
 	
 	@OneToMany(mappedBy = "workSchedule", fetch = FetchType.EAGER)
-	private Set<SummaryHours> sumaryHours = new HashSet<>();
+	private Set<SummaryHour> summaryHours = new HashSet<>();
 
 	public WorkSchedule() {
 		
@@ -101,12 +101,12 @@ public class WorkSchedule implements BaseEntity, Serializable {
 		this.hourMarkers.remove(hourMarker);
 	}
 	
-	public void addSummaryHours(SummaryHours hourMarker) {
-		this.hourMarkers.add(hourMarker);
+	public void addSummaryHours(SummaryHour summaryHour) {
+		this.summaryHours.add(summaryHour);
 	}
 	
-	public void removeHourMaker(HourMarker hourMarker) {
-		this.hourMarkers.remove(hourMarker);
+	public void removeHourMaker(SummaryHour summaryHour) {
+		this.summaryHours.remove(summaryHour);
 	}
 
 	@Override

@@ -1,10 +1,10 @@
 package br.com.insight.hourapp.repositories.factory;
 
 import br.com.insight.hourapp.repositories.HourMarkerRepositoryImpl;
-import br.com.insight.hourapp.repositories.SummaryOfHoursWorkedRepositoryImpl;
+import br.com.insight.hourapp.repositories.SummaryHoursRepositoryImpl;
 import br.com.insight.hourapp.repositories.WorkScheduleRepositoryImpl;
 import br.com.insight.hourapp.repositories.interfaces.HourMarkerRepository;
-import br.com.insight.hourapp.repositories.interfaces.SummaryOfHoursWorkedRepository;
+import br.com.insight.hourapp.repositories.interfaces.SummaryHoursRepository;
 import br.com.insight.hourapp.repositories.interfaces.WorkScheduleRepository;
 
 /**
@@ -20,8 +20,8 @@ public class RepositoryFactory {
 		return new HourMarkerRepositoryImpl();
 	}
 	
-	public static SummaryOfHoursWorkedRepository createSummaryOfHoursWorkedRepository() {
-		return new SummaryOfHoursWorkedRepositoryImpl();
+	public static SummaryHoursRepository createSummaryOfHoursWorkedRepository() {
+		return new SummaryHoursRepositoryImpl();
 	}
 	
 	public static WorkScheduleRepository createWorkScheduleRepository() {

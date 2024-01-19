@@ -46,13 +46,19 @@ public interface BaseRepository {
 		try {
 			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
 			try {
-				em.getTransaction().begin();
-				em.persist(obj);
-				em.getTransaction().commit();
+				if(exists(obj)) {
+					em.getTransaction().begin();
+					em.merge(obj);
+					em.getTransaction().commit();	
+				} else {
+					em.getTransaction().begin();
+					em.persist(obj);
+					em.getTransaction().commit();	
+				}
+				
+				
 			} catch (RollbackException e) {
-				em.getTransaction().begin();
-				em.merge(obj);
-				em.getTransaction().commit();
+				e.printStackTrace();
 			}
 			System.out.println("[Entity has saved correctly]:" + obj.toString());
 		} catch (Exception e) {
