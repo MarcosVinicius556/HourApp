@@ -4,12 +4,14 @@ $(() => {
         await Swal.fire({
             title: "Novo Horário",
             html: `
-              <label class="swal2-label">Descrição</label>
-              <input id="scheduleDescription" class="swal2-input" type="textarea">
-              <label class="swal2-label">Hora de Entrada</label>
-              <input id="scheduleEntryHour" class="swal2-input">
-              <label id="swal-label1" class="swal2-label">Hora de Saída</label>
-              <input id="scheduleDepartureTime" id="swal-input2" class="swal2-input">
+            <label class="swal2-label">Descrição</label>
+            <input id="schedule-description" class="swal2-input" type="textarea">
+            
+            <label class="swal2-label">Horário de Entrada</label>
+            <input id="schedule-entryHour" class="swal2-input">
+
+            <label id="swal-label1" class="swal2-label">Horário de Saída</label>
+            <input id="schedule-departureTime" id="swal-input2" class="swal2-input">
             `,
             focusConfirm: false,
             showCancelButton: true,
@@ -17,9 +19,9 @@ $(() => {
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
             preConfirm: () => {
-              let description = $('#scheduleDescription').val();
-              let entryHour = $('#scheduleEntryHour').val();
-              let departureTime = $('#scheduleDepartureTime').val();
+              let description = $('#schedule-description').val();
+              let entryHour = $('#schedule-entryHour').val();
+              let departureTime = $('#schedule-departureTime').val();
               
               let data = {
                 description,
@@ -36,17 +38,144 @@ $(() => {
                     type: 'POST',
                     data: JSON.stringify(data),
                     url: 'WorkSchedule',
-                    success: (response) => {
-                        Toast.fire({
-                            icon: "success",
-                            title: "Cadastro Realizado com sucesso!"
-                        });
+                    success: () => {
+                        Swal.fire({
+                            title: "Sucesso!",
+                            text: "Registro Atualizado.",
+                            icon: "success"
+                          });
                     },
                     error: (error) => {
-                        Toast.fire({
-                            icon: "error",
-                            title: "Ocorreu um erro ao salvar o registro!"
+                        Swal.fire({
+                            title: "Atenção!",
+                            text: `Não foi possível salvar o registro. Motivo: ${error}`,
+                            icon: "success"
+                          });
+                        console.log(error);
+                    }
+                }); 
+            } else {
+                Toast.fire({
+                    icon: "error",
+                    title: "Operação Cancelada!"
+                });
+            }
+        });
+    }
+
+    const findAllSchedule = async () => {
+        await $.ajax({
+                type: 'GET',
+                url: 'WorkSchedules',
+                success: (response) => {
+                    if(response) {
+                        response.map((workSchedule) => {
+                            $('schedule-table').append(`
+                            <tr>
+                                    <td>${workSchedule.scheduleId}</td>
+                                    <td>${workSchedule.descritpion}</td>
+                                    <td>${workSchedule.entryHour}</td>
+                                    <td>${workSchedule.departureTime}</td>
+                                    <td>
+                                        <a class="btn me-3 text-lg text-success" id="schedule-update" data-id='${workSchedule.scheduleId}'>
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                        <a class="text-lg text-danger" id="schedule-delete" data-id='${workSchedule.scheduleId}'>
+                                            <i class="far fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                            </tr>
+                            `);
                         });
+                    }
+                },
+                error: (error) => {
+                    Swal.fire({
+                        title: "Atenção!",
+                        text: `Não foi possível buscar os registros de Horários. Motivo: ${error}`,
+                        icon: "error"
+                    });
+                }
+            });
+    }
+
+    const findScheduleById = async (id) => {
+        $.ajax({
+            type: 'GET',
+            url: `WorkSchedules/action=byId&scheduleId=${id}`,
+            success: (response) => { 
+                return {
+                    scheduleId: response.scheduleId,
+                    description: response.description,
+                    entryHour: response.entryHour,
+                    departureTime: response.departureTime
+                }; 
+            },
+            error: (error) => {
+                console.log(error);
+                Toast.fire({
+                    icon: 'error',
+                    text: `Não foi possível buscar o Horário escolhido. Motivo: ${error}`
+                });
+            }
+        });
+    }
+
+    const updateSchedule = async () => {
+        let id = $('#schedule-update').data('id');
+        let old = findScheduleById(id);
+
+        await Swal.fire({
+            title: "Atualizar Horário",
+            html: `
+              <label class="swal2-label">Descrição</label>
+              <input id="schedule-description" class="swal2-input" type="textarea" value='${old.description}'>
+              
+              <label class="swal2-label">Horário de Entrada</label>
+              <input id="schedule-entryHour" class="swal2-input" value='${old.entryHour}'>
+
+              <label id="swal-label1" class="swal2-label">Horário de Saída</label>
+              <input id="schedule-departureTime" id="swal-input2" class="swal2-input" value='${old.departureTime}'>
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Salvar',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+              let description = $('#schedule-description').val();
+              let entryHour = $('#schedule-entryHour').val();
+              let departureTime = $('#schedule-departureTime').val();
+              
+              let data = {
+                scheduleId: id,
+                description,
+                entryHour,
+                departureTime
+              };
+
+              return data;
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if(result.isConfirmed){
+                $ajax({
+                    type: 'PUT',
+                    data: JSON.stringify(data),
+                    url: 'WorkSchedules',
+                    success: () => {
+                        Swal.fire({
+                            title: "Sucesso!",
+                            text: "Registro Atualizado.",
+                            icon: "success"
+                          });
+                    },
+                    error: (error) => {
+                        Swal.fire({
+                            title: "Atenção!",
+                            text: `Não foi possível atualizar o registro. Motivo: ${error}`,
+                            icon: "success"
+                          });
                         console.log(error);
                     }
                 });
@@ -60,79 +189,9 @@ $(() => {
         });
     }
 
-    const findAllSchedule = async () => {
-        await $.ajax({
-                type: 'GET',
-                url: 'WorkSchedule',
-                success: (response) => {
-                    console.log(response);
-                    /**
-                     * Popular
-                     */
-                    response.map((workSchedule) => {
-                        $('workScheduleTable').appen(`
-                        <tr>
-                                <td>${workSchedule.scheduleId}</td>
-                                <td>${workSchedule.descritpion}</td>
-                                <td>${workSchedule.entryHour}</td>
-                                <td>${workSchedule.departureTime}</td>
-                                <td>
-                                    <button type="button" class="btn me-3 text-lg text-success"  data-bs-toggle="modal" data-bs-target="#addWorkScheduleModal">
-                                        <i class="far fa-edit"></i>
-                                    </button>
-                                    <a class="text-lg text-danger" id="workScheduleDelete" >
-                                        <i class="far fa-trash-alt"></i>
-                                    </a>
-                                </td>
-                        </tr>
-                        `);
-                    });
-                },
-                error: (error) => {
-                    console.log(error);
-                }
-            });
-    }
+    const deleteSchedule = async () => {
+        let id = $('#schedule-delete').data('id');
 
-    const findScheduleById = async (e) => {
-        e.preventDefault();
-        
-        let data = {
-
-        };
-
-        $.ajax({
-            type: 'POST',
-            data: data,
-            url: 'HourMarkers',
-            success: (response) => {
-            },
-            error: (error) => {
-                console.log(error);
-            }
-        });
-    }
-
-    const updateSchedule = async (e) => {
-        e.preventDefault();
-        
-        let data = {
-
-        };
-
-        $.ajax({
-            type: 'POST',
-            data: data,
-            url: 'HourMarkers',
-            success: (response) => {
-            },
-            error: (error) => {
-                console.log(error);
-            }
-        });
-    }
-
-    const deleteSchedule = async (e) => {
         Swal.fire({
             title: "Tem certeza?",
             text: "Você não poderá reverter esta ação!",
@@ -143,15 +202,31 @@ $(() => {
             cancelButtonText: "Cancelar",
             confirmButtonText: "Sim, Delete isso!"
         }).then(async (result) => {
-            /**
-             * Requisição com ajax
-             */
             if (result.isConfirmed) {
-              Swal.fire({
-                title: "Sucesso!",
-                text: "Registro Removido.",
-                icon: "success"
-              });
+                $.ajax({
+                    type: 'DELETE',
+                    url: `WorkSchedules/${id}`,
+                    success: () => {
+                        Swal.fire({
+                            title: "Sucesso!",
+                            text: "Registro Removido.",
+                            icon: "success"
+                          });
+                    },
+                    
+                    error: (error) => {
+                        Swal.fire({
+                            title: "Atenção!",
+                            text: `Não foi possível remover o registro. Motivo: ${error}`,
+                            icon: "error"
+                          });
+                    }
+                });
+            } else {
+                Toast.fire({
+                    icon: "error",
+                    title: "Operação Cancelada!"
+                });
             }
           });
     }
@@ -159,9 +234,13 @@ $(() => {
     /**
      * Atribuir eventos das funções
      */
-    $('#workScheduleDelete').on('click', deleteSchedule);
-    $('#addWorkSchedule').on('click', createSchedule);
+    $('#schedule-create').on('click', createSchedule);
+    $('#schedule-update').on('click', updateSchedule);
+    $('#schedule-delete').on('click', deleteSchedule);
 
+    /**
+     * Ao iniciar busca todos e lista na tabela de horários
+     */
     findAllSchedule();
 });
 

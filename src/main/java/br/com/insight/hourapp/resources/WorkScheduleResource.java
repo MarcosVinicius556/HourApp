@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/HourMarkers")
+@WebServlet("/WorkSchedules")
 public class WorkScheduleResource extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -84,16 +84,23 @@ public class WorkScheduleResource extends HttpServlet {
 		PrintWriter writer = null;
 		Gson gson = null;
 		String json = "";
+		List<WorkSchedule> schedules = null;
 		try {
 			resp.setContentType("text/plain");
 			writer = resp.getWriter();
 			gson = new Gson();
 			json = BufferedReaderToJson.bufferedReaderToJson(req.getReader());
+			schedules = scheduleService.findAll(new WorkSchedule()); 
 			
-			WorkSchedule workSchedule = gson.fromJson(json, WorkSchedule.class);
-			scheduleService.insert(workSchedule);
+			if(schedules != null && schedules.size() <= 3){
+				WorkSchedule workSchedule = gson.fromJson(json, WorkSchedule.class);
+				scheduleService.insert(workSchedule);	
+				resp.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				resp.setStatus(HttpServletResponse.SC_CONFLICT);
+				writer.write("Só é possível inserir até três horários");
+			}
 			
-			resp.setStatus(HttpServletResponse.SC_OK);
 		} catch (Exception e) {
 			logger.error(e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

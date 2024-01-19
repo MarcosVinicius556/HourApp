@@ -8,7 +8,7 @@
             <i class="fas fa-receipt"></i>
             </div>
             <h6>TOTAL DE ACESSOS</h6>
-            <h3 class="text-blue" style="inline-size: min-content;">348</h3>
+            <h3 class="text-blue" style="inline-size: min-content;">---</h3>
             <p class="text-muted text-sm mb-0">01/01/2024</p>
         </div>
     </div>
@@ -20,7 +20,7 @@
             <div class="icon icon-lg bg-primary">
             <i class="fas fa-server"></i>
             </div>
-            <h6>TOTAL DE REGISTROS</h6>
+            <h6>TOTAL DE MARCAÇÕES</h6>
             <h3 class="text-primary" style="inline-size: min-content;">56</h3>
             <p class="text-muted text-sm mb-0">01/01/2024</p>
         </div>
