@@ -7,13 +7,13 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.insight.hourapp.entities.HourMarker;
-import br.com.insight.hourapp.entities.SummaryHour;
-import br.com.insight.hourapp.entities.WorkSchedule;
-import br.com.insight.hourapp.services.factory.ServiceFactory;
-import br.com.insight.hourapp.services.interfaces.HourMarkerService;
-import br.com.insight.hourapp.services.interfaces.SummaryHoursService;
-import br.com.insight.hourapp.services.interfaces.WorkScheduleService;
+import br.com.insight.hourapp.web.entities.HourMarker;
+import br.com.insight.hourapp.web.entities.SummaryHour;
+import br.com.insight.hourapp.web.entities.WorkSchedule;
+import br.com.insight.hourapp.web.services.factory.ServiceFactory;
+import br.com.insight.hourapp.web.services.interfaces.HourMarkerService;
+import br.com.insight.hourapp.web.services.interfaces.SummaryHoursService;
+import br.com.insight.hourapp.web.services.interfaces.WorkScheduleService;
 import junit.framework.TestCase;
 /**
  * Classe com testes unitários e de integração referentes a classe SummaryOfHoursWorked"

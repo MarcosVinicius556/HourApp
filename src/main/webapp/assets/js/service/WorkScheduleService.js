@@ -205,7 +205,7 @@ $(() => {
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'DELETE',
-                    url: `WorkSchedules/${id}`,
+                    url: `WorkSchedules/scheduleId=${id}`,
                     success: () => {
                         Swal.fire({
                             title: "Sucesso!",
