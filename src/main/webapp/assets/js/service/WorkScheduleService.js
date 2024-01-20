@@ -68,25 +68,26 @@ $(() => {
                 type: 'GET',
                 url: 'WorkSchedules',
                 success: (response) => {
+                    console.log(response);
                     if(response) {
-                        response.map((workSchedule) => {
-                            $('schedule-table').append(`
-                            <tr>
-                                    <td>${workSchedule.scheduleId}</td>
-                                    <td>${workSchedule.descritpion}</td>
-                                    <td>${workSchedule.entryHour}</td>
-                                    <td>${workSchedule.departureTime}</td>
-                                    <td>
-                                        <a class="btn me-3 text-lg text-success" id="schedule-update" data-id='${workSchedule.scheduleId}'>
-                                            <i class="far fa-edit"></i>
-                                        </a>
-                                        <a class="text-lg text-danger" id="schedule-delete" data-id='${workSchedule.scheduleId}'>
-                                            <i class="far fa-trash-alt"></i>
-                                        </a>
-                                    </td>
-                            </tr>
-                            `);
-                        });
+                        // response.map((workSchedule) => {
+                        //     $('schedule-table').append(`
+                        //     <tr>
+                        //             <td>${workSchedule.scheduleId}</td>
+                        //             <td>${workSchedule.descritpion}</td>
+                        //             <td>${workSchedule.entryHour}</td>
+                        //             <td>${workSchedule.departureTime}</td>
+                        //             <td>
+                        //                 <a class="btn me-3 text-lg text-success" id="schedule-update" data-id='${workSchedule.scheduleId}'>
+                        //                     <i class="far fa-edit"></i>
+                        //                 </a>
+                        //                 <a class="text-lg text-danger" id="schedule-delete" data-id='${workSchedule.scheduleId}'>
+                        //                     <i class="far fa-trash-alt"></i>
+                        //                 </a>
+                        //             </td>
+                        //     </tr>
+                        //     `);
+                        // });
                     }
                 },
                 error: (error) => {

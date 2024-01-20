@@ -84,25 +84,26 @@ $(() => {
                 type: 'GET',
                 url: 'HourMarkers',
                 success: (response) => {
+                    console.log(response);
                     if(response) {
-                        response.map((hourMarker) => {
-                            $('marker-table').append(`
-                            <tr>
-                                    <td>${hourMarker.markerId}</td>
-                                    <td>${hourMarker.schedule.scheduleId} - ${hourMarker.schedule.description}</td>
-                                    <td>${hourMarker.entryHour}</td>
-                                    <td>${hourMarker.departureTime}</td>
-                                    <td>
-                                        <a class="btn me-3 text-lg text-success" id="schedule-update" data-id='${hourMarker.markerId}'>
-                                            <i class="far fa-edit"></i>
-                                        </a>
-                                        <a class="text-lg text-danger" id="schedule-delete" data-id='${hourMarker.markerId}'>
-                                            <i class="far fa-trash-alt"></i>
-                                        </a>
-                                    </td>
-                            </tr>
-                            `);
-                        });
+                        // response.map((hourMarker) => {
+                        //     $('marker-table').append(`
+                        //     <tr>
+                        //             <td>${hourMarker.markerId}</td>
+                        //             <td>${hourMarker.schedule.scheduleId} - ${hourMarker.schedule.description}</td>
+                        //             <td>${hourMarker.entryHour}</td>
+                        //             <td>${hourMarker.departureTime}</td>
+                        //             <td>
+                        //                 <a class="btn me-3 text-lg text-success" id="schedule-update" data-id='${hourMarker.markerId}'>
+                        //                     <i class="far fa-edit"></i>
+                        //                 </a>
+                        //                 <a class="text-lg text-danger" id="schedule-delete" data-id='${hourMarker.markerId}'>
+                        //                     <i class="far fa-trash-alt"></i>
+                        //                 </a>
+                        //             </td>
+                        //     </tr>
+                        //     `);
+                        // });
                     }
                 },
                 error: (error) => {
