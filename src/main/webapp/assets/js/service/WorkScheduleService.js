@@ -18,11 +18,18 @@ $(() => {
             cancelButtonText: 'Cancelar',
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
+            didOpen: () => {
+                $('#schedule-entryHour').inputmask('99:99', { placeholder: '__:__' });
+                $('#schedule-departureTime').inputmask('99:99', { placeholder: '__:__' });
+            },
             preConfirm: () => {
               let description = $('#schedule-description').val();
               let entryHour = $('#schedule-entryHour').val();
               let departureTime = $('#schedule-departureTime').val();
               
+              if(!validateHour(entryHour)){ return false; }
+              if(!validateHour(departureTime)){ return false; }
+
               let data = {
                 description,
                 entryHour,
@@ -41,14 +48,25 @@ $(() => {
                     },
                     body: JSON.stringify(result.value)
                 }).then(response => {
+                    console.log(response)
                         if (!response.ok) {
-                            throw new Error(`Erro na requisição: ${response.status}`);
+                            response.text()
+                                    .then((result) => {
+                                        Swal.fire({
+                                            title: "Atenção!",
+                                            text: `Não foi possível salvar o registro. Motivo: ${result}`,
+                                            icon: "error"
+                                          });
+                                    });
+                            return;
                         }
 
                         Swal.fire({
                             title: "Sucesso!",
                             text: "Registro Adicionado.",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1000
                           });
     
                         findAllSchedule();
@@ -56,7 +74,7 @@ $(() => {
                     Swal.fire({
                         title: "Atenção!",
                         text: `Não foi possível salvar o registro. Motivo: ${error}`,
-                        icon: "success"
+                        icon: "error"
                       });
                     console.log(error);
                 }); 
@@ -176,11 +194,18 @@ $(() => {
             cancelButtonText: 'Cancelar',
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
+            didOpen: () => {
+            $('#schedule-entryHour').inputmask('99:99', { placeholder: '__:__' });
+            $('#schedule-departureTime').inputmask('99:99', { placeholder: '__:__' });
+            },
             preConfirm: () => {
               let description = $('#schedule-description').val();
               let entryHour = $('#schedule-entryHour').val();
               let departureTime = $('#schedule-departureTime').val();
               
+              if(!validateHour(entryHour)){ return false; }
+              if(!validateHour(departureTime)){ return false; }
+
               let data = {
                 scheduleId: id,
                 description,
@@ -206,7 +231,9 @@ $(() => {
                         Swal.fire({
                             title: "Sucesso!",
                             text: "Registro Atualizado.",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1000
                         });
 
                         findAllSchedule();
@@ -214,7 +241,7 @@ $(() => {
                     Swal.fire({
                         title: "Atenção!",
                         text: `Não foi possível atualizar o registro. Motivo: ${error}`,
-                        icon: "success"
+                        icon: "error"
                       });
                     console.log(error);
                 });
@@ -247,14 +274,24 @@ $(() => {
                         'Content-Type': 'application/json'
                     }
                 }).then((response) => {
-                        if (!response.ok) {
-                            throw new Error(`Erro na requisição: ${response.status}`);
-                        }
+                    if (!response.ok) {
+                        response.text()
+                                .then((result) => {
+                                    Swal.fire({
+                                        title: "Atenção!",
+                                        text: `Não foi possível remover o registro. Motivo: ${result}`,
+                                        icon: "error"
+                                      });
+                                });
+                        return;
+                    }
 
                         Swal.fire({
                             title: "Sucesso!",
                             text: "Registro Removido.",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1000
                         });
 
                         findAllSchedule();

@@ -63,11 +63,18 @@ $(() => {
             cancelButtonText: 'Cancelar',
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
+            didOpen: () => {
+                $('#marker-entryHour').inputmask('99:99', { placeholder: '__:__' });
+                $('#marker-departureTime').inputmask('99:99', { placeholder: '__:__' });
+            },
             preConfirm: () => {
               let scheduleId = $('#marker-scheduleId').val();
               let entryHour = $('#marker-entryHour').val();
               let departureTime = $('#marker-departureTime').val();
               
+              if(!validateHour(entryHour)){ return false; }
+              if(!validateHour(departureTime)){ return false; }
+
               let data = {
                 scheduleId,
                 entryHour,
@@ -93,7 +100,9 @@ $(() => {
                         Swal.fire({
                             title: "Sucesso!",
                             text: "Registro Adicionado.",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1000
                           });
     
                         findAllMarkers();
@@ -101,7 +110,7 @@ $(() => {
                     Swal.fire({
                         title: "Atenção!",
                         text: `Não foi possível salvar o registro. Motivo: ${error}`,
-                        icon: "success"
+                        icon: "error"
                       });
                     console.log(error);
                 });  
@@ -228,11 +237,18 @@ $(() => {
             cancelButtonText: 'Cancelar',
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
+            didOpen: () => {
+                $('#marker-entryHour').inputmask('99:99', { placeholder: '__:__' });
+                $('#marker-departureTime').inputmask('99:99', { placeholder: '__:__' });
+            },
             preConfirm: () => {
               let scheduleId = $('#marker-scheduleId').val();
               let entryHour = $('#marker-entryHour').val();
               let departureTime = $('#marker-departureTime').val();
               
+              if(!validateHour(entryHour)){ return false; }
+              if(!validateHour(departureTime)){ return false; }
+
               let data = {
                 markerId: id,
                 scheduleId,
@@ -243,6 +259,10 @@ $(() => {
                 console.log(data)
 
               return data;
+            },
+            didOpen: () => {
+                $('#marker-entryHour').inputmask('hh:mm', { placeholder: '__:__' });
+                $('#marker-departureTime').inputmask('hh:mm', { placeholder: '__:__' });
             },
             allowOutsideClick: () => !Swal.isLoading()
         }).then(async (result) => {
@@ -261,7 +281,9 @@ $(() => {
                     Swal.fire({
                         title: "Sucesso!",
                         text: "Registro Atualizado.",
-                        icon: "success"
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1000
                     });
 
                     findAllMarkers();
@@ -309,7 +331,9 @@ $(() => {
                         Swal.fire({
                             title: "Sucesso!",
                             text: "Registro Removido.",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1000
                         });
 
                         findAllMarkers();
