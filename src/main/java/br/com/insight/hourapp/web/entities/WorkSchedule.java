@@ -108,6 +108,14 @@ public class WorkSchedule implements BaseEntity, Serializable {
 	public void removeHourMaker(SummaryHour summaryHour) {
 		this.summaryHours.remove(summaryHour);
 	}
+	
+	public Set<HourMarker> getHourMarkers() {
+		return hourMarkers;
+	}
+
+	public Set<SummaryHour> getSummaryHours() {
+		return summaryHours;
+	}
 
 	@Override
 	public Object getId() {

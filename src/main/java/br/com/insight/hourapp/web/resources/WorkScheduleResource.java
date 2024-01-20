@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import br.com.insight.hourapp.web.entities.HourMarker;
+import br.com.insight.hourapp.web.entities.SummaryHour;
 import br.com.insight.hourapp.web.entities.WorkSchedule;
 import br.com.insight.hourapp.web.entities.dto.WorkScheduleDTO;
 import br.com.insight.hourapp.web.resources.util.BufferedReaderToJson;
@@ -143,6 +145,35 @@ public class WorkScheduleResource extends HttpServlet {
 			long scheduleId = Long.parseLong(req.getParameter("scheduleId"));
 			WorkSchedule schedule = new WorkSchedule();
 			schedule.setScheduleId(scheduleId);
+			
+			schedule = scheduleService.findById(schedule);
+			/**
+			 * Devolve uma exceção personalizada caso exista registro nas tabelas associadas;
+			 */
+			if(schedule.getHourMarkers().size() > 0) {
+				String markersId = "";
+				for(HourMarker hourMarker : schedule.getHourMarkers()) {
+					markersId += hourMarker.getMarkerId() + ", ";
+				};
+				
+				resp.setStatus(HttpServletResponse.SC_CONFLICT);
+	            writer.write("Existem registros de Marcações com este horário.\n"
+	            		   + "Para removê-lo é necessário remover os registros associados.\n"
+	            		   + "Registros associados: " + markersId.substring(0, markersId.length() -2));	
+				return;
+			} else if(schedule.getSummaryHours().size() > 0) {
+				String summariesId = "";
+				for(SummaryHour summary : schedule.getSummaryHours()) {
+					summariesId += summary.getSummaryId() + ", ";
+				};
+				
+				resp.setStatus(HttpServletResponse.SC_CONFLICT);
+	            writer.write("Existem registros de registro de Hora Extra/Atraso com este horário.\n"
+	            		   + "Para removê-lo é necessário remover os registros associados.\n"
+	            		   + "Registros associados: " + summariesId.substring(0, summariesId.length() -2));	
+				return;
+			}
+			
 			scheduleService.remove(schedule);
 			
 			resp.setStatus(HttpServletResponse.SC_OK);

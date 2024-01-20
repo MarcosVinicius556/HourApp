@@ -51,9 +51,7 @@ $(() => {
                             icon: "success"
                           });
     
-                        setTimeout(() =>{
-                            findAllSchedule();
-                        }, 2000);
+                        findAllSchedule();
                 }).catch((error) => {
                     Swal.fire({
                         title: "Atenção!",
@@ -72,6 +70,7 @@ $(() => {
     }
 
     const findAllSchedule = async () => {
+        let newHtml = '';
         await fetch('WorkSchedules', {
             method: 'GET',
             headers: {
@@ -89,10 +88,12 @@ $(() => {
                     text: 'Nenhum registro de horário de trabalho encontrado!',
                     icon: 'warning'
                 });
+
+                $('#schedule-table').html(newHtml);
+
                 return;
             }
             
-            let newHtml = '';
             data.map((workSchedule) => {
                 newHtml += `
                 <tr>
@@ -208,9 +209,7 @@ $(() => {
                             icon: "success"
                         });
 
-                        setTimeout(() =>{
-                            findAllSchedule();
-                        }, 2000);
+                        findAllSchedule();
                 }).catch((error) => {
                     Swal.fire({
                         title: "Atenção!",
@@ -258,9 +257,7 @@ $(() => {
                             icon: "success"
                         });
 
-                        setTimeout(() =>{
-                            findAllSchedule();
-                        }, 2000);
+                        findAllSchedule();
                 }).catch((error) => {
                     Swal.fire({
                         title: "Atenção!",

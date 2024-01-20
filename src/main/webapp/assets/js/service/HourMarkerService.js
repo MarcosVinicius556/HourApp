@@ -1,20 +1,19 @@
 $(() => {
   
     const findAvailableSchedules = async () => {
-        let availableSchedules = [{}];
-        await fetch('WorkScchedules', {
+        let availableSchedules;
+         await fetch('WorkSchedules', {
             method: 'GET',
             headers: {
-                'Content-Type': 'application-json'
+                'Content-Type': 'application/json'
             }
-        }).then((response) => {
-            if(response.ok) {
-                throw new Error(`Erro na requisição: ${response.status}`)
-            }
-
-            return response.json();
-        }).then((result) => {
-            workSchedules = result;
+        }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                return response.json();
+        }).then(result => {
+            availableSchedules = result;
         }).catch((error) => {
             Toast.fire({
                 icon: 'error',
@@ -23,18 +22,24 @@ $(() => {
             });
             console.log(error)
         });
-
-        return workSchedules;
+        
+        return availableSchedules;
     }
 
     const createMarker = async (e) => {
         /**
          * Buscar os horários de trabalho
          */
-        let workSchedules = findAvailableSchedules();
-        
-        console.log(workSchedules);
-
+        let workSchedules = await findAvailableSchedules();
+        console.log(workSchedules)
+        if(!Array.isArray(workSchedules) || workSchedules.length === 0){
+            await Swal.fire({
+                    title: "Atenção!",
+                    text: `Não é possível cadastrar uma marcação sem ter pelo menos um horário cadastrado`,
+                    icon: "error"
+                }); 
+            return;
+        }
         await Swal.fire({
             title: "Nova Marcação",
             html: `
@@ -42,9 +47,8 @@ $(() => {
             <select class="swal2-select" id="marker-scheduleId">
             ${
                 workSchedules.map((schedule) => {
-                    return(`<option value="${schedule.id}">${schedule.scheduleId} - ${schedule.description}</option>`
-                            );
-                        })
+                    return(`<option value="${schedule.scheduleId}">${schedule.scheduleId} - ${schedule.description}</option>`);
+                })
             }
             </select>
             
@@ -60,12 +64,12 @@ $(() => {
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
             preConfirm: () => {
-              let markerScheduleId = $('#marker-scheduleId').val();
+              let scheduleId = $('#marker-scheduleId').val();
               let entryHour = $('#marker-entryHour').val();
               let departureTime = $('#marker-departureTime').val();
               
               let data = {
-                markerScheduleId,
+                scheduleId,
                 entryHour,
                 departureTime
               };
@@ -92,9 +96,7 @@ $(() => {
                             icon: "success"
                           });
     
-                        setTimeout(() =>{
-                            findAllSchedule();
-                        }, 2000);
+                        findAllMarkers();
                 }).catch((error) => {
                     Swal.fire({
                         title: "Atenção!",
@@ -113,80 +115,95 @@ $(() => {
     }
 
     const findAllMarkers = async () => {
-        await $.ajax({
-                type: 'GET',
-                url: 'HourMarkers',
-                success: (response) => {
-                    if (!Array.isArray(response) || response.length === 0) {
-                        Toast.fire({
-                            title: 'Atenção',
-                            text: 'Nenhum registro de marcação encontrado!',
-                            icon: 'warning'
-                        });
-                        return;
-                    }
-
-                    response.map((hourMarker) => {
-                        $('marker-table').append(`
-                        <tr>
-                                <td>${hourMarker.markerId}</td>
-                                <td>${hourMarker.schedule.scheduleId} - ${hourMarker.schedule.description}</td>
-                                <td>${hourMarker.entryHour}</td>
-                                <td>${hourMarker.departureTime}</td>
-                                <td>
-                                    <a class="btn me-3 text-lg text-success" id="schedule-update" data-id='${hourMarker.markerId}'>
-                                        <i class="far fa-edit"></i>
-                                    </a>
-                                    <a class="text-lg text-danger" id="schedule-delete" data-id='${hourMarker.markerId}'>
-                                        <i class="far fa-trash-alt"></i>
-                                    </a>
-                                </td>
-                        </tr>
-                        `);
-                    });
-                },
-                error: (error) => {
-                    Swal.fire({
-                        title: "Atenção!",
-                        text: `Não foi possível buscar as marcações de horário. Motivo: ${error}`,
-                        icon: "error"
-                    });
-                }
-            });
-    }
-
-    const findMarkerById = async (id) => {
-        $.ajax({
-            type: 'GET',
-            url: `HourMarkers?action=byId&markerId=${id}`,
-            success: (response) => { 
-                return {
-                    markerId: response.markerId,
-                    schedule: response.schedule,
-                    entryHour: response.entryHour,
-                    departureTime: response.departureTime
-                }; 
+        let newHtml = '';
+        await fetch('HourMarkers', {
+            method: 'GET',
+            headers: {
+                "Content-Type":"application/json"
             },
-            error: (error) => {
-                console.log(error);
-                Toast.fire({
-                    icon: 'error',
-                    text: `Não foi possível buscar a Marcação de horário escolhida. Motivo: ${error}`
-                });
+        }).then((response) => {
+            if(!response.ok) {
+                throw new Error('Não foi possível realizar a requisição');
             }
+            return response.json();
+        }).then((result) => {
+            if (!Array.isArray(result) || result.length === 0) {
+                Toast.fire({
+                    title: 'Atenção',
+                    text: 'Nenhum registro de marcação encontrado!',
+                    icon: 'warning'
+                });
+
+                $('#marker-table').html(newHtml);
+
+                return;
+            }
+
+            result.map((hourMarker) => {
+                newHtml += `
+                <tr>
+                    <td>${hourMarker.markerId}</td>
+                    <td>${hourMarker.scheduleId} - ${hourMarker.scheduleDescription}</td>
+                    <td>${hourMarker.entryHour}</td>
+                    <td>${hourMarker.departureTime}</td>
+                    <td>
+                        <a class="btn me-3 text-lg text-success" id="marker-update" data-id='${hourMarker.markerId}'>
+                            <i class="far fa-edit"></i>
+                        </a>
+                        <a class="text-lg text-danger" id="marker-delete" data-id='${hourMarker.markerId}'>
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                `;
+            });
+            $('#marker-table').html(newHtml);
+        }).catch((error) => {
+            Swal.fire({
+                title: "Atenção!",
+                text: `Não foi possível buscar as marcações de horário. Motivo: ${error}`,
+                icon: "error"
+            });
         });
     }
 
+    const findMarkerById = async (id) => {
+        let obj = null;
+        await fetch(`HourMarkers?action=byId&markerId=${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                return response.json();
+        }).then(result => {
+            obj = {
+                    markerId: result.markerId,
+                    schedule: result.schedule,
+                    entryHour: result.entryHour,
+                    departureTime: result.departureTime
+                };
+        }).catch((error) => {
+            console.log(error);
+            Toast.fire({
+                icon: 'error',
+                text: `Não foi possível buscar a marcação escolhida. Motivo: ${error}`
+            });
+        });
+        return obj;
+    }
+
     const updateMarker = async () => {
-        let id = $('#schedule-update').data('id');
-        let old = findMarkerById(id);
+        let id = $('#marker-update').data('id');
+        let old = await findMarkerById(id);
 
         /**
          * Buscar os horários de trabalho
          */
-        let workSchedules = findAvailableSchedules();
-        
-        console.log(workSchedules);
+        let workSchedules = await findAvailableSchedules();
         await Swal.fire({
             title: "Atualizar Marcação",
             html: `
@@ -194,7 +211,7 @@ $(() => {
             <select class="swal2-select" id="marker-scheduleId">
             ${
                 workSchedules.map((schedule) => {
-                    return(`<option value="${schedule.id}">${schedule.scheduleId} - ${schedule.description}</option>`
+                    return(`<option value="${schedule.scheduleId}">${schedule.scheduleId} - ${schedule.description}</option>`
                             );
                         })
             }
@@ -212,40 +229,50 @@ $(() => {
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
             preConfirm: () => {
-              let markerScheduleId = $('#marker-scheduleId').val();
+              let scheduleId = $('#marker-scheduleId').val();
               let entryHour = $('#marker-entryHour').val();
               let departureTime = $('#marker-departureTime').val();
               
               let data = {
                 markerId: id,
-                markerScheduleId,
+                scheduleId,
                 entryHour,
                 departureTime
               };
 
+                console.log(data)
+
               return data;
             },
             allowOutsideClick: () => !Swal.isLoading()
-        }).then((result) => {
+        }).then(async (result) => {
             if(result.isConfirmed){
-                $ajax({
-                    type: 'PUT',
-                    data: JSON.stringify(data),
-                    url: 'HourMarkers',
-                    success: () => {
-                        Toast.fire({
-                            icon: "success",
-                            title: "Cadastro Realizado com sucesso!"
-                        });
+                await fetch('HourMarkers', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type':'application/json'
                     },
-                    error: (error) => {
-                        Toast.fire({
-                            icon: "error",
-                            title: "Ocorreu um erro ao salvar o registro!"
-                        });
-                        console.log(error);
+                    body: JSON.stringify(result.value)
+                }).then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`Erro na requisição: ${response.status}`);
                     }
-                }); 
+                    
+                    Swal.fire({
+                        title: "Sucesso!",
+                        text: "Registro Atualizado.",
+                        icon: "success"
+                    });
+
+                    findAllMarkers();
+                }).catch((error) =>{
+                    Swal.fire({
+                        title: "Atenção!",
+                        text: `Não foi possível atualizar o registro. Motivo: ${error}`,
+                        icon: "error"
+                    });
+                    console.log(error);
+                });
             } else {
                 Toast.fire({
                     icon: "error",
@@ -269,24 +296,29 @@ $(() => {
             confirmButtonText: "Sim, Delete isso!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                $.ajax({
-                    type: 'DELETE',
-                    url: `HourMarkers/${id}`,
-                    success: () => {
+                await fetch(`HourMarkers?markerId=${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`Erro na requisição: ${response.status}`);
+                        }
+
                         Swal.fire({
                             title: "Sucesso!",
                             text: "Registro Removido.",
                             icon: "success"
-                          });
-                    },
-                    
-                    error: (error) => {
-                        Swal.fire({
-                            title: "Atenção!",
-                            text: `Não foi possível remover o registro. Motivo: ${error}`,
-                            icon: "error"
-                          });
-                    }
+                        });
+
+                        findAllMarkers();
+                }).catch((error) => {
+                    Swal.fire({
+                        title: "Atenção!",
+                        text: `Não foi possível remover o registro. Motivo: ${error}`,
+                        icon: "error"
+                    });
                 });
             } else {
                 Toast.fire({
@@ -300,9 +332,9 @@ $(() => {
     /**
      * Atribuir eventos das funções
      */
-    $('#marker-create').on('click', createMarker);
-    $('#marker-update').on('click', updateMarker);
-    $('#marker-delete').on('click', deleteMarker);
+    $(document).on('click', '#marker-create', createMarker);
+    $(document).on('click', '#marker-update', updateMarker);
+    $(document).on('click', '#marker-delete', deleteMarker);
 
     /**
      * Ao iniciar busca todos e lista na tabela de horários
