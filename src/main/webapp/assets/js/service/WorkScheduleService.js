@@ -195,8 +195,8 @@ $(() => {
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
             didOpen: () => {
-            $('#schedule-entryHour').inputmask('99:99', { placeholder: '__:__' });
-            $('#schedule-departureTime').inputmask('99:99', { placeholder: '__:__' });
+                $('#schedule-entryHour').inputmask('99:99', { placeholder: '__:__' });
+                $('#schedule-departureTime').inputmask('99:99', { placeholder: '__:__' });
             },
             preConfirm: () => {
               let description = $('#schedule-description').val();

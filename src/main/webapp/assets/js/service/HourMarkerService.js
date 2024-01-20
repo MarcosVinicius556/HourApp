@@ -260,10 +260,6 @@ $(() => {
 
               return data;
             },
-            didOpen: () => {
-                $('#marker-entryHour').inputmask('hh:mm', { placeholder: '__:__' });
-                $('#marker-departureTime').inputmask('hh:mm', { placeholder: '__:__' });
-            },
             allowOutsideClick: () => !Swal.isLoading()
         }).then(async (result) => {
             if(result.isConfirmed){
