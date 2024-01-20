@@ -9,6 +9,7 @@ import br.com.insight.hourapp.web.entities.enums.HourType;
 
 public class SummaryHourDTO {
 
+	private long summaryId;
 	private long scheduleId;
 	private long markerId;
 	private String totalHours;
@@ -22,6 +23,7 @@ public class SummaryHourDTO {
 		this.totalHours = sh.getTotalHours();
 		this.hourType = HourType.getDescriptionByCod(sh.getHourType()).getDescription();
 		this.created = sdf.format(sh.getCreated().getTime());
+		this.summaryId = sh.getSummaryId();
 	}
 
 	public long getScheduleId() {
@@ -62,6 +64,14 @@ public class SummaryHourDTO {
 
 	public void setCreated(String created) {
 		this.created = created;
+	}
+
+	public long getSummaryId() {
+		return summaryId;
+	}
+
+	public void setSummaryId(long summaryId) {
+		this.summaryId = summaryId;
 	}
 
 	public SummaryHour fromDTO() {

@@ -5,6 +5,7 @@ import br.com.insight.hourapp.web.entities.WorkSchedule;
 
 public class HourMarkerDTO {
 
+	private long markerId;
 	private long scheduleId;
 	private String entryHour;
 	private String departureTime;
@@ -13,6 +14,7 @@ public class HourMarkerDTO {
 		this.scheduleId = marker.getWorkSchedule().getScheduleId();
 		this.entryHour = marker.getEntryHour();
 		this.departureTime = marker.getDepartureTime();
+		this.markerId = marker.getMarkerId();
 	}
 
 	public long getScheduleId() {
@@ -39,6 +41,14 @@ public class HourMarkerDTO {
 		this.departureTime = departureTime;
 	}
 	
+	public long getMarkerId() {
+		return markerId;
+	}
+
+	public void setMarkerId(long markerId) {
+		this.markerId = markerId;
+	}
+
 	public HourMarker fromDTO() {
 		HourMarker hm = new HourMarker();
 		WorkSchedule ws = new WorkSchedule();

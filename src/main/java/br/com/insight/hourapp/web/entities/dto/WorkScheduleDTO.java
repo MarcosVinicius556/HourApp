@@ -4,6 +4,7 @@ import br.com.insight.hourapp.web.entities.WorkSchedule;
 
 public class WorkScheduleDTO {
 
+	private long scheduleId;
 	private String description;
 	private String entryHour;
 	private String departureTime;
@@ -12,6 +13,7 @@ public class WorkScheduleDTO {
 		this.description = schedule.getDescription();
 		this.entryHour = schedule.getEntryHour();
 		this.departureTime = schedule.getDepartureTime();
+		this.scheduleId = schedule.getScheduleId(); 
 	}
 
 	public String getDescription() {
@@ -36,6 +38,14 @@ public class WorkScheduleDTO {
 
 	public void setDepartureTime(String departureTime) {
 		this.departureTime = departureTime;
+	}
+
+	public long getScheduleId() {
+		return scheduleId;
+	}
+
+	public void setScheduleId(long scheduleId) {
+		this.scheduleId = scheduleId;
 	}
 	
 }
