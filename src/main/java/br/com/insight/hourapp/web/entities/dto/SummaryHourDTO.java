@@ -13,6 +13,7 @@ public class SummaryHourDTO {
 	private long scheduleId;
 	private long markerId;
 	private String totalHours;
+	private int hourTypeCod;
 	private String hourType;
 	private String created;
 	
@@ -21,6 +22,7 @@ public class SummaryHourDTO {
 		this.scheduleId = sh.getWorkSchedule().getScheduleId();
 		this.markerId = sh.getHourMarker().getMarkerId();
 		this.totalHours = sh.getTotalHours();
+		this.hourTypeCod = sh.getHourType();
 		this.hourType = HourType.getDescriptionByCod(sh.getHourType()).getDescription();
 		this.created = sdf.format(sh.getCreated().getTime());
 		this.summaryId = sh.getSummaryId();
@@ -74,6 +76,14 @@ public class SummaryHourDTO {
 		this.summaryId = summaryId;
 	}
 
+	public int getHourTypeCod() {
+		return hourTypeCod;
+	}
+
+	public void setHourTypeCod(int hourTypeCod) {
+		this.hourTypeCod = hourTypeCod;
+	}
+
 	public SummaryHour fromDTO() {
 		WorkSchedule ws = new WorkSchedule();
 		ws.setScheduleId(scheduleId);
@@ -85,6 +95,7 @@ public class SummaryHourDTO {
 		sh.setWorkSchedule(ws);
 		sh.setHourMarker(hm);
 		sh.setTotalHours(totalHours);
+		sh.setHourType(hourTypeCod);
 		
 		return sh;
 	}

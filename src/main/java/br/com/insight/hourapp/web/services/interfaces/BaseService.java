@@ -29,7 +29,7 @@ public interface BaseService<Entity extends BaseEntity>{
 	 */
 	default void insert(Entity obj) {
 		try {
-			getRepository().insert(obj);
+				getRepository().insert(obj);
 		} catch (Exception e) {
 			throw new ServiceException("Não foi possível inserir a entidade. Motivo: " + e.getMessage());
 		}

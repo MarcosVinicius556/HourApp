@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.insight.hourapp.web.entities.SummaryHour;
 import br.com.insight.hourapp.web.entities.dto.SummaryHourCalculateDTO;
+import br.com.insight.hourapp.web.entities.dto.SummaryHourDTO;
 import br.com.insight.hourapp.web.resources.enums.CalculateMode;
 
 /**
@@ -18,6 +19,6 @@ public interface SummaryHoursService extends BaseService<SummaryHour>{
 	 * @param marker
 	 * @return
 	 */
-	List<SummaryHour> calculateTotalHours(SummaryHourCalculateDTO dto, CalculateMode calcMode);
+	List<SummaryHourDTO> calculateTotalHours(SummaryHourCalculateDTO dto, CalculateMode calcMode);
 	
 }

@@ -1,5 +1,15 @@
 $(() => {
-  
+    
+    const showLoadingIndicator = () => {
+        $('#loading-indicator').show();
+        $('#page-content').hide();
+    };
+
+    const hideLoadingIndicator = () => {
+        $('#loading-indicator').hide();
+        $('#page-content').show();
+    };
+
     const findAvailableSchedules = async () => {
         let availableSchedules;
          await fetch('WorkSchedules', {
@@ -124,6 +134,9 @@ $(() => {
     }
 
     const findAllMarkers = async () => {
+
+        showLoadingIndicator();
+
         let newHtml = '';
         await fetch('HourMarkers', {
             method: 'GET',
@@ -181,6 +194,8 @@ $(() => {
                 text: `Não foi possível buscar as marcações de horário. Motivo: ${error}`,
                 icon: "error"
             });
+        }).finally(() => {
+            hideLoadingIndicator();
         });
     }
 

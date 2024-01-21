@@ -48,7 +48,7 @@ public class SummaryHour implements BaseEntity, Serializable {
 	@Column(name = "created", columnDefinition = "TIMESTAMP")
 	private GregorianCalendar created;
 	
-	@Column(name = "total_hours", nullable = false, length = 5)
+	@Column(name = "total_hours", nullable = false, length = 16)
 	private String totalHours;
 	
 	@Column(name = "hour_type", nullable = false)

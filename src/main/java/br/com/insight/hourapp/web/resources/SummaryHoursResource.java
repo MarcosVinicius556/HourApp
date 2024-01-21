@@ -107,7 +107,9 @@ public class SummaryHoursResource extends HttpServlet {
 				SummaryHourCalculateDTO dto = gson.fromJson(json, SummaryHourCalculateDTO.class);
 				int calculateMode = Integer.parseInt(req.getParameter("mode"));
 				CalculateMode mode = CalculateMode.valueOfCod(calculateMode);
-				json = gson.toJson(summaryService.calculateTotalHours(dto, mode));
+				Type jsonType = new TypeToken<List<SummaryHour>>() {}.getType(); 
+				List<SummaryHourDTO> summaries = summaryService.calculateTotalHours(dto, mode);
+				json = gson.toJson(summaries, jsonType);
 				break;
 			case "save":
 				System.out.println("Not yet implemented");

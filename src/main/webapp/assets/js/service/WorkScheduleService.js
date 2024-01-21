@@ -1,5 +1,15 @@
 $(() => {
-  
+
+    const showLoadingIndicator = () => {
+        $('#loading-indicator').show();
+        $('#page-content').hide();
+    };
+
+    const hideLoadingIndicator = () => {
+        $('#loading-indicator').hide();
+        $('#page-content').show();
+    };
+
     const createSchedule = async (e) => {
         await Swal.fire({
             title: "Novo Horário",
@@ -88,6 +98,12 @@ $(() => {
     }
 
     const findAllSchedule = async () => {
+
+        /**
+         * Mostra o componente de loading até que tudo seja carregado
+         */
+        showLoadingIndicator();
+
         let newHtml = '';
         await fetch('WorkSchedules', {
             method: 'GET',
@@ -147,6 +163,8 @@ $(() => {
                 text: `Não foi possível buscar os registros de Horários. Motivo: ${error.message}`,
                 icon: "error"
             });
+        }).finally(() => {
+            hideLoadingIndicator();
         });
     }
 

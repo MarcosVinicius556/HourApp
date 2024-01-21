@@ -11,19 +11,19 @@
 		<jsp:include page="./assets/imports/StylesImports.jsp"></jsp:include>
     </head>
   	<body>
+
+		  
 		<!-- navbar -->
 		<jsp:include page="./views/static/navbar.jsp"></jsp:include>
 		<!-- /navbar -->
+		<div id="loading-indicator" style="display: none;">
+			<div class="spinner"></div>
+    		<p>Carregando...</p>
+		</div>
 
-		<div class="page-holder bg-gray-100">
+		<div class="page-holder bg-gray-100" id="page-content">
 			<div class="container-fluid px-lg-4 px-xl-5">
 			  <section class="mb-3 mb-lg-5">
-	
-				<div class="row mb-3">
-					<!-- <CARDS> -->
-						<jsp:include page="./views/cards.jsp"></jsp:include>
-					<!-- </ CARDS> -->
-				</div>	
 				
 				<div class="row mb-3">
 					<!-- <Horários de Trabalho>-->

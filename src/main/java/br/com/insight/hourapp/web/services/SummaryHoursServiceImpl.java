@@ -3,6 +3,7 @@ package br.com.insight.hourapp.web.services;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
@@ -10,6 +11,7 @@ import br.com.insight.hourapp.web.entities.HourMarker;
 import br.com.insight.hourapp.web.entities.SummaryHour;
 import br.com.insight.hourapp.web.entities.WorkSchedule;
 import br.com.insight.hourapp.web.entities.dto.SummaryHourCalculateDTO;
+import br.com.insight.hourapp.web.entities.dto.SummaryHourDTO;
 import br.com.insight.hourapp.web.entities.enums.HourType;
 import br.com.insight.hourapp.web.repositories.factory.RepositoryFactory;
 import br.com.insight.hourapp.web.repositories.interfaces.BaseRepository;
@@ -44,11 +46,11 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 	}
 
 	@Override
-	public List<SummaryHour> calculateTotalHours(SummaryHourCalculateDTO dto, CalculateMode calcMode) {
-		SummaryHour summary = new SummaryHour();
+	public List<SummaryHourDTO> calculateTotalHours(SummaryHourCalculateDTO dto, CalculateMode calcMode) {
 		List<WorkSchedule> schedules = new ArrayList<>();
 		List<HourMarker> markers = new ArrayList<>();
-		List<SummaryHour> newSummaries = new ArrayList<>();
+ 		List<SummaryHour> newSummaries = new ArrayList<>();
+ 		List<SummaryHourDTO> newSummariesDTO = new ArrayList<>();
 		
 		try {
 			
@@ -66,18 +68,23 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 			
 			switch (calcMode) {
 				case MARKER_LESS_SCHEDULE:
+					//Converte para uma lista de DTO's
 					newSummaries = calculateByMarker(markers, schedules);
 					break;
 				case SCHEDULE_LESS_MARKER:
 					newSummaries = calculateBySchedule(schedules, markers);
 					break;
-			}			
+			}		
+			
+			newSummaries.forEach(s -> this.insert(s));  
+			newSummariesDTO = newSummaries.stream().map(s -> new SummaryHourDTO(s)).collect(Collectors.toList());
+			
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
 		}
 		
-		return newSummaries;
+		return newSummariesDTO; 
 	}
 	
 	/**************************************************************
@@ -110,15 +117,15 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 		HourType hourType = null;
 
 		String markerEntryHour = marker.getEntryHour();
-		String scheduleEntryHour = marker.getEntryHour();
+		String scheduleEntryHour = schedule.getEntryHour();
 		
-		String scheduleDepartureTime = marker.getDepartureTime();
 		String markerDepartureTime = marker.getDepartureTime();
+		String scheduleDepartureTime = schedule.getDepartureTime();
 		
 		/**
 		 * Se houver atraso/extra, gera novo registro de summaryHour
 		 */
-		Object[] entryDiff = calculateDiff(markerEntryHour, scheduleEntryHour, true);
+		Object[] entryDiff = calculateDiff(scheduleEntryHour, markerEntryHour, true);
 		diffHour = (String) entryDiff[0];
 		hourType = (HourType) entryDiff[1];
 		if(hourType != null) {
@@ -132,7 +139,7 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 			newSummaries.add(summary);
 		}
 		
-		Object[] departureDiff = calculateDiff(markerDepartureTime, scheduleDepartureTime, false);
+		Object[] departureDiff = calculateDiff(scheduleDepartureTime, markerDepartureTime, false);
 		diffHour = (String) departureDiff[0];
 		hourType = (HourType) departureDiff[1];
 		if(hourType != null) {
@@ -180,15 +187,15 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 		HourType hourType = null;
 
 		String markerEntryHour = marker.getEntryHour();
-		String scheduleEntryHour = marker.getEntryHour();
+		String scheduleEntryHour = schedule.getEntryHour();
 		
-		String scheduleDepartureTime = marker.getDepartureTime();
 		String markerDepartureTime = marker.getDepartureTime();
+		String scheduleDepartureTime = schedule.getDepartureTime();
 		
 		/**
 		 * Se houver atraso/extra, gera novo registro de summaryHour
 		 */
-		Object[] entryDiff = calculateDiff(scheduleEntryHour, markerEntryHour, true);
+		Object[] entryDiff = calculateDiff(markerEntryHour, scheduleEntryHour, true);
 		diffHour = (String) entryDiff[0];
 		hourType = (HourType) entryDiff[1];
 		if(hourType != null) {
@@ -202,7 +209,7 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 			newSummaries.add(summary);
 		}
 		
-		Object[] departureDiff = calculateDiff(scheduleDepartureTime, markerDepartureTime, false);
+		Object[] departureDiff = calculateDiff(markerDepartureTime, scheduleDepartureTime, false);
 		diffHour = (String) departureDiff[0];
 		hourType = (HourType) departureDiff[1];
 		if(hourType != null) {
