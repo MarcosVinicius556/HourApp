@@ -7,6 +7,8 @@
   <!-- CSS-->
   <link rel="stylesheet" href="assets/css/bootstrap.css" id="theme-stylesheet">
   <link rel="stylesheet" href="assets/css/sweetalert2.min.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="assets/css/fontawesome.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="assets/css/loading-indicator.css" id="theme-stylesheet">
 
   <!-- Favicon-->
   <link rel="shortcut icon" href="assets/images/favicon.png">

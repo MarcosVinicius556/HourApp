@@ -17,8 +17,9 @@
 		<jsp:include page="./views/static/navbar.jsp"></jsp:include>
 		<!-- /navbar -->
 		<div id="loading-indicator" style="display: none;">
-			<div class="spinner"></div>
-    		<p>Carregando...</p>
+			<div class="spinner-container">
+				<div class="spinner"></div>
+			</div>
 		</div>
 
 		<div class="page-holder bg-gray-100" id="page-content">

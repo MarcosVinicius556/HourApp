@@ -7,27 +7,26 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
     z-index: 1000;
 }
 
+.spinner-container {
+    display: flex;
+    align-items: center;
+}
+
 .spinner {
-    border: 6px solid rgba(0, 0, 0, 0.1);
-    border-left: 6px solid #3498db; /* Cor do spinner */
+    border: 8px solid transparent;
+    border-top: 8px solid #3498db; /* Cor do spinner */
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     animation: spin 1s linear infinite;
+    margin-right: 10px; /* Espaçamento entre o spinner e o texto */
 }
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-#loading-indicator p {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    margin-left: 10px;
 }
