@@ -151,7 +151,15 @@ $(() => {
             result.map((hourMarker) => {
                 newHtml += `
                 <tr>
-                    <td>${hourMarker.markerId}</td>
+                
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="${hourMarker.markerId}">
+                            <label class="form-check-label">
+                                <strong>${hourMarker.markerId}</strong>
+                            </label>
+                        </div>
+                    </td>
                     <td>${hourMarker.scheduleId} - ${hourMarker.scheduleDescription}</td>
                     <td>${hourMarker.entryHour}</td>
                     <td>${hourMarker.departureTime}</td>

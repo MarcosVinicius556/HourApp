@@ -7,11 +7,10 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                
                 <table class="table table-borderless table-hover mb-0">
                     <thead class="light">
                         <tr>
-                            <th># </th>
+                            <th>Incluir no Calc.</th>
                             <th>Descrição</th>
                             <th>Entrada</th>
                             <th>Saída</th>

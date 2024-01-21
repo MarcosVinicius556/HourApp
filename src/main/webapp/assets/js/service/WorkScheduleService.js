@@ -115,18 +115,25 @@ $(() => {
             data.map((workSchedule) => {
                 newHtml += `
                 <tr>
-                        <td>${workSchedule.scheduleId}</td>
-                        <td>${workSchedule.description}</td>
-                        <td>${workSchedule.entryHour}</td>
-                        <td>${workSchedule.departureTime}</td>
-                        <td>
-                            <a class="btn me-3 text-lg text-success" id="schedule-update" data-id='${workSchedule.scheduleId}'>
-                                <i class="far fa-edit"></i>
-                            </a>
-                            <a class="text-lg text-danger" id="schedule-delete" data-id='${workSchedule.scheduleId}'>
-                                <i class="far fa-trash-alt"></i>
-                            </a>
-                        </td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="${workSchedule.scheduleId}">
+                            <label class="form-check-label">
+                                <strong>${workSchedule.scheduleId}</strong>
+                            </label>
+                        </div>
+                    </td>
+                    <td>${workSchedule.description}</td>
+                    <td>${workSchedule.entryHour}</td>
+                    <td>${workSchedule.departureTime}</td>
+                    <td>
+                        <a class="btn me-3 text-lg text-success" id="schedule-update" data-id='${workSchedule.scheduleId}'>
+                            <i class="far fa-edit"></i>
+                        </a>
+                        <a class="text-lg text-danger" id="schedule-delete" data-id='${workSchedule.scheduleId}'>
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
                 </tr>
                 `;
             });

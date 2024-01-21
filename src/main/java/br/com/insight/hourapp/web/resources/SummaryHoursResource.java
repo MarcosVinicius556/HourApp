@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -14,8 +13,9 @@ import com.google.gson.reflect.TypeToken;
 
 import br.com.insight.hourapp.web.entities.SummaryHour;
 import br.com.insight.hourapp.web.entities.WorkSchedule;
+import br.com.insight.hourapp.web.entities.dto.SummaryHourCalculateDTO;
 import br.com.insight.hourapp.web.entities.dto.SummaryHourDTO;
-import br.com.insight.hourapp.web.entities.enums.HourType;
+import br.com.insight.hourapp.web.resources.enums.CalculateMode;
 import br.com.insight.hourapp.web.resources.util.BufferedReaderToJson;
 import br.com.insight.hourapp.web.services.factory.ServiceFactory;
 import br.com.insight.hourapp.web.services.interfaces.SummaryHoursService;
@@ -48,7 +48,7 @@ public class SummaryHoursResource extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = null;
-		PrintWriter writer = null;
+		PrintWriter writer = null; 
 		Gson gson = null;
 		String json = "";
 		try {
@@ -90,24 +90,29 @@ public class SummaryHoursResource extends HttpServlet {
 		PrintWriter writer = null;
 		Gson gson = null;
 		String json = "";
+		String action = "";
 		try {
 			resp.setContentType("text/plain");
 			writer = resp.getWriter();
 			gson = new Gson();
-			json = BufferedReaderToJson.bufferedReaderToJson(req.getReader());
+			action = req.getParameter("action");
+			json = BufferedReaderToJson.bufferedReaderToJson(req.getReader()); 
 			
-			SummaryHourDTO dto = gson.fromJson(json, SummaryHourDTO.class);
-			SummaryHour summary = dto.fromDTO();
-			summary.setCreated(new GregorianCalendar());
+			
 			/**
 			 * TODO Verifiacar como deve ser feito....
 			 */
-			summary.setTotalHours("01:00");
-			summary.setHourType(HourType.LATE.getCod());
-			
-			summaryService.insert(summary);
-			
-			json = gson.toJson(new SummaryHourDTO(summary));
+			switch (action) {
+			case "calculate":
+				SummaryHourCalculateDTO dto = gson.fromJson(json, SummaryHourCalculateDTO.class);
+				int calculateMode = Integer.parseInt(req.getParameter("mode"));
+				CalculateMode mode = CalculateMode.valueOfCod(calculateMode);
+				json = gson.toJson(summaryService.calculateTotalHours(dto, mode));
+				break;
+			case "save":
+				System.out.println("Not yet implemented");
+				break;
+			}
 			
 			resp.setStatus(HttpServletResponse.SC_OK);
 			writer.append(json);

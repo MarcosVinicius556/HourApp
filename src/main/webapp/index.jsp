@@ -36,9 +36,9 @@
 				</div>
 	
 				<div class="row mb-3">
-					<!-- Cálculo de Atraso e Hora Extra-->
+					<!-- Cálculo de Atraso e Hora Extra (horaExtra - horaDeTrabalho)-->
 					<jsp:include page="./views/hourCalculator.jsp"></jsp:include>
-					<!-- /Cálculo de Atraso e Hora Extra-->
+					<!-- /Cálculo de Atraso e Hora Extra (horaExtra - horaDeTrabalho)-->
 				</div>
 
 				<div class="row mb-3">
