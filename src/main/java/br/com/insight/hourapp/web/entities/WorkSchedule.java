@@ -1,20 +1,7 @@
 package br.com.insight.hourapp.web.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 import br.com.insight.hourapp.web.entities.interfaces.BaseEntity;
 
@@ -22,41 +9,19 @@ import br.com.insight.hourapp.web.entities.interfaces.BaseEntity;
  * @author Marcos Vinicius
  * @apiNote Entidade que representa os horários de trabalho 
  */
-@Entity
-@Table(name = "work_schedule", 
-	   indexes = @Index(name="idx_work_schedule", columnList = "schedule_id") 
-	   )
 public class WorkSchedule implements BaseEntity, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@Column(name="schedule_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "work_schedule_id")
-	@SequenceGenerator(name = "work_schedule_id", sequenceName = "work_schedule_id", allocationSize = 1)
 	private long scheduleId;
-	
-	@Column(name = "description", length = 128)
-	private String description;
-	
-	@Column(name = "entry_hour", length = 5)
 	private String entryHour;
-	
-	@Column(name = "departure_hour", length = 5)
 	private String departureTime;
-	
-	@OneToMany( mappedBy = "workSchedule", fetch = FetchType.EAGER )
-	private Set<HourMarker> hourMarkers = new HashSet<>();
-	
-	@OneToMany(mappedBy = "workSchedule", fetch = FetchType.EAGER)
-	private Set<SummaryHour> summaryHours = new HashSet<>();
 
 	public WorkSchedule() {
 		
 	}
 	
-	public WorkSchedule(String description, String entryHour, String departureTime) {
-		this.description = description;
+	public WorkSchedule(String entryHour, String departureTime) {
 		this.entryHour = entryHour;
 		this.departureTime = departureTime;
 	}
@@ -67,14 +32,6 @@ public class WorkSchedule implements BaseEntity, Serializable {
 
 	public void setScheduleId(long scheduleId) {
 		this.scheduleId = scheduleId;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public String getEntryHour() {
@@ -91,30 +48,6 @@ public class WorkSchedule implements BaseEntity, Serializable {
 
 	public void setDepartureTime(String departureTime) {
 		this.departureTime = departureTime;
-	}
-
-	public void addHourMaker(HourMarker hourMarker) {
-		this.hourMarkers.add(hourMarker);
-	}
-	
-	public void removeHourMaker(HourMarker hourMarker) {
-		this.hourMarkers.remove(hourMarker);
-	}
-	
-	public void addSummaryHours(SummaryHour summaryHour) {
-		this.summaryHours.add(summaryHour);
-	}
-	
-	public void removeHourMaker(SummaryHour summaryHour) {
-		this.summaryHours.remove(summaryHour);
-	}
-	
-	public Set<HourMarker> getHourMarkers() {
-		return hourMarkers;
-	}
-
-	public Set<SummaryHour> getSummaryHours() {
-		return summaryHours;
 	}
 
 	@Override
@@ -146,7 +79,7 @@ public class WorkSchedule implements BaseEntity, Serializable {
 
 	@Override
 	public String toString() {
-		return "WorkSchedule [scheduleId=" + scheduleId + ", description=" + description + ", entryHour=" + entryHour
+		return "WorkSchedule [scheduleId=" + scheduleId + ", entryHour=" + entryHour
 				+ ", departureTime=" + departureTime + "]";
 	}
 
