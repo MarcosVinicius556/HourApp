@@ -1,3 +1,4 @@
+
 $(() => {
 
     const showLoadingIndicator = () => {
@@ -11,90 +12,49 @@ $(() => {
     };
 
     const createSchedule = async (e) => {
-        await Swal.fire({
-            title: "Novo Horário",
-            html: `
-            <label class="swal2-label">Descrição</label>
-            <input id="schedule-description" class="swal2-input" type="textarea">
+            let entryHour = $('#schedule-entryHour').val();
+            let departureTime = $('#schedule-departureTime').val();
             
-            <label class="swal2-label">Horário de Entrada</label>
-            <input id="schedule-entryHour" class="swal2-input">
+            if(!validateHour(entryHour)){ return; }
+            if(!validateHour(departureTime)){ return; }
 
-            <label id="swal-label1" class="swal2-label">Horário de Saída</label>
-            <input id="schedule-departureTime" id="swal-input2" class="swal2-input">
-            `,
-            focusConfirm: false,
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar',
-            confirmButtonText: 'Salvar',
-            showLoaderOnConfirm: true,
-            didOpen: () => {
-                $('#schedule-entryHour').inputmask('99:99', { placeholder: '__:__' });
-                $('#schedule-departureTime').inputmask('99:99', { placeholder: '__:__' });
-            },
-            preConfirm: () => {
-              let description = $('#schedule-description').val();
-              let entryHour = $('#schedule-entryHour').val();
-              let departureTime = $('#schedule-departureTime').val();
-              
-              if(!validateHour(entryHour)){ return false; }
-              if(!validateHour(departureTime)){ return false; }
-
-              let data = {
-                description,
+            let data = {
                 entryHour,
                 departureTime
-              };
+            };
 
-              return data;
+            await fetch('WorkSchedules', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             },
-            allowOutsideClick: () => !Swal.isLoading()
-        }).then(async (result) => {
-            if(result.isConfirmed){
-                await fetch('WorkSchedules', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(result.value)
-                }).then(response => {
-                    console.log(response)
-                        if (!response.ok) {
-                            response.text()
-                                    .then((result) => {
-                                        Swal.fire({
-                                            title: "Atenção!",
-                                            text: `Não foi possível salvar o registro. Motivo: ${result}`,
-                                            icon: "error"
-                                          });
+            body: JSON.stringify(data)
+        }).then(response => {
+            console.log(response)
+                if (!response.ok) {
+                    response.text()
+                            .then((result) => {
+                                Swal.fire({
+                                    title: "Atenção!",
+                                    text: `Não foi possível salvar o registro. Motivo: ${result}`,
+                                    icon: "error"
                                     });
-                            return;
-                        }
+                            });
+                    return;
+                }
 
-                        Swal.fire({
-                            title: "Sucesso!",
-                            text: "Registro Adicionado.",
-                            icon: "success",
-                            showConfirmButton: false,
-                            timer: 1000
-                          });
-    
-                        findAllSchedule();
-                }).catch((error) => {
-                    Swal.fire({
-                        title: "Atenção!",
-                        text: `Não foi possível salvar o registro. Motivo: ${error}`,
-                        icon: "error"
-                      });
-                    console.log(error);
-                }); 
-            } else {
-                Toast.fire({
-                    icon: "error",
-                    title: "Operação Cancelada!"
-                });
-            }
-        });
+                findAllSchedule();
+        }).catch((error) => {
+            console.log(error);
+            Swal.fire({
+                title: "Atenção!",
+                text: `Não foi possível salvar o registro. Motivo: ${error}`,
+                icon: "error"
+            });
+        }).finally(() => {
+            $('#schedule-entryHour').val('');
+            $('#schedule-departureTime').val('');
+        }); 
     }
 
     const findAllSchedule = async () => {
@@ -133,13 +93,12 @@ $(() => {
                 <tr>
                     <td>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="${workSchedule.scheduleId}">
+                            <input class="form-check-input" type="checkbox" value="${workSchedule.scheduleId} checked='true' ">
                             <label class="form-check-label">
                                 <strong>${workSchedule.scheduleId}</strong>
                             </label>
                         </div>
                     </td>
-                    <td>${workSchedule.description}</td>
                     <td>${workSchedule.entryHour}</td>
                     <td>${workSchedule.departureTime}</td>
                     <td>
@@ -183,7 +142,6 @@ $(() => {
         }).then(data => {
             obj = {
                 scheduleId: data.scheduleId,
-                description: data.description,
                 entryHour: data.entryHour,
                 departureTime: data.departureTime
             };
@@ -205,9 +163,6 @@ $(() => {
         await Swal.fire({
             title: "Atualizar Horário",
             html: `
-              <label class="swal2-label">Descrição</label>
-              <input id="schedule-description" class="swal2-input" type="textarea" value='${old.description}'>
-              
               <label class="swal2-label">Horário de Entrada</label>
               <input id="schedule-entryHour" class="swal2-input" value='${old.entryHour}'>
 
@@ -224,7 +179,6 @@ $(() => {
                 $('#schedule-departureTime').inputmask('99:99', { placeholder: '__:__' });
             },
             preConfirm: () => {
-              let description = $('#schedule-description').val();
               let entryHour = $('#schedule-entryHour').val();
               let departureTime = $('#schedule-departureTime').val();
               
@@ -233,7 +187,6 @@ $(() => {
 
               let data = {
                 scheduleId: id,
-                description,
                 entryHour,
                 departureTime
               };
@@ -342,12 +295,20 @@ $(() => {
     $(document).on('click', '#schedule-create', createSchedule);
     $(document).on('click', '#schedule-update', updateSchedule);
     $(document).on('click', '#schedule-delete', deleteSchedule);
-
+    
     /**
      * Ao iniciar busca todos e lista na tabela de horários
      */
     findAllSchedule();
+
+    $(document).ready(() => {
+        console.log('Executando criação da máscaras...')
+        $('#schedule-entryHour').inputmask('99:99', { placeholder: '__:__' });
+        $('#schedule-departureTime').inputmask('99:99', { placeholder: '__:__' });
+    });
 });
+
+
 
 
 

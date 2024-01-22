@@ -62,9 +62,6 @@ public interface BaseRepository {
 		MemoryStorage memory = new MemoryStorage();
 		List<Object> lst = memory.readAllIntoMemory(obj.getClass().getName());
 		try {
-			if(lst.size() == 0) {
-				throw new RuntimeException("Nenhum registro encontrado!");
-			}
 			//Remove o objeto antigo
 			memory.removeFromMemory(obj.getClass().getName(), obj);
 			
@@ -88,10 +85,6 @@ public interface BaseRepository {
 		List<Object> lst = memory.readAllIntoMemory(obj.getClass().getName());
 		List<BaseEntity> lstReturn = new ArrayList<>();
 		try {
-			if(lst.size() == 0) {
-				throw new RuntimeException("Nenhum registro encontrado!");
-			}
-			
 			lst.forEach(o -> lstReturn.add((BaseEntity)o));
 		} catch (Exception e) {
 			e.printStackTrace();

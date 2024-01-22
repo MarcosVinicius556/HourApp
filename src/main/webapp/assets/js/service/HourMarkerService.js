@@ -39,9 +39,9 @@ $(() => {
     const createMarker = async (e) => {
         /**
          * Buscar os horários de trabalho
+         * Se não houver nenhum horário cadastrado não será possível calcular nada....
          */
         let workSchedules = await findAvailableSchedules();
-        console.log(workSchedules)
         if(!Array.isArray(workSchedules) || workSchedules.length === 0){
             await Swal.fire({
                     title: "Atenção!",
@@ -50,87 +50,41 @@ $(() => {
                 }); 
             return;
         }
-        await Swal.fire({
-            title: "Nova Marcação",
-            html: `
-            <label class="swal2-label">Horário de Trabalho</label>
-            <select class="swal2-select" id="marker-scheduleId">
-            ${
-                workSchedules.map((schedule) => {
-                    return(`<option value="${schedule.scheduleId}">${schedule.scheduleId} - ${schedule.description}</option>`);
-                })
-            }
-            </select>
-            
-            <label class="swal2-label">Horário de Entrada</label>
-            <input id="marker-entryHour" class="swal2-input">
 
-            <label id="swal-label1" class="swal2-label">Horário de Saída</label>
-            <input id="marker-departureTime" id="swal-input2" class="swal2-input">
-            `,
-            focusConfirm: false,
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar',
-            confirmButtonText: 'Salvar',
-            showLoaderOnConfirm: true,
-            didOpen: () => {
-                $('#marker-entryHour').inputmask('99:99', { placeholder: '__:__' });
-                $('#marker-departureTime').inputmask('99:99', { placeholder: '__:__' });
+        let entryHour = $('#marker-entryHour').val();
+        let departureTime = $('#marker-departureTime').val();
+        
+        if(!validateHour(entryHour)){ return false; }
+        if(!validateHour(departureTime)){ return false; }
+
+        let data = {
+        entryHour,
+        departureTime
+        };
+
+        await fetch('HourMarkers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             },
-            preConfirm: () => {
-              let scheduleId = $('#marker-scheduleId').val();
-              let entryHour = $('#marker-entryHour').val();
-              let departureTime = $('#marker-departureTime').val();
-              
-              if(!validateHour(entryHour)){ return false; }
-              if(!validateHour(departureTime)){ return false; }
+            body: JSON.stringify(data)
+        }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
 
-              let data = {
-                scheduleId,
-                entryHour,
-                departureTime
-              };
-
-              return data;
-            },
-            allowOutsideClick: () => !Swal.isLoading()
-        }).then(async (result) => {
-            if(result.isConfirmed){
-                await fetch('HourMarkers', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(result.value)
-                }).then(response => {
-                        if (!response.ok) {
-                            throw new Error(`Erro na requisição: ${response.status}`);
-                        }
-
-                        Swal.fire({
-                            title: "Sucesso!",
-                            text: "Registro Adicionado.",
-                            icon: "success",
-                            showConfirmButton: false,
-                            timer: 1000
-                          });
-    
-                        findAllMarkers();
-                }).catch((error) => {
-                    Swal.fire({
-                        title: "Atenção!",
-                        text: `Não foi possível salvar o registro. Motivo: ${error}`,
-                        icon: "error"
-                      });
-                    console.log(error);
-                });  
-            } else {
-                Toast.fire({
-                    icon: "error",
-                    title: "Operação Cancelada!"
+                findAllMarkers();
+        }).catch((error) => {
+            Swal.fire({
+                title: "Atenção!",
+                text: `Não foi possível salvar o registro. Motivo: ${error}`,
+                icon: "error"
                 });
-            }
-        });
+            console.log(error);
+        }).finally(() => {
+            $('#marker-entryHour').val('');
+            $('#marker-departureTime').val('');
+        }); ;
     }
 
     const findAllMarkers = async () => {
@@ -164,16 +118,6 @@ $(() => {
             result.map((hourMarker) => {
                 newHtml += `
                 <tr>
-                
-                    <td>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="${hourMarker.markerId}">
-                            <label class="form-check-label">
-                                <strong>${hourMarker.markerId}</strong>
-                            </label>
-                        </div>
-                    </td>
-                    <td>${hourMarker.scheduleId} - ${hourMarker.scheduleDescription}</td>
                     <td>${hourMarker.entryHour}</td>
                     <td>${hourMarker.departureTime}</td>
                     <td>
@@ -239,16 +183,6 @@ $(() => {
         await Swal.fire({
             title: "Atualizar Marcação",
             html: `
-            <label class="swal2-label">Horário de Trabalho</label>
-            <select class="swal2-select" id="marker-scheduleId">
-            ${
-                workSchedules.map((schedule) => {
-                    return(`<option value="${schedule.scheduleId}">${schedule.scheduleId} - ${schedule.description}</option>`
-                            );
-                        })
-            }
-            </select>
-            
             <label class="swal2-label">Horário de Entrada</label>
             <input id="marker-entryHour" class="swal2-input" value='${old.entryHour}'>
 
@@ -265,7 +199,6 @@ $(() => {
                 $('#marker-departureTime').inputmask('99:99', { placeholder: '__:__' });
             },
             preConfirm: () => {
-              let scheduleId = $('#marker-scheduleId').val();
               let entryHour = $('#marker-entryHour').val();
               let departureTime = $('#marker-departureTime').val();
               
@@ -274,12 +207,10 @@ $(() => {
 
               let data = {
                 markerId: id,
-                scheduleId,
                 entryHour,
                 departureTime
               };
 
-                console.log(data)
 
               return data;
             },
@@ -383,6 +314,12 @@ $(() => {
      * Ao iniciar busca todos e lista na tabela de horários
      */
     findAllMarkers();
+
+    $(document).ready(() => {
+        console.log('Executando criação da máscaras...')
+        $('#marker-entryHour').inputmask('99:99', { placeholder: '__:__' });
+        $('#marker-departureTime').inputmask('99:99', { placeholder: '__:__' });
+    });
 });
 
 
