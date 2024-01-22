@@ -73,8 +73,13 @@ public class SummaryHour implements BaseEntity, Serializable {
 	}
 
 	@Override
-	public Object getId() {
+	public Long getId() {
 		return summaryId;
+	}
+	
+	@Override
+	public void setId(long newId) {
+		this.scheduleId = newId;
 	}
 
 	@Override

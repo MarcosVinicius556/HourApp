@@ -51,7 +51,7 @@ public class WorkSchedule implements BaseEntity, Serializable {
 	}
 
 	@Override
-	public Object getId() {
+	public Long getId() {
 		return scheduleId;
 	}
 
@@ -81,6 +81,11 @@ public class WorkSchedule implements BaseEntity, Serializable {
 	public String toString() {
 		return "WorkSchedule [scheduleId=" + scheduleId + ", entryHour=" + entryHour
 				+ ", departureTime=" + departureTime + "]";
+	}
+
+	@Override
+	public void setId(long newId) {
+		this.scheduleId = newId;
 	}
 
 	

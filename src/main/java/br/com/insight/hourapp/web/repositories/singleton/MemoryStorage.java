@@ -1,9 +1,11 @@
 package br.com.insight.hourapp.web.repositories.singleton;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MemoryStorage {
 
@@ -11,8 +13,10 @@ public class MemoryStorage {
 	 * Armazena todos os dados da aplicação no modelo Chave | Valor
 	 * Sendo a chave o nome da tabela (Fornecido utilizando .getClassName()) e valor os registro contidos 
 	 * na memória...
+	 * 
+	 * Utilizado set, pois assim fica mais fácil tratar chaves duplicadas....
 	 */
-	private static Map<String, List<Object>> MEMMORY_DATABASE;
+	private static Map<String, Set<Object>> MEMMORY_DATABASE;
 	
 	public MemoryStorage() {
 		if(MEMMORY_DATABASE == null) {
@@ -21,7 +25,7 @@ public class MemoryStorage {
 	}
 	
 	public void createNewTable(String className) {
-		List<Object> newList = new ArrayList<>();
+		Set<Object> newList = new HashSet<>();
 		MEMMORY_DATABASE.put(className, newList);
 	}
 	
@@ -33,17 +37,21 @@ public class MemoryStorage {
 	}
 	
 	public void removeFromMemory(String className, Object data) throws Exception {
-		if(MemoryStorage.MEMMORY_DATABASE.get(className) == null)
-			throw new RuntimeException("Nenhuma 'Tabele' com o nome " + className + " encontrada!");
+		if(MemoryStorage.MEMMORY_DATABASE.get(className) == null) {
+			System.out.println("Nenhuma 'Tabela' com o nome " + className + " encontrada! Criando tabela...");
+			createNewTable(className);
+		}
 		
 		MemoryStorage.MEMMORY_DATABASE.get(className).remove(data);
 	}
 	
 	public List<Object> readAllIntoMemory(String className) {
-		if(MemoryStorage.MEMMORY_DATABASE.get(className) == null)
-			throw new RuntimeException("Nenhuma 'Tabele' com o nome " + className + " encontrada!");
+		if(MemoryStorage.MEMMORY_DATABASE.get(className) == null) {
+			System.out.println("Nenhuma 'Tabela' com o nome " + className + " encontrada! Criando tabela...");
+			createNewTable(className);
+		}
 		
-		return MemoryStorage.MEMMORY_DATABASE.get(className);
+		return MemoryStorage.MEMMORY_DATABASE.get(className).stream().collect(Collectors.toList());
 	}
 	
 	/**

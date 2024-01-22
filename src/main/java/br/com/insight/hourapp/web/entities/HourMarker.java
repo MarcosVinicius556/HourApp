@@ -51,8 +51,13 @@ public class HourMarker implements BaseEntity, Serializable {
 	}
 
 	@Override
-	public Object getId() {
+	public Long getId() {
 		return markerId;
+	}
+	
+	@Override
+	public void setId(long newId) {
+		this.markerId = newId;
 	}
 	
 	@Override

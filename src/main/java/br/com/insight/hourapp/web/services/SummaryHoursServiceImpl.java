@@ -1,7 +1,6 @@
 package br.com.insight.hourapp.web.services;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,9 +129,6 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 		hourType = (HourType) entryDiff[1];
 		if(hourType != null) {
 			SummaryHour summary = new SummaryHour();
-			summary.setHourMarker(marker);
-			summary.setWorkSchedule(schedule);
-			summary.setCreated(new GregorianCalendar());
 			summary.setHourType(hourType.getCod());
 			summary.setTotalHours(diffHour);
 			
@@ -144,9 +140,6 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 		hourType = (HourType) departureDiff[1];
 		if(hourType != null) {
 			SummaryHour summary = new SummaryHour();
-			summary.setHourMarker(marker);
-			summary.setWorkSchedule(schedule);
-			summary.setCreated(new GregorianCalendar());
 			summary.setHourType(hourType.getCod());
 			summary.setTotalHours(diffHour);
 			
@@ -200,9 +193,6 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 		hourType = (HourType) entryDiff[1];
 		if(hourType != null) {
 			SummaryHour summary = new SummaryHour();
-			summary.setHourMarker(marker);
-			summary.setWorkSchedule(schedule);
-			summary.setCreated(new GregorianCalendar());
 			summary.setHourType(hourType.getCod());
 			summary.setTotalHours(diffHour);
 			
@@ -214,9 +204,6 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 		hourType = (HourType) departureDiff[1];
 		if(hourType != null) {
 			SummaryHour summary = new SummaryHour();
-			summary.setHourMarker(marker);
-			summary.setWorkSchedule(schedule);
-			summary.setCreated(new GregorianCalendar());
 			summary.setHourType(hourType.getCod());
 			summary.setTotalHours(diffHour);
 			

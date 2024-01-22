@@ -135,7 +135,10 @@ public interface BaseRepository {
 			List<Object> lst = memory.readAllIntoMemory(className);
 			if(lst.size() == 0) //Caso não encontre nada, é por quê será a primeira inserção
 				return 0;
-			lst.stream().sorted((o1, o2) -> ((BaseEntity)o1).getId().compareTo(((BaseEntity)o2).getId())).findFirst().get();
+			BaseEntity temp = (BaseEntity) lst.stream()
+							   .sorted((o1, o2) -> ((BaseEntity)o1).getId().compareTo(((BaseEntity)o2).getId()))
+							   .findFirst().get();
+			lastId = temp.getId();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
