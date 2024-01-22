@@ -26,6 +26,16 @@
 			<div class="container-fluid px-lg-4 px-xl-5">
 			  <section class="mb-3 mb-lg-5">
 				
+				<div class="row mb-5">
+					<!-- <Horários de Trabalho>-->
+						<jsp:include page="./views/scheduleRegistry.jsp"></jsp:include>
+					<!-- </ Horários de Trabalho> -->
+					
+					<!-- <Marcações de Horário>-->
+						<jsp:include page="./views/hourRegistry.jsp"></jsp:include>
+					<!-- </Marcações de Horário>-->
+				</div>
+
 				<div class="row mb-3">
 					<!-- <Horários de Trabalho>-->
 						<jsp:include page="./views/workScheduleTable.jsp"></jsp:include>
@@ -36,12 +46,6 @@
 					<!-- </Marcações de Horário>-->
 				</div>
 	
-				<div class="row mb-3">
-					<!-- Cálculo de Atraso e Hora Extra (horaExtra - horaDeTrabalho)-->
-					<jsp:include page="./views/hourCalculator.jsp"></jsp:include>
-					<!-- /Cálculo de Atraso e Hora Extra (horaExtra - horaDeTrabalho)-->
-				</div>
-
 				<div class="row mb-3">
 					
 					<!-- Registro de Horas de Atraso -->

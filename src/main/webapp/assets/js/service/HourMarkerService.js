@@ -51,6 +51,7 @@ $(() => {
             return;
         }
 
+
         let entryHour = $('#marker-entryHour').val();
         let departureTime = $('#marker-departureTime').val();
         
@@ -58,8 +59,8 @@ $(() => {
         if(!validateHour(departureTime)){ return false; }
 
         let data = {
-        entryHour,
-        departureTime
+            entryHour,
+            departureTime
         };
 
         await fetch('HourMarkers', {
@@ -118,6 +119,7 @@ $(() => {
             result.map((hourMarker) => {
                 newHtml += `
                 <tr>
+                <td>${hourMarker.markerId}</td>
                     <td>${hourMarker.entryHour}</td>
                     <td>${hourMarker.departureTime}</td>
                     <td>
@@ -184,10 +186,10 @@ $(() => {
             title: "Atualizar Marcação",
             html: `
             <label class="swal2-label">Horário de Entrada</label>
-            <input id="marker-entryHour" class="swal2-input" value='${old.entryHour}'>
+            <input id="marker-update-entryHour" class="swal2-input" value='${old.entryHour}'>
 
             <label id="swal-label1" class="swal2-label">Horário de Saída</label>
-            <input id="marker-departureTime" id="swal-input2" class="swal2-input" value='${old.departureTime}'>
+            <input id="marker-update-departureTime" id="swal-input2" class="swal2-input" value='${old.departureTime}'>
             `,
             focusConfirm: false,
             showCancelButton: true,
@@ -195,12 +197,12 @@ $(() => {
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
             didOpen: () => {
-                $('#marker-entryHour').inputmask('99:99', { placeholder: '__:__' });
-                $('#marker-departureTime').inputmask('99:99', { placeholder: '__:__' });
+                $('#marker-update-entryHour').inputmask('99:99', { placeholder: '__:__' });
+                $('#marker-update-departureTime').inputmask('99:99', { placeholder: '__:__' });
             },
             preConfirm: () => {
-              let entryHour = $('#marker-entryHour').val();
-              let departureTime = $('#marker-departureTime').val();
+              let entryHour = $('#marker-update-entryHour').val();
+              let departureTime = $('#marker-update-departureTime').val();
               
               if(!validateHour(entryHour)){ return false; }
               if(!validateHour(departureTime)){ return false; }
@@ -316,7 +318,7 @@ $(() => {
     findAllMarkers();
 
     $(document).ready(() => {
-        console.log('Executando criação da máscaras...')
+        console.log('Executando criação da máscaras para as marcações...')
         $('#marker-entryHour').inputmask('99:99', { placeholder: '__:__' });
         $('#marker-departureTime').inputmask('99:99', { placeholder: '__:__' });
     });

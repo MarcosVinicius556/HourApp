@@ -1,4 +1,3 @@
-
 $(() => {
 
     const showLoadingIndicator = () => {
@@ -88,6 +87,8 @@ $(() => {
                 return;
             }
             
+            console.log(data)
+
             data.map((workSchedule) => {
                 newHtml += `
                 <tr>
@@ -102,10 +103,10 @@ $(() => {
                     <td>${workSchedule.entryHour}</td>
                     <td>${workSchedule.departureTime}</td>
                     <td>
-                        <a class="btn me-3 text-lg text-success" id="schedule-update" data-id='${workSchedule.scheduleId}'>
+                        <a class="btn me-3 text-lg text-success schedule-update" data-id='${workSchedule.scheduleId}'>
                             <i class="far fa-edit"></i>
                         </a>
-                        <a class="text-lg text-danger" id="schedule-delete" data-id='${workSchedule.scheduleId}'>
+                        <a class="text-lg text-danger schedule-delete" data-id='${workSchedule.scheduleId}'>
                             <i class="far fa-trash-alt"></i>
                         </a>
                     </td>
@@ -156,18 +157,19 @@ $(() => {
         return obj;
     }
 
-    const updateSchedule = async () => {
-        let id = $('#schedule-update').data('id');
+    const updateSchedule = async (e) => {
+        let id = e.currentTarget.dataset.id;
         let old = await findScheduleById(id);
+
 
         await Swal.fire({
             title: "Atualizar Horário",
             html: `
               <label class="swal2-label">Horário de Entrada</label>
-              <input id="schedule-entryHour" class="swal2-input" value='${old.entryHour}'>
+              <input id="schedule-update-entryHour" class="swal2-input" value='${old.entryHour}'>
 
               <label id="swal-label1" class="swal2-label">Horário de Saída</label>
-              <input id="schedule-departureTime" id="swal-input2" class="swal2-input" value='${old.departureTime}'>
+              <input id="schedule-update-departureTime" id="swal-input2" class="swal2-input" value='${old.departureTime}'>
             `,
             focusConfirm: false,
             showCancelButton: true,
@@ -175,12 +177,12 @@ $(() => {
             confirmButtonText: 'Salvar',
             showLoaderOnConfirm: true,
             didOpen: () => {
-                $('#schedule-entryHour').inputmask('99:99', { placeholder: '__:__' });
-                $('#schedule-departureTime').inputmask('99:99', { placeholder: '__:__' });
+                $('#schedule-update-entryHour').inputmask('99:99', { placeholder: '__:__' });
+                $('#schedule-update-departureTime').inputmask('99:99', { placeholder: '__:__' });
             },
             preConfirm: () => {
-              let entryHour = $('#schedule-entryHour').val();
-              let departureTime = $('#schedule-departureTime').val();
+              let entryHour = $('#schedule-update-entryHour').val();
+              let departureTime = $('#schedule-update-departureTime').val();
               
               if(!validateHour(entryHour)){ return false; }
               if(!validateHour(departureTime)){ return false; }
@@ -232,8 +234,8 @@ $(() => {
         });
     }
 
-    const deleteSchedule = async () => {
-        let id = $('#schedule-delete').data('id');
+    const deleteSchedule = async (e) => {
+        let id = e.currentTarget.dataset.id;
 
         Swal.fire({
             title: "Tem certeza?",
@@ -293,8 +295,8 @@ $(() => {
      * Atribuir eventos das funções
      */
     $(document).on('click', '#schedule-create', createSchedule);
-    $(document).on('click', '#schedule-update', updateSchedule);
-    $(document).on('click', '#schedule-delete', deleteSchedule);
+    $(document).on('click', '.schedule-update', updateSchedule);
+    $(document).on('click', '.schedule-delete', deleteSchedule);
     
     /**
      * Ao iniciar busca todos e lista na tabela de horários

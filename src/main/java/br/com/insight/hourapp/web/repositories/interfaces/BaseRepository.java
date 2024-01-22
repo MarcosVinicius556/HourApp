@@ -129,7 +129,7 @@ public interface BaseRepository {
 			if(lst.size() == 0) //Caso não encontre nada, é por quê será a primeira inserção
 				return 0;
 			BaseEntity temp = (BaseEntity) lst.stream()
-							   .sorted((o1, o2) -> ((BaseEntity)o1).getId().compareTo(((BaseEntity)o2).getId()))
+							   .sorted((o1, o2) -> ((BaseEntity)o2).getId().compareTo(((BaseEntity)o1).getId()))
 							   .findFirst().get();
 			lastId = temp.getId();
 		} catch (Exception e) {
