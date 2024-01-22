@@ -1,10 +1,6 @@
 package br.com.insight.hourapp.web.entities.dto;
 
-import java.text.SimpleDateFormat;
-
-import br.com.insight.hourapp.web.entities.HourMarker;
 import br.com.insight.hourapp.web.entities.SummaryHour;
-import br.com.insight.hourapp.web.entities.WorkSchedule;
 import br.com.insight.hourapp.web.entities.enums.HourType;
 
 public class SummaryHourDTO {
@@ -15,16 +11,13 @@ public class SummaryHourDTO {
 	private String totalHours;
 	private int hourTypeCod;
 	private String hourType;
-	private String created;
 	
 	public SummaryHourDTO(SummaryHour sh) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		this.scheduleId = sh.getWorkSchedule().getScheduleId();
-		this.markerId = sh.getHourMarker().getMarkerId();
+		this.scheduleId = sh.getScheduleId();
+		this.markerId = sh.getMarkerId();
 		this.totalHours = sh.getTotalHours();
 		this.hourTypeCod = sh.getHourType();
 		this.hourType = HourType.getDescriptionByCod(sh.getHourType()).getDescription();
-		this.created = sdf.format(sh.getCreated().getTime());
 		this.summaryId = sh.getSummaryId();
 	}
 
@@ -60,14 +53,6 @@ public class SummaryHourDTO {
 		this.hourType = hourType;
 	}
 	
-	public String getCreated() {
-		return created;
-	}
-
-	public void setCreated(String created) {
-		this.created = created;
-	}
-
 	public long getSummaryId() {
 		return summaryId;
 	}
@@ -85,17 +70,11 @@ public class SummaryHourDTO {
 	}
 
 	public SummaryHour fromDTO() {
-		WorkSchedule ws = new WorkSchedule();
-		ws.setScheduleId(scheduleId);
-
-		HourMarker hm = new HourMarker();
-		hm.setMarkerId(markerId);
-		
 		SummaryHour sh = new SummaryHour();
-		sh.setWorkSchedule(ws);
-		sh.setHourMarker(hm);
 		sh.setTotalHours(totalHours);
 		sh.setHourType(hourTypeCod);
+		sh.setScheduleId(scheduleId);
+		sh.setMarkerId(markerId);
 		
 		return sh;
 	}

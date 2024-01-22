@@ -5,12 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.insight.hourapp.web.entities.HourMarker;
-import br.com.insight.hourapp.web.entities.SummaryHour;
-import br.com.insight.hourapp.web.entities.WorkSchedule;
-import br.com.insight.hourapp.web.entities.enums.HourType;
-
-public class MemoryDatabase {
+public class MemoryStorage {
 
 	/**
 	 * Armazena todos os dados da aplicação no modelo Chave | Valor
@@ -19,7 +14,7 @@ public class MemoryDatabase {
 	 */
 	private static Map<String, List<Object>> MEMMORY_DATABASE;
 	
-	public MemoryDatabase() {
+	public MemoryStorage() {
 		if(MEMMORY_DATABASE == null) {
 			MEMMORY_DATABASE = new HashMap<>();
 		}
@@ -31,31 +26,24 @@ public class MemoryDatabase {
 	}
 	
 	public void insertIntoMemory(String className, Object data) {
-		if(MemoryDatabase.MEMMORY_DATABASE.get(className) == null)
+		if(MemoryStorage.MEMMORY_DATABASE.get(className) == null)
 			createNewTable(className);
 		
-		MemoryDatabase.MEMMORY_DATABASE.get(className).add(data);
+		MemoryStorage.MEMMORY_DATABASE.get(className).add(data);
 	}
 	
-	public void removeIntoMemory(String className, Object data) throws Exception {
-		if(MemoryDatabase.MEMMORY_DATABASE.get(className) == null)
+	public void removeFromMemory(String className, Object data) throws Exception {
+		if(MemoryStorage.MEMMORY_DATABASE.get(className) == null)
 			throw new RuntimeException("Nenhuma 'Tabele' com o nome " + className + " encontrada!");
 		
-		MemoryDatabase.MEMMORY_DATABASE.get(className).remove(data);
-	}
-	
-	public void upateIntoMemory(String className, Object data) {
-		if(MemoryDatabase.MEMMORY_DATABASE.get(className) == null)
-			throw new RuntimeException("Nenhuma 'Tabele' com o nome " + className + " encontrada!");
-		
-		MemoryDatabase.MEMMORY_DATABASE.get(className).remove(data);
+		MemoryStorage.MEMMORY_DATABASE.get(className).remove(data);
 	}
 	
 	public List<Object> readAllIntoMemory(String className) {
-		if(MemoryDatabase.MEMMORY_DATABASE.get(className) == null)
+		if(MemoryStorage.MEMMORY_DATABASE.get(className) == null)
 			throw new RuntimeException("Nenhuma 'Tabele' com o nome " + className + " encontrada!");
 		
-		return MemoryDatabase.MEMMORY_DATABASE.get(className);
+		return MemoryStorage.MEMMORY_DATABASE.get(className);
 	}
 	
 	/**

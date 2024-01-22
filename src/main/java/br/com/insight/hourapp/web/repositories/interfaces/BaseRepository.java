@@ -2,14 +2,10 @@ package br.com.insight.hourapp.web.repositories.interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.RollbackException;
-import javax.persistence.TypedQuery;
+import java.util.Optional;
 
 import br.com.insight.hourapp.web.entities.interfaces.BaseEntity;
-import br.com.insight.hourapp.web.repositories.singleton.H2DatabaseConnection;
+import br.com.insight.hourapp.web.repositories.singleton.MemoryStorage;
 
 /**
  * @author Marcos Vinicius Angeli Costa.
@@ -28,97 +24,19 @@ public interface BaseRepository {
 	 * @apiNote Método reponsável por inserir uma entidade no banco.
 	 */
 	default void insert(BaseEntity obj) throws Exception {
-		EntityManager em = null;
+		MemoryStorage memory = new MemoryStorage();
+		String className = obj.getClass().getName();
 		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			em.getTransaction().begin();
-			em.persist(obj);
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			throw new Exception("Não foi possível persistir a entidade. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-	}
-	
-	default void insertOrUpdate(BaseEntity obj) throws Exception {
-		EntityManager em = null;
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			try {
-				if(exists(obj)) {
-					em.getTransaction().begin();
-					em.merge(obj);
-					em.getTransaction().commit();	
-				} else {
-					em.getTransaction().begin();
-					em.persist(obj);
-					em.getTransaction().commit();	
-				}
-				
-				
-			} catch (RollbackException e) {
-				e.printStackTrace();
-			}
-			System.out.println("[Entity has saved correctly]:" + obj.toString());
-		} catch (Exception e) {
-			throw new Exception("Não foi possível salvar ou atualizar as entidades. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-	}
-
-	/**
-	 * @param List<BaseEntity>
-	 * @return true if success
-	 * @throws Exception 
-	 */
-	default void insertAll(List<BaseEntity> objs) throws Exception {
-		EntityManager em = null;
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			em.getTransaction().begin();
-			for(BaseEntity obj : objs) {
-				em.persist(obj);	
-				System.out.println("[Entity was saved correctly]: " + obj.toString());
-			}
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			throw new Exception("Não foi possível persistir as entidades. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-	}
-	
-	/**
-	 * @param List<BaseEntity>
-	 * @return true if success
-	 * @throws Exception 
-	 */
-	default void insertAllOrUpdateAll(List<BaseEntity> objs) throws Exception {
-		EntityManager em = null;
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-
-			for(BaseEntity obj : objs) {
-				try {
-					em.getTransaction().begin();
-					em.persist(obj);
-					em.getTransaction().commit();
-				} catch (RollbackException e) {
-					em.getTransaction().begin();
-					em.merge(obj);
-					em.getTransaction().commit();
-				}
-				System.out.println("[Entity was saved correctly]: " + obj.toString());
-			}
+			long lastId = getLastIdNumber(className);
+			obj.setId(lastId + 1); //" AUTO_INCREMENT "
+			
+			memory.insertIntoMemory(className, obj);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new Exception("Não foi possível persistir as entidades. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
+			System.err.println(e.getMessage());
 		}
 	}
+	
 
 	/**
 	 * @param BaseEntity
@@ -126,38 +44,12 @@ public interface BaseRepository {
 	 * @throws Exception 
 	 */
 	default void remove(BaseEntity obj) throws Exception {
-		EntityManager em = null;
+		MemoryStorage memory = new MemoryStorage();
 		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			em.getTransaction().begin();
-			em.remove(em.contains(obj) ? obj : em.merge(obj));
-			em.getTransaction().commit();
+			memory.removeFromMemory(obj.getClass().getName(), obj);
 		} catch (Exception e) {
-			throw new Exception("Não foi possível remover a entidade. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-	}
-
-	/**
-	 * @param List<BaseEntity>
-	 * @return true if success
-	 * @throws Exception 
-	 */
-	default <T extends BaseEntity>  void removeAll(List<T> objs) throws Exception {
-		EntityManager em = null;
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-
-			em.getTransaction().begin();
-			for(BaseEntity obj : objs) {
-				em.remove(em.contains(obj) ? obj : em.merge(obj));
-			}
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			throw new Exception("Não foi possível remover as entidades. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
+			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 
@@ -167,39 +59,23 @@ public interface BaseRepository {
 	 * @throws Exception 
 	 */
 	default void update(BaseEntity obj) throws Exception {
-		EntityManager em = null;
+		MemoryStorage memory = new MemoryStorage();
+		List<Object> lst = memory.readAllIntoMemory(obj.getClass().getName());
 		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-
-			em.getTransaction().begin();
-			em.merge(obj);
-			em.getTransaction().commit();
+			if(lst.size() == 0) {
+				throw new RuntimeException("Nenhum registro encontrado!");
+			}
+			//Remove o objeto antigo
+			memory.removeFromMemory(obj.getClass().getName(), obj);
+			
+			//Adiciona o novo
+			memory.insertIntoMemory(obj.getClass().getName(), obj);
 		} catch (Exception e) {
-			throw new Exception("Não foi possível atualizar a entidade. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
+			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 
-	/**
-	 * @param List<BaseEntity>
-	 * @return true if success
-	 * @throws Exception 
-	 */
-	default void updateAll(List<BaseEntity> objs) throws Exception {
-		EntityManager em = null;
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-
-			em.getTransaction().begin();
-			objs.forEach(em::merge);
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			throw new Exception("Não foi possível atualizar os dados das entidades. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-	}
 
 	/**
 	 * @apiNote Retorna tudo da entidade passada por parâmetro
@@ -207,160 +83,64 @@ public interface BaseRepository {
 	 * @return
 	 * @throws Exception 
 	 */
-	default List<BaseEntity> findAll(BaseEntity entity) throws Exception{
-		EntityManager em = null;
-		TypedQuery<? extends BaseEntity> queryEntity = null;
-		List<BaseEntity> lst = new ArrayList<>();
+	default List<BaseEntity> findAll(BaseEntity obj) throws Exception{
+		MemoryStorage memory = new MemoryStorage();
+		List<Object> lst = memory.readAllIntoMemory(obj.getClass().getName());
+		List<BaseEntity> lstReturn = new ArrayList<>();
 		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			queryEntity =  em.createQuery("SELECT c FROM "+entity.getClass().getName()+" c ", entity.getClass());
-			queryEntity.getResultList().forEach(lst::add);
+			if(lst.size() == 0) {
+				throw new RuntimeException("Nenhum registro encontrado!");
+			}
+			
+			lst.forEach(o -> lstReturn.add((BaseEntity)o));
 		} catch (Exception e) {
-			throw new Exception("Não foi possível buscar todas as entidades. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
+			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
-		return lst;
+		
+		return lstReturn;
 	}
 
-	/**
-	 * @apiNote Faz uma consulta retornando aquilo que condiz com o que foi digitado
-	 * @param entity
-	 * @param field
-	 * @param typed
-	 * @return
-	 * @throws Exception 
-	 */
-	default List<BaseEntity> findAllLike(BaseEntity entity, String field, String typed) throws Exception {
-		EntityManager em = null;
-		TypedQuery<? extends BaseEntity> queryEntity = null;
-		List<BaseEntity> lst = new ArrayList<>();
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			queryEntity =  em.createQuery("SELECT c FROM "+entity.getClass().getName()+" c WHERE upper(c."+field+") LIKE upper(CAST('%"+typed+"%' as string))", entity.getClass());
-			queryEntity.getResultList().forEach(lst::add);
-		} catch (Exception e) {
-			throw new Exception("Não foi possível buscar todas as entidades. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-		return lst;
-	}
-	
 	/**
 	 * @param BaseEntity
 	 * @return Entity
 	 * @throws Exception 
 	 */
 	default BaseEntity findById(BaseEntity obj) throws Exception {
-		EntityManager em = null;
-
+		MemoryStorage memory = new MemoryStorage();
+		List<Object> lst = memory.readAllIntoMemory(obj.getClass().getName());
+		BaseEntity objectFind = null;
 		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			return em.find(obj.ClassType(), obj.getId());
+			if(lst.size() == 0) {
+				throw new RuntimeException("Nenhum registro encontrado!");
+			}
+			Optional<Object> opObj = lst.stream().filter(o -> ((BaseEntity)o).getId() == obj.getId()).findFirst();
+			if(!opObj.isPresent())
+				throw new RuntimeException("Nenhum registro com o ID. " + obj.getId() + " encontrado" );
+			
+			objectFind = (BaseEntity) opObj.get();
 		} catch (Exception e) {
-			throw new Exception("Não foi possível encontrar a entidade. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
+			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
+		
+		return objectFind;
 	}
 
-	/**
-	 * @apiNote Executa uma query JPQL
-	 * @param BaseEntity
-	 * @return List of entity
-	 * @throws Exception 
-	 */
-	default List<Object> loadByQuery(String query) throws Exception {
-		EntityManager em = null;
-		TypedQuery<Object> queryToExec = null;
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			queryToExec = em.createQuery(query, Object.class);
-			return queryToExec.getResultList();
-		} catch (Exception e) {
-			throw new Exception("Não foi possível encontrar a entidade. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-	}
-	
-	/**
-	 * @apiNote Executa uma query SQL
-	 * @param BaseEntity
-	 * @return List of entity
-	 * @throws Exception 
-	 */
-	@SuppressWarnings("unchecked")
-	default List<Object> loadByNativeQuery(String query) throws Exception {
-		EntityManager em = null;
-		Query queryToExec = null;
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			queryToExec = em.createNativeQuery(query);
-			return queryToExec.getResultList();
-		} catch (Exception e) {
-			throw new Exception("Não foi possível encontrar a entidade. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-	}
 
-	/**
-	 * @param BaseEntity
-	 * @return true if success
-	 * @throws Exception 
-	 */
-	default boolean exists(BaseEntity obj) throws Exception {
-		EntityManager em = null;
-
+	private long getLastIdNumber(String className) {
+		MemoryStorage memory = new MemoryStorage();
+		long lastId = 0;
 		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-
-			return em.find(obj.getClass(), obj.getId()) == null ? false : true;
+			List<Object> lst = memory.readAllIntoMemory(className);
+			if(lst.size() == 0) //Caso não encontre nada, é por quê será a primeira inserção
+				return 0;
+			lst.stream().sorted((o1, o2) -> ((BaseEntity)o1).getId().compareTo(((BaseEntity)o2).getId())).findFirst().get();
 		} catch (Exception e) {
-			throw new Exception("Não foi possível verificar se a entidade existe. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
+			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
-	}
-	
-	default void executeQuery(String query) throws Exception {
-		EntityManager em = null;
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			em.getTransaction().begin();
-			em.createQuery(query).executeUpdate();
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			throw new Exception("Não foi possível executar a query. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-	}
-	
-	default void executeNativeQuery(String query) throws Exception {
-		EntityManager em = null;
-		try {
-			em = H2DatabaseConnection.createDatabaseConnection().createEntityManager();
-			em.getTransaction().begin();
-			em.createNativeQuery(query).executeUpdate();
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			throw new Exception("Não foi possível executar a query. Motivo: " + e.getMessage());
-		} finally {
-			closeEntitySession(em);
-		}
-	}
-
-	/**
-	 * @param EntityManager em
-	 * @apiNote Fecha a sessão ativa no escopo do método
-	 */
-	default void closeEntitySession(EntityManager em) {
-		if (em != null)
-			em.close();
-		em = null;
+		return lastId;
 	}
 	
 

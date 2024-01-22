@@ -8,6 +8,7 @@ package br.com.insight.hourapp.web.entities.interfaces;
  */
 public interface BaseEntity {
 
-	public Object getId();
+	public Long getId();
+	public void setId(long newId);
 	public Class<? extends BaseEntity> ClassType();
 }
