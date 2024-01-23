@@ -17,15 +17,13 @@ $(() => {
         extraHours.map((summary) => {
             newHtml += `
             <tr>
-                    <td>${summary.summaryId}</td>
-                    <td>${summary.totalHours}</td>
-                    <td>${summary.created}</td>
-                    <td>
-                        <a class="text-lg text-danger" id="summary-extra-delete" data-id='${summary.summaryId}'>
-                            <i class="far fa-trash-alt"></i>
-                        </a>
-                    </td>
-                </tr>
+                <td>${summary.summaryId}</td>
+                <td>${summary.totalHours}</td>
+                <td>
+                    <a class="text-lg text-danger summary-extra-delete" data-id='${summary.summaryId}'>
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                </td>
             <tr>
             `;
         });
@@ -50,15 +48,13 @@ $(() => {
         lateHours.map((summary) => {
             newHtml += `
             <tr>
-                    <td>${summary.summaryId}</td>
-                    <td>${summary.totalHours}</td>
-                    <td>${summary.created}</td>
-                    <td>
-                        <a class="text-lg text-danger" id="summary-late-delete" data-id='${summary.summaryId}'>
-                            <i class="far fa-trash-alt"></i>
-                        </a>
-                    </td>
-                </tr>
+                <td>${summary.summaryId}</td>
+                <td>${summary.totalHours}</td>
+                <td>
+                    <a class="text-lg text-danger summary-late-delete" data-id='{summary.summaryId}'>
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                </td>
             <tr>
             `;
         });
@@ -93,93 +89,8 @@ $(() => {
         });
     }
 
-    const getSelectedMarkers = async () => {
-        let markers = $('#marker-table input[type="checkbox"]:checked').map(function() {
-            return this.value;
-        }).get();
-
-        if(!Array.isArray(markers) || markers.length === 0){
-            await Swal.fire({
-                    title: "Atenção!",
-                    text: `Não é possível calcular sem selecionar ao menos 1 marcação`,
-                    icon: "error"
-                }); 
-            return undefined;
-        }
-        return markers;
-    }
-
-    const getSelectedSchedules = async () => {
-        let schedules = $('#schedule-table input[type="checkbox"]:checked').map(function() {
-            return this.value;
-        }).get();
-        if(!Array.isArray(schedules) || schedules.length === 0){
-            await Swal.fire({
-                    title: "Atenção!",
-                    text: `Não é possível calcular sem selecionar ao menos 1 horário`,
-                    icon: "error"
-                }); 
-            return undefined;
-        }
-        return schedules;
-    }
-
-    const calculate = async (e) => {
-        
-        /**
-         * Buscar as marcações
-         */
-        let markers = await getSelectedMarkers();
-        if(!markers) return;
-        
-        /**
-         * Buscar os horários de trabalho
-         */
-        let schedules = await getSelectedSchedules();
-        if(!schedules) return;
-
-        let calcMode = $('input[name="calculator-mode"]:checked').val();
-
-        let dataToSend = JSON.stringify({
-            scheduleIds: schedules,
-            markerIds: markers
-        });
-       
-        await fetch(`SummaryHours?action=calculate&mode=${calcMode}`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: dataToSend
-        }).then((response) => {
-            if(!response.ok){
-                throw new Error(`Erro na requisição. status: ${response.status}`)
-            }
-            return response.json();
-        }).then(async () => {
-            await Swal.fire({
-                title: "Sucesso",
-                text: "O cálculo foi realizado com sucesso! Verifique o resultado nas tabelas abaixo...",
-                icon: "success",
-                showCancelButton: false,
-                showConfirmButton: false,
-                timer: 1000,
-            });
-            findAllSummaries();
-        }).catch(async (error) => {
-            await Swal.fire({
-                title: "Atenção",
-                text: `Não foi possível realizar o cálculo. Motivo: ${error}`,
-                icon: "error",
-                showCancelButton: false,
-                showConfirmButton: true,
-                text: "Fechar",
-            });
-        });
-    }
-
-    const deleteLateSummary = async () => {
-        let id = $('#summary-late-delete').data('id');
+    const deleteLateSummary = async (e) => {
+        let id = e.currentTarget.dataset.id;
 
         Swal.fire({
             title: "Tem certeza?",
@@ -235,8 +146,8 @@ $(() => {
           });
     }
 
-    const deleteExtraSummary = async () => {
-        let id = $('#summary-extra-delete').data('id');
+    const deleteExtraSummary = async (e) => {
+        let id = e.currentTarget.dataset.id;
 
         Swal.fire({
             title: "Tem certeza?",
@@ -295,7 +206,9 @@ $(() => {
     /**
      * Atribuir eventos das funções
      */
-    $('#hour-calculator').on('click', calculate);
-    $(document).on('click', '#summary-late-delete', deleteLateSummary);
-    $(document).on('click', '#summary-extra-delete', deleteExtraSummary);
+    $(document).on('click', '.summary-late-delete', deleteLateSummary);
+    $(document).on('click', '.summary-extra-delete', deleteExtraSummary);
+
+    findAllSummaries();
+
 });

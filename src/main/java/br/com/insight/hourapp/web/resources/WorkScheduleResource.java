@@ -11,14 +11,11 @@ import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import br.com.insight.hourapp.web.entities.HourMarker;
-import br.com.insight.hourapp.web.entities.SummaryHour;
 import br.com.insight.hourapp.web.entities.WorkSchedule;
 import br.com.insight.hourapp.web.entities.dto.WorkScheduleDTO;
 import br.com.insight.hourapp.web.resources.util.BufferedReaderToJson;
 import br.com.insight.hourapp.web.services.factory.ServiceFactory;
 import br.com.insight.hourapp.web.services.interfaces.WorkScheduleService;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -35,10 +32,9 @@ public class WorkScheduleResource extends HttpServlet {
 	private WorkScheduleService scheduleService;
 	
 	/**
-	 * @apiNote Inicializa os serviços desta classe
+	 * Verifica sempre antes de uma chamada se a classe de serviço está instanciada...
 	 */
-	@Override
-	public void init(ServletConfig config) throws ServletException {
+	private void checkService() {
 		if(scheduleService == null) {
 			scheduleService = ServiceFactory.createWorkScheduleService();
 		}
@@ -46,6 +42,7 @@ public class WorkScheduleResource extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		String action = null;
 		PrintWriter writer = null;
 		Gson gson = null;
@@ -86,6 +83,7 @@ public class WorkScheduleResource extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		PrintWriter writer = null;
 		Gson gson = null;
 		String json = "";
@@ -115,6 +113,7 @@ public class WorkScheduleResource extends HttpServlet {
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		PrintWriter writer = null;
 		Gson gson = null;
 		String json = "";
@@ -137,6 +136,7 @@ public class WorkScheduleResource extends HttpServlet {
 	
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		PrintWriter writer = null;
 		try {
 			resp.setContentType("text/plain");

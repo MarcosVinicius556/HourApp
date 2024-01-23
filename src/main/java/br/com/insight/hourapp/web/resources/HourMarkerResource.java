@@ -16,7 +16,6 @@ import br.com.insight.hourapp.web.entities.dto.HourMarkerDTO;
 import br.com.insight.hourapp.web.resources.util.BufferedReaderToJson;
 import br.com.insight.hourapp.web.services.factory.ServiceFactory;
 import br.com.insight.hourapp.web.services.interfaces.HourMarkerService;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,10 +32,9 @@ public class HourMarkerResource extends HttpServlet {
 	private HourMarkerService markerService;
 	
 	/**
-	 * @apiNote Inicializa os serviços desta classe
+	 * Verifica sempre antes de uma chamada se a classe de serviço está instanciada...
 	 */
-	@Override
-	public void init(ServletConfig config) throws ServletException {
+	private void checkService() {
 		if(markerService == null) {
 			markerService = ServiceFactory.createHourMarkerService();
 		}
@@ -44,6 +42,7 @@ public class HourMarkerResource extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		String action = null;
 		PrintWriter writer = null;
 		Gson gson = null;
@@ -84,6 +83,7 @@ public class HourMarkerResource extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		PrintWriter writer = null;
 		Gson gson = null;
 		String json = "";
@@ -98,6 +98,7 @@ public class HourMarkerResource extends HttpServlet {
 			markerService.insert(marker);
 			
 			resp.setStatus(HttpServletResponse.SC_OK);
+			writer.write(gson.toJson(marker));
 		} catch (Exception e) {
 			logger.error(e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -107,6 +108,7 @@ public class HourMarkerResource extends HttpServlet {
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		PrintWriter writer = null;
 		Gson gson = null;
 		String json = "";
@@ -130,6 +132,7 @@ public class HourMarkerResource extends HttpServlet {
 	
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		PrintWriter writer = null;
 		try {
 			resp.setContentType("text/plain");

@@ -1,14 +1,4 @@
 $(() => {
-    
-    const showLoadingIndicator = () => {
-        $('#loading-indicator').show();
-        $('#page-content').hide();
-    };
-
-    const hideLoadingIndicator = () => {
-        $('#loading-indicator').hide();
-        $('#page-content').show();
-    };
 
     const findAvailableSchedules = async () => {
         let availableSchedules;
@@ -36,7 +26,156 @@ $(() => {
         return availableSchedules;
     }
 
-    const createMarker = async (e) => {
+    const showExtraHours = (extraHours) => {
+        let newHtml = '';
+        if (!Array.isArray(extraHours) || extraHours.length === 0) {
+            Toast.fire({
+                title: 'Atenção',
+                text: 'Nenhum registro de hora extra encontrado!',
+                icon: 'warning'
+            });
+
+            $('#summary-extra-table').html(newHtml);
+
+            return;
+        }
+
+        extraHours.map((summary) => {
+            newHtml += `
+            <tr>
+                <td>${summary.summaryId}</td>
+                <td>${summary.totalHours}</td>
+                <td>
+                    <a class="text-lg text-danger summary-extra-delete" data-id='${summary.summaryId}'>
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                </td>
+            <tr>
+            `;
+        });
+
+        $('#summary-extra-table').html(newHtml);
+    }
+
+    const showLateHours = (lateHours) => {
+        let newHtml = '';
+        if (!Array.isArray(lateHours) || lateHours.length === 0) {
+            Toast.fire({
+                title: 'Atenção',
+                text: 'Nenhum registro de hora extra encontrado!',
+                icon: 'warning'
+            });
+
+            $('#summary-late-table').html(newHtml);
+
+            return;
+        }
+
+        lateHours.map((summary) => {
+            newHtml += `
+            <tr>
+                <td>${summary.summaryId}</td>
+                <td>${summary.totalHours}</td>
+                <td>
+                    <a class="text-lg text-danger summary-late-delete" data-id='{summary.summaryId}'>
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                </td>
+            <tr>
+            `;
+        });
+
+        $('#summary-late-table').html(newHtml);
+    }
+
+    const findAllSummaries = async () => {
+        await fetch('SummaryHours', {
+           method: 'GET',
+           headers: {
+               'Content-Type': 'application/json'
+           }
+       }).then(response => {
+               if (!response.ok) {
+                   throw new Error(`Erro na requisição: ${response.status}`);
+               }
+               return response.json();
+       }).then(result => {
+           let extraHoursList = result.filter(({hourType}) => hourType === "EXTRA");
+           let lateHoursList = result.filter(({hourType}) => hourType === "ATRASO");
+
+           showExtraHours(extraHoursList);
+           showLateHours(lateHoursList);
+       }).catch((error) => {
+           Toast.fire({
+               icon: 'error',
+               title: 'Atenção',
+               text: 'Erro ao buscar horários de trabalho'
+           });
+           console.log(error)
+       });
+   }
+
+    const getSelectedSchedules = async () => {
+        let schedules = $('#schedule-table input[type="checkbox"]:checked').map(function() {
+            return this.value;
+        }).get();
+        if(!Array.isArray(schedules) || schedules.length === 0){
+            await Swal.fire({
+                    title: "Atenção!",
+                    text: `Não é possível calcular sem selecionar ao menos 1 horário`,
+                    icon: "error"
+                }); 
+            return undefined;
+        }
+        return schedules;
+    }
+
+    const calculate = async (marker) => {
+        
+        /**
+         * Buscar os horários de trabalho
+         */
+        let schedules = await getSelectedSchedules();
+        if(!schedules) return;
+
+        let calcMode = $('input[name="calculator-mode"]:checked').val();
+
+        let dataToSend = JSON.stringify({
+            scheduleIds: schedules,
+            marker: marker
+        });
+       
+        await fetch(`SummaryHours?action=calculate&mode=${calcMode}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: dataToSend
+        }).then((response) => {
+            if(!response.ok){
+                throw new Error(`Erro na requisição. status: ${response.status}`)
+            }
+            return response.json();
+        }).then(async () => {
+            await Toast.fire({
+                title: "Sucesso",
+                text: "O cálculo foi realizado com sucesso! Verifique o resultado nas tabelas abaixo...",
+                icon: "success"
+            });
+            findAllSummaries();
+        }).catch(async (error) => {
+            await Swal.fire({
+                title: "Atenção",
+                text: `Não foi possível realizar o cálculo. Motivo: ${error}`,
+                icon: "error",
+                showCancelButton: false,
+                showConfirmButton: true,
+                text: "Fechar",
+            });
+        });
+    }
+
+    const createMarker = async () => {
         /**
          * Buscar os horários de trabalho
          * Se não houver nenhum horário cadastrado não será possível calcular nada....
@@ -74,7 +213,14 @@ $(() => {
                     throw new Error(`Erro na requisição: ${response.status}`);
                 }
 
+                data = {
+                    markerId: response.markerId,
+                    ...data,
+                }
+
+                console.log(data);
                 findAllMarkers();
+                calculate(data);
         }).catch((error) => {
             Swal.fire({
                 title: "Atenção!",
@@ -85,12 +231,11 @@ $(() => {
         }).finally(() => {
             $('#marker-entryHour').val('');
             $('#marker-departureTime').val('');
+            $('#marker-entryHour').focus();
         }); ;
     }
 
     const findAllMarkers = async () => {
-
-        showLoadingIndicator();
 
         let newHtml = '';
         await fetch('HourMarkers', {
@@ -119,14 +264,15 @@ $(() => {
             result.map((hourMarker) => {
                 newHtml += `
                 <tr>
-                <td>${hourMarker.markerId}</td>
+                    <td>${hourMarker.markerId}</td>
+                    <td>${hourMarker.entryHour}</td>
                     <td>${hourMarker.entryHour}</td>
                     <td>${hourMarker.departureTime}</td>
                     <td>
-                        <a class="btn me-3 text-lg text-success" id="marker-update" data-id='${hourMarker.markerId}'>
+                        <a class="btn me-3 text-lg text-success marker-update" data-id='${hourMarker.markerId}'>
                             <i class="far fa-edit"></i>
                         </a>
-                        <a class="text-lg text-danger" id="marker-delete" data-id='${hourMarker.markerId}'>
+                        <a class="text-lg text-danger marker-delete" data-id='${hourMarker.markerId}'>
                             <i class="far fa-trash-alt"></i>
                         </a>
                     </td>
@@ -140,8 +286,6 @@ $(() => {
                 text: `Não foi possível buscar as marcações de horário. Motivo: ${error}`,
                 icon: "error"
             });
-        }).finally(() => {
-            hideLoadingIndicator();
         });
     }
 
@@ -160,7 +304,6 @@ $(() => {
         }).then(result => {
             obj = {
                     markerId: result.markerId,
-                    schedule: result.schedule,
                     entryHour: result.entryHour,
                     departureTime: result.departureTime
                 };
@@ -174,22 +317,22 @@ $(() => {
         return obj;
     }
 
-    const updateMarker = async () => {
-        let id = $('#marker-update').data('id');
+    const updateMarker = async (e) => {
+        e.preventDefault();
+        let id = e.currentTarget.dataset.id;
         let old = await findMarkerById(id);
 
         /**
          * Buscar os horários de trabalho
          */
-        let workSchedules = await findAvailableSchedules();
         await Swal.fire({
             title: "Atualizar Marcação",
             html: `
             <label class="swal2-label">Horário de Entrada</label>
-            <input id="marker-update-entryHour" class="swal2-input" value='${old.entryHour}'>
+            <input type="text" id="marker-update-entryHour" class="swal2-input" value='${old.entryHour}'>
 
             <label id="swal-label1" class="swal2-label">Horário de Saída</label>
-            <input id="marker-update-departureTime" id="swal-input2" class="swal2-input" value='${old.departureTime}'>
+            <input type="text" id="marker-update-departureTime" id="swal-input2" class="swal2-input" value='${old.departureTime}'>
             `,
             focusConfirm: false,
             showCancelButton: true,
@@ -256,8 +399,9 @@ $(() => {
         });
     }
 
-    const deleteMarker = async () => {
-        let id = $('#marker-delete').data('id');
+    const deleteMarker = async (e) => {
+        e.preventDefault();
+        let id =  e.currentTarget.dataset.id;
 
         Swal.fire({
             title: "Tem certeza?",
@@ -309,8 +453,14 @@ $(() => {
      * Atribuir eventos das funções
      */
     $(document).on('click', '#marker-create', createMarker);
-    $(document).on('click', '#marker-update', updateMarker);
-    $(document).on('click', '#marker-delete', deleteMarker);
+    $('#marker-departureTime').keydown((event) => {
+        if (event.which === 13 || event.which === 9) {
+            event.preventDefault();
+            createMarker(event);
+        }
+    });
+    $(document).on('click', '.marker-update', updateMarker);
+    $(document).on('click', '.marker-delete', deleteMarker);
 
     /**
      * Ao iniciar busca todos e lista na tabela de horários
@@ -318,7 +468,6 @@ $(() => {
     findAllMarkers();
 
     $(document).ready(() => {
-        console.log('Executando criação da máscaras para as marcações...')
         $('#marker-entryHour').inputmask('99:99', { placeholder: '__:__' });
         $('#marker-departureTime').inputmask('99:99', { placeholder: '__:__' });
     });

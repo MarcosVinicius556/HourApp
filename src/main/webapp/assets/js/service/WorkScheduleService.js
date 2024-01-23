@@ -1,15 +1,5 @@
 $(() => {
 
-    const showLoadingIndicator = () => {
-        $('#loading-indicator').show();
-        $('#page-content').hide();
-    };
-
-    const hideLoadingIndicator = () => {
-        $('#loading-indicator').hide();
-        $('#page-content').show();
-    };
-
     const createSchedule = async (e) => {
             let entryHour = $('#schedule-entryHour').val();
             let departureTime = $('#schedule-departureTime').val();
@@ -53,15 +43,11 @@ $(() => {
         }).finally(() => {
             $('#schedule-entryHour').val('');
             $('#schedule-departureTime').val('');
+            $('#schedule-entryHour').focus();
         }); 
     }
 
     const findAllSchedule = async () => {
-
-        /**
-         * Mostra o componente de loading até que tudo seja carregado
-         */
-        showLoadingIndicator();
 
         let newHtml = '';
         await fetch('WorkSchedules', {
@@ -94,7 +80,7 @@ $(() => {
                 <tr>
                     <td>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="${workSchedule.scheduleId} checked='true' ">
+                            <input class="form-check-input" type="checkbox" value="${workSchedule.scheduleId}" checked>
                             <label class="form-check-label">
                                 <strong>${workSchedule.scheduleId}</strong>
                             </label>
@@ -123,8 +109,6 @@ $(() => {
                 text: `Não foi possível buscar os registros de Horários. Motivo: ${error.message}`,
                 icon: "error"
             });
-        }).finally(() => {
-            hideLoadingIndicator();
         });
     }
 
@@ -158,6 +142,7 @@ $(() => {
     }
 
     const updateSchedule = async (e) => {
+        e.preventDefault();
         let id = e.currentTarget.dataset.id;
         let old = await findScheduleById(id);
 
@@ -166,10 +151,10 @@ $(() => {
             title: "Atualizar Horário",
             html: `
               <label class="swal2-label">Horário de Entrada</label>
-              <input id="schedule-update-entryHour" class="swal2-input" value='${old.entryHour}'>
+              <input type="text" id="schedule-update-entryHour" class="swal2-input" value='${old.entryHour}'>
 
               <label id="swal-label1" class="swal2-label">Horário de Saída</label>
-              <input id="schedule-update-departureTime" id="swal-input2" class="swal2-input" value='${old.departureTime}'>
+              <input type="text" id="schedule-update-departureTime" id="swal-input2" class="swal2-input" value='${old.departureTime}'>
             `,
             focusConfirm: false,
             showCancelButton: true,
@@ -235,6 +220,7 @@ $(() => {
     }
 
     const deleteSchedule = async (e) => {
+        e.preventDefault();
         let id = e.currentTarget.dataset.id;
 
         Swal.fire({
@@ -295,6 +281,12 @@ $(() => {
      * Atribuir eventos das funções
      */
     $(document).on('click', '#schedule-create', createSchedule);
+    $('#schedule-departureTime').keydown((event) => {
+        if (event.which === 13 || event.which === 9) {
+            event.preventDefault();
+            createSchedule(event);
+        }
+    });
     $(document).on('click', '.schedule-update', updateSchedule);
     $(document).on('click', '.schedule-delete', deleteSchedule);
     
@@ -304,10 +296,10 @@ $(() => {
     findAllSchedule();
 
     $(document).ready(() => {
-        console.log('Executando criação da máscaras...')
         $('#schedule-entryHour').inputmask('99:99', { placeholder: '__:__' });
         $('#schedule-departureTime').inputmask('99:99', { placeholder: '__:__' });
     });
+
 });
 
 

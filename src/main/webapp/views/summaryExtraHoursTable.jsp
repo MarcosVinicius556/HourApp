@@ -12,7 +12,6 @@
                         <tr>
                             <th>#</th>
                             <th>Período</th>
-                            <th>Data do Registro</th>
                             <th>Ações</th>
                         </tr>
                     </thead>

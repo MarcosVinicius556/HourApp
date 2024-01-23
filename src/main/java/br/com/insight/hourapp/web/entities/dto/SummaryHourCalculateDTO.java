@@ -3,14 +3,16 @@ package br.com.insight.hourapp.web.entities.dto;
 import java.util.HashSet;
 import java.util.Set;
 
+import br.com.insight.hourapp.web.entities.HourMarker;
+
 public class SummaryHourCalculateDTO {
 
 	private Set<String> scheduleIds = new HashSet<>();
-	private Set<String> markerIds = new HashSet<>();
+	private HourMarker marker = null;
 	
-	public SummaryHourCalculateDTO(Set<String> scheduleIds, Set<String> markerIds) {
+	public SummaryHourCalculateDTO(Set<String> scheduleIds, HourMarker marker) {
 		this.scheduleIds = scheduleIds;
-		this.markerIds = markerIds;
+		this.marker = marker;
 	}
 
 	public Set<String> getScheduleIds() {
@@ -21,12 +23,12 @@ public class SummaryHourCalculateDTO {
 		this.scheduleIds = scheduleIds;
 	}
 
-	public Set<String> getMarkerIds() {
-		return markerIds;
+	public HourMarker getMarker() {
+		return marker;
 	}
 
-	public void setMarkerIds(Set<String> markerIds) {
-		this.markerIds = markerIds;
+	public void setMarker(HourMarker marker) {
+		this.marker = marker;
 	}
 	
 }

@@ -17,8 +17,6 @@ public class SummaryHour implements BaseEntity, Serializable {
 
 	private long summaryId;
 	private String totalHours;
-	private long scheduleId;
-	private long markerId;
 	private int hourType;
 
 	public SummaryHour() {
@@ -56,21 +54,7 @@ public class SummaryHour implements BaseEntity, Serializable {
 		this.hourType = hourType;
 	}
 	
-	public long getScheduleId() {
-		return scheduleId;
-	}
 
-	public void setScheduleId(long scheduleId) {
-		this.scheduleId = scheduleId;
-	}
-
-	public long getMarkerId() {
-		return markerId;
-	}
-
-	public void setMarkerId(long markerId) {
-		this.markerId = markerId;
-	}
 
 	@Override
 	public Long getId() {
@@ -79,7 +63,7 @@ public class SummaryHour implements BaseEntity, Serializable {
 	
 	@Override
 	public void setId(long newId) {
-		this.scheduleId = newId;
+		this.summaryId = newId;
 	}
 
 	@Override
@@ -106,8 +90,7 @@ public class SummaryHour implements BaseEntity, Serializable {
 
 	@Override
 	public String toString() {
-		return "SummaryHour [summaryId=" + summaryId + ", totalHours=" + totalHours + ", scheduleId=" + scheduleId
-				+ ", markerId=" + markerId + ", hourType=" + hourType + "]";
+		return "SummaryHour [summaryId=" + summaryId + ", totalHours=" + totalHours + ", hourType=" + hourType + "]";
 	}
 
 	

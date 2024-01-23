@@ -19,7 +19,6 @@ import br.com.insight.hourapp.web.resources.enums.CalculateMode;
 import br.com.insight.hourapp.web.resources.util.BufferedReaderToJson;
 import br.com.insight.hourapp.web.services.factory.ServiceFactory;
 import br.com.insight.hourapp.web.services.interfaces.SummaryHoursService;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -36,10 +35,9 @@ public class SummaryHoursResource extends HttpServlet {
 	private SummaryHoursService summaryService;
 	
 	/**
-	 * @apiNote Inicializa os serviços desta classe
+	 * Verifica sempre antes de uma chamada se a classe de serviço está instanciada...
 	 */
-	@Override
-	public void init(ServletConfig config) throws ServletException {
+	private void checkService() {
 		if(summaryService == null) {
 			summaryService = ServiceFactory.createSummaryHoursService();
 		}
@@ -47,6 +45,7 @@ public class SummaryHoursResource extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		String action = null;
 		PrintWriter writer = null; 
 		Gson gson = null;
@@ -87,6 +86,7 @@ public class SummaryHoursResource extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		PrintWriter writer = null;
 		Gson gson = null;
 		String json = "";
@@ -127,6 +127,7 @@ public class SummaryHoursResource extends HttpServlet {
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		PrintWriter writer = null;
 		writer = resp.getWriter();
 		resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
@@ -135,6 +136,7 @@ public class SummaryHoursResource extends HttpServlet {
 	
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		checkService();
 		PrintWriter writer = null;
 		try {
 			resp.setContentType("text/plain");

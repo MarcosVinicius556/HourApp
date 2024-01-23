@@ -60,7 +60,6 @@ public interface BaseRepository {
 	 */
 	default void update(BaseEntity obj) throws Exception {
 		MemoryStorage memory = new MemoryStorage();
-		List<Object> lst = memory.readAllIntoMemory(obj.getClass().getName());
 		try {
 			//Remove o objeto antigo
 			memory.removeFromMemory(obj.getClass().getName(), obj);

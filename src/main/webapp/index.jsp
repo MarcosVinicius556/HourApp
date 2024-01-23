@@ -26,7 +26,7 @@
 			<div class="container-fluid px-lg-4 px-xl-5">
 			  <section class="mb-3 mb-lg-5">
 				
-				<div class="row mb-5">
+				<div class="row mb-5 align-items-stretch">
 					<!-- <Horários de Trabalho>-->
 						<jsp:include page="./views/scheduleRegistry.jsp"></jsp:include>
 					<!-- </ Horários de Trabalho> -->

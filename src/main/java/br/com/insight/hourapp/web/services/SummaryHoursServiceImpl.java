@@ -47,7 +47,7 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 	@Override
 	public List<SummaryHourDTO> calculateTotalHours(SummaryHourCalculateDTO dto, CalculateMode calcMode) {
 		List<WorkSchedule> schedules = new ArrayList<>();
-		List<HourMarker> markers = new ArrayList<>();
+		HourMarker marker = null;
  		List<SummaryHour> newSummaries = new ArrayList<>();
  		List<SummaryHourDTO> newSummariesDTO = new ArrayList<>();
 		
@@ -59,23 +59,19 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 				schedules.add(scheduleService.findById(w));
 			});
 			
-			dto.getMarkerIds().forEach(id -> {
-				HourMarker h = new HourMarker();
-				h.setMarkerId(Long.parseLong(id));
-				markers.add(markerService.findById(h));
-			});
+			marker = dto.getMarker();
 			
 			switch (calcMode) {
 				case MARKER_LESS_SCHEDULE:
 					//Converte para uma lista de DTO's
-					newSummaries = calculateByMarker(markers, schedules);
+					newSummaries = calculateByMarker(marker, schedules);
 					break;
 				case SCHEDULE_LESS_MARKER:
-					newSummaries = calculateBySchedule(schedules, markers);
+					newSummaries = calculateBySchedule(schedules, marker);
 					break;
 			}		
 			
-			newSummaries.forEach(s -> this.insert(s));  
+			newSummaries.forEach(s -> insert(s));  
 			newSummariesDTO = newSummaries.stream().map(s -> new SummaryHourDTO(s)).collect(Collectors.toList());
 			
 		} catch (Exception e) {
@@ -92,20 +88,10 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 	 * @param markers
 	 * @return
 	 *************************************************************/
-	private List<SummaryHour> calculateBySchedule(List<WorkSchedule> schedules, List<HourMarker> markers) {
+	private List<SummaryHour> calculateBySchedule(List<WorkSchedule> schedules, HourMarker marker) {
 		List<SummaryHour> newSummaries = new ArrayList<>();
-		if(schedules.size() >= markers.size()) {
-			for(WorkSchedule schedule : schedules) {
-				for(HourMarker marker : markers) {
-					newSummaries.addAll(processByScheduleDiff(schedule, marker));
-				}
-			}
-		} else {
-			for(HourMarker marker : markers) {
-				for(WorkSchedule schedule : schedules) {
-					newSummaries.addAll(processByScheduleDiff(schedule, marker));
-				}
-			}
+		for(WorkSchedule schedule : schedules) {
+			newSummaries.addAll(processByScheduleDiff(schedule, marker));
 		}
 		return newSummaries;
 	}
@@ -156,20 +142,10 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 	 * @return
 	 ************************************************************/
 
-	private List<SummaryHour> calculateByMarker(List<HourMarker> markers, List<WorkSchedule> schedules) {
+	private List<SummaryHour> calculateByMarker(HourMarker marker, List<WorkSchedule> schedules) {
 		List<SummaryHour> newSummaries = new ArrayList<>();
-		if(schedules.size() >= markers.size()) {
-			for(WorkSchedule schedule : schedules) {
-				for(HourMarker marker : markers) {
-					newSummaries.addAll(processByMarkerDiff(schedule, marker));
-				}
-			}
-		} else {
-			for(HourMarker marker : markers) {
-				for(WorkSchedule schedule : schedules) {
-					newSummaries.addAll(processByMarkerDiff(schedule, marker));
-				}
-			}
+		for(WorkSchedule schedule : schedules) {
+				newSummaries.addAll(processByMarkerDiff(schedule, marker));
 		}
 		return newSummaries;
 	}
@@ -252,6 +228,83 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 		
 		
 		return objReturn;
+	}
+	
+	/**
+	 * Exemplo de entrada
+	 * 
+	 *  Horários:
+	 *  	- 08:00	12:00
+	 *  	- 13:30	17:30
+	 *  Marcações:
+	 *  	- 06:00 20:00
+	 *  
+	 *  Exemplo de saída:
+	 *  
+	 *  Atraso:
+	 *  	-
+	 *  Hora Extra:
+	 *  	- 06:00 08:00
+	 *  	- 12:00 13:30
+	 *  	- 17:30 20:00
+	 *  
+	 */
+	
+	public static void main(String[] args) {
+		List<WorkSchedule> schedules = new ArrayList<>();
+		
+		schedules.add(new WorkSchedule("08:00","12:00"));
+		
+		schedules.add(new WorkSchedule("13:30","17:30"));
+		int ultimaMarcacaoVerificada = 0;
+		
+		HourMarker hm = new HourMarker("06:00", "20:00");
+		int markerEntryHour = Integer.parseInt(hm.getEntryHour().split(":")[0]);
+		int markerEntryMinute = Integer.parseInt(hm.getEntryHour().split(":")[1]);
+		
+		int markerDepartureHour = Integer.parseInt(hm.getDepartureTime().split(":")[0]);
+		int markerDepatureMinute = Integer.parseInt(hm.getDepartureTime().split(":")[1]);
+		
+		boolean entrada = true;
+		
+		/**
+		 * Percore a hora de início até o horário de saída do funcionário
+		 */
+		
+		
+		for(WorkSchedule schedule : schedules) {
+			int scheduleEntryHour = Integer.parseInt(schedule.getEntryHour().split(":")[0]); //Horário de entrada 
+			int scheduleDepartureHour = Integer.parseInt(schedule.getDepartureTime().split(":")[0]); //Horário de saida
+			
+			System.out.println("ENTRADA: " + scheduleEntryHour);
+			System.out.println("SAÍDA: " + scheduleDepartureHour);
+			
+			for(int hour = markerEntryHour; hour <= markerDepartureHour; ) {
+				if(markerEntryHour <= scheduleDepartureHour) {
+					if(entrada) {
+						if(hour < scheduleEntryHour) {
+							System.out.println("Hora extra de: " + hour + " a " + scheduleEntryHour);
+						} else if(hour > scheduleEntryHour) {
+							System.out.println("Atraso de: " + hour + " a " + scheduleEntryHour);
+						}
+					} else {
+						if(hour < scheduleEntryHour) {
+							System.out.println("Atraso de: " + hour + " a " + scheduleEntryHour);
+						} else if(hour > scheduleEntryHour) {
+							System.out.println("Hora extra de: " + hour + " a " + scheduleEntryHour);
+						}
+					}	
+					hour++;
+					ultimaMarcacaoVerificada = hour;
+				} else {
+					break;
+				}
+			}	
+			System.out.println("ULTIMA VERIFICACAO -> " + ultimaMarcacaoVerificada);
+			
+		}	
+		
+		
 	}
 	
 

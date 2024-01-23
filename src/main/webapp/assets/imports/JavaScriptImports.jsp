@@ -24,7 +24,7 @@
 
  <!-- API Service  -->
  <script type="text/javascript" src="assets/js/service/util/HourValidation.js"></script>
+ <script type="text/javascript" src="assets/js/service/SummaryHourService.js"></script>
  <script type="text/javascript" src="assets/js/service/WorkScheduleService.js"></script>
  <script type="text/javascript" src="assets/js/service/HourMarkerService.js"></script>
- <script type="text/javascript" src="assets/js/service/SummaryHourService.js"></script>
     
