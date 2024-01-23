@@ -33,8 +33,7 @@ public class HourAppApplicationAllTests extends TestCase {
 	/**
 	 * INSERTS
 	 */
-	@Test
-	public void insertAndFindWithNonExceptionAndRemoveAll() {
+	public void testInsertAndFindWithNonExceptionAndRemoveAll() {
 		WorkSchedule wsTemp = new WorkSchedule("08:00", "12:00");
 		HourMarker hmTemp= new HourMarker("08:00", "12:00");
 		SummaryHour shw = new SummaryHour();
@@ -58,7 +57,7 @@ public class HourAppApplicationAllTests extends TestCase {
 	}
 	
 	@Test
-	public void updateWithNonExceptionAndRemoveAll() {
+	public void testUpdateWithNonExceptionAndRemoveAll() {
 		WorkSchedule wsTemp = new WorkSchedule("08:00", "12:00");
 		HourMarker hmTemp= new HourMarker("08:00", "12:00");
 		SummaryHour shw = new SummaryHour();
@@ -92,7 +91,7 @@ public class HourAppApplicationAllTests extends TestCase {
 	 */
 	
 	@Test
-	public void findAllWithNonExceptionAndRemoveAll() {
+	public void testFindAllWithNonExceptionAndRemoveAll() {
 		WorkSchedule wsTemp_1 = new WorkSchedule("08:00", "12:00");
 		WorkSchedule wsTemp_2 = new WorkSchedule("12:00", "18:00");
 		HourMarker hmTemp_1 = new HourMarker("08:00", "12:00");
