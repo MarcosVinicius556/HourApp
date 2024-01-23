@@ -1,7 +1,6 @@
 package br.com.insight.hourapp.web.entities;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
 import java.util.Objects;
 
 import br.com.insight.hourapp.web.entities.interfaces.BaseEntity;
@@ -15,6 +14,31 @@ public class SummaryHour implements BaseEntity, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public static class Builder {
+		private long summaryId;
+		private String totalHours;
+		private int hourType;
+		
+		public Builder setSummaryId(long summaryId) {
+			this.summaryId = summaryId;
+			return this;
+		}
+		
+		public Builder setTotalHours(String totalHours) {
+			this.totalHours = totalHours;
+			return this;
+		}
+		
+		public Builder setHourType(int hourType) {
+			this.hourType = hourType;
+			return this;
+		}
+		
+		public SummaryHour build() {
+			return new SummaryHour(this);
+		}
+	}
+	
 	private long summaryId;
 	private String totalHours;
 	private int hourType;
@@ -23,8 +47,13 @@ public class SummaryHour implements BaseEntity, Serializable {
 		
 	}
 	
-	public SummaryHour(long summaryId, GregorianCalendar created,
-			String totalHours, int hourType) {
+	public SummaryHour(Builder builder) {
+		this.summaryId = builder.summaryId;
+		this.totalHours = builder.totalHours;
+		this.hourType = builder.hourType;
+	}
+	
+	public SummaryHour(long summaryId, String totalHours, int hourType) {
 		this.summaryId = summaryId;
 		this.totalHours = totalHours;
 		this.hourType = hourType;

@@ -12,15 +12,13 @@
                         <tr>
                             <th>#</th>
                             <th>Período</th>
+                            <th>Tipo</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle" id="summary-extra-table"></tbody>
                 </table>
             </div>
-        </div>
-        <div class="card-footer text-end">
-            <a class="btn btn-secondary" href="#!">Imprimir Relatório de Extras</a>
         </div>
     </div>
 </div>

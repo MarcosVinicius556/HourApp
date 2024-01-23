@@ -1,6 +1,9 @@
 package br.com.insight.hourapp.web.services;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,7 +70,7 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 					newSummaries = calculateByMarker(marker, schedules);
 					break;
 				case SCHEDULE_LESS_MARKER:
-					newSummaries = calculateBySchedule(schedules, marker);
+					newSummaries = new ArrayList<>();
 					break;
 			}		
 			
@@ -82,59 +85,6 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 		return newSummariesDTO; 
 	}
 	
-	/**************************************************************
-	 * @apiNote Faz o cálculo das horas extras e de atraso, fazendo a operação de (Horários de Trabalho - Marcações)
-	 * @param schedules
-	 * @param markers
-	 * @return
-	 *************************************************************/
-	private List<SummaryHour> calculateBySchedule(List<WorkSchedule> schedules, HourMarker marker) {
-		List<SummaryHour> newSummaries = new ArrayList<>();
-		for(WorkSchedule schedule : schedules) {
-			newSummaries.addAll(processByScheduleDiff(schedule, marker));
-		}
-		return newSummaries;
-	}
-	
-	private List<SummaryHour> processByScheduleDiff(WorkSchedule schedule, HourMarker marker) {
-		List<SummaryHour> newSummaries = new ArrayList<>();
-		String diffHour = "";
-		HourType hourType = null;
-
-		String markerEntryHour = marker.getEntryHour();
-		String scheduleEntryHour = schedule.getEntryHour();
-		
-		String markerDepartureTime = marker.getDepartureTime();
-		String scheduleDepartureTime = schedule.getDepartureTime();
-		
-		/**
-		 * Se houver atraso/extra, gera novo registro de summaryHour
-		 */
-		Object[] entryDiff = calculateDiff(scheduleEntryHour, markerEntryHour, true);
-		diffHour = (String) entryDiff[0];
-		hourType = (HourType) entryDiff[1];
-		if(hourType != null) {
-			SummaryHour summary = new SummaryHour();
-			summary.setHourType(hourType.getCod());
-			summary.setTotalHours(diffHour);
-			
-			newSummaries.add(summary);
-		}
-		
-		Object[] departureDiff = calculateDiff(scheduleDepartureTime, markerDepartureTime, false);
-		diffHour = (String) departureDiff[0];
-		hourType = (HourType) departureDiff[1];
-		if(hourType != null) {
-			SummaryHour summary = new SummaryHour();
-			summary.setHourType(hourType.getCod());
-			summary.setTotalHours(diffHour);
-			
-			newSummaries.add(summary);
-		}
-		
-		return newSummaries;
-	}
-	
 	/************************************************************
 	 * @apiNote Faz o cálculo das horas extras e de atraso, fazendo a operação de (Marcações - Horários de Trabalho)
 	 * @param schedules
@@ -144,168 +94,291 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 
 	private List<SummaryHour> calculateByMarker(HourMarker marker, List<WorkSchedule> schedules) {
 		List<SummaryHour> newSummaries = new ArrayList<>();
-		for(WorkSchedule schedule : schedules) {
-				newSummaries.addAll(processByMarkerDiff(schedule, marker));
-		}
+		newSummaries.addAll(verifyHours(schedules, marker));
 		return newSummaries;
 	}
 	
-	private List<SummaryHour> processByMarkerDiff(WorkSchedule schedule, HourMarker marker) {
+	/**
+	 * @author Marcos Vinicius
+	 * @apiNote Percorre a lista de horários fornecida, e faz o cálculo e define se é atraso ou extra
+	 * @param List<WorkSchedules> schedules
+	 * @param HourMarker hm
+	 * @return List<SummaryHour> summaries
+	 */
+	public List<SummaryHour> verifyHours(List<WorkSchedule> schedules, HourMarker hm) {
 		List<SummaryHour> newSummaries = new ArrayList<>();
-		String diffHour = "";
-		HourType hourType = null;
-
-		String markerEntryHour = marker.getEntryHour();
-		String scheduleEntryHour = schedule.getEntryHour();
 		
-		String markerDepartureTime = marker.getDepartureTime();
-		String scheduleDepartureTime = schedule.getDepartureTime();
-		
-		/**
-		 * Se houver atraso/extra, gera novo registro de summaryHour
-		 */
-		Object[] entryDiff = calculateDiff(markerEntryHour, scheduleEntryHour, true);
-		diffHour = (String) entryDiff[0];
-		hourType = (HourType) entryDiff[1];
-		if(hourType != null) {
-			SummaryHour summary = new SummaryHour();
-			summary.setHourType(hourType.getCod());
-			summary.setTotalHours(diffHour);
-			
-			newSummaries.add(summary);
-		}
-		
-		Object[] departureDiff = calculateDiff(markerDepartureTime, scheduleDepartureTime, false);
-		diffHour = (String) departureDiff[0];
-		hourType = (HourType) departureDiff[1];
-		if(hourType != null) {
-			SummaryHour summary = new SummaryHour();
-			summary.setHourType(hourType.getCod());
-			summary.setTotalHours(diffHour);
-			
-			newSummaries.add(summary);
-		}
-		
-		return newSummaries;
-	}
-	
-	/**
-	 * @apiNote Calcula a difereça de dois horários, sempre o primeiro parâmetro menos o segundo
-	 * @param hour_calc_1
-	 * @param hour_calc_2
-	 * @param entryHour
-	 * @return
-	 */
-	private Object[] calculateDiff(String hour_calc_1, String hour_calc_2, boolean entryHour) {
-		Object[] objReturn = new Object[2];
-		
-		String[] arr_hour_1 = hour_calc_1.split(":");
-		String[] arr_hour_2 = hour_calc_2.split(":");
-		
-		int hour_1 = Integer.parseInt(arr_hour_1[0]);
-		int	 minute_1 = Integer.parseInt(arr_hour_1[1]);
-		
-		int hour_2 = Integer.parseInt(arr_hour_2[0]);
-		int minute_2 = Integer.parseInt(arr_hour_2[1]);
-		
-		/**
-		 * Se for entrada, a regra é diferente, pois se o primeiro 
-		 * horário for inferior ao segundo, signifca que será hora extra
-		 */
-		
-		objReturn[0] = hour_calc_1 + " " + hour_calc_2;
-		if(hour_1 > hour_2) {
-			objReturn[1] = entryHour ? HourType.LATE : HourType.OVERTIME;
-		} else if( hour_1 < hour_2) {
-			objReturn[1] = entryHour ? HourType.OVERTIME : HourType.LATE;
-		} else {
-			if(minute_1 > minute_2) {
-				objReturn[1] = entryHour ? HourType.LATE : HourType.OVERTIME;
-			} else if( minute_1 < minute_2) {
-				objReturn[1] = entryHour ? HourType.OVERTIME : HourType.LATE;
-			}
-		}
-		
-		
-		return objReturn;
-	}
-	
-	/**
-	 * Exemplo de entrada
-	 * 
-	 *  Horários:
-	 *  	- 08:00	12:00
-	 *  	- 13:30	17:30
-	 *  Marcações:
-	 *  	- 06:00 20:00
-	 *  
-	 *  Exemplo de saída:
-	 *  
-	 *  Atraso:
-	 *  	-
-	 *  Hora Extra:
-	 *  	- 06:00 08:00
-	 *  	- 12:00 13:30
-	 *  	- 17:30 20:00
-	 *  
-	 */
-	
-	public static void main(String[] args) {
-		List<WorkSchedule> schedules = new ArrayList<>();
-		
-		schedules.add(new WorkSchedule("08:00","12:00"));
-		
-		schedules.add(new WorkSchedule("13:30","17:30"));
-		int ultimaMarcacaoVerificada = 0;
-		
-		HourMarker hm = new HourMarker("06:00", "20:00");
 		int markerEntryHour = Integer.parseInt(hm.getEntryHour().split(":")[0]);
 		int markerEntryMinute = Integer.parseInt(hm.getEntryHour().split(":")[1]);
 		
 		int markerDepartureHour = Integer.parseInt(hm.getDepartureTime().split(":")[0]);
-		int markerDepatureMinute = Integer.parseInt(hm.getDepartureTime().split(":")[1]);
+		int markerDepartureMinute = Integer.parseInt(hm.getDepartureTime().split(":")[1]);
+
+		//Guarda a hora extra
+		String horaExtra = "";
 		
-		boolean entrada = true;
+		//Guarda a hora de atraso
+		String horaAtraso = "";
 		
-		/**
-		 * Percore a hora de início até o horário de saída do funcionário
-		 */
+		//Início da jornada
+		int hour = 0;
+		
+		//Guarda o último minuto processado
+		int lastMinute = 0;
 		
 		
-		for(WorkSchedule schedule : schedules) {
-			int scheduleEntryHour = Integer.parseInt(schedule.getEntryHour().split(":")[0]); //Horário de entrada 
-			int scheduleDepartureHour = Integer.parseInt(schedule.getDepartureTime().split(":")[0]); //Horário de saida
+		//Percorro os horários de trabalho
+		for (WorkSchedule schedule : schedules) {
+			boolean horaExtraAntecipadaDetectada = false;
+			boolean horaDeAtrasoAntecipadaDetectada = false;
 			
-			System.out.println("ENTRADA: " + scheduleEntryHour);
-			System.out.println("SAÍDA: " + scheduleDepartureHour);
+			boolean horaExtraAposDetectado = false;
+			boolean horaDeAtrasoAposDetectado = false;
 			
-			for(int hour = markerEntryHour; hour <= markerDepartureHour; ) {
-				if(markerEntryHour <= scheduleDepartureHour) {
-					if(entrada) {
-						if(hour < scheduleEntryHour) {
-							System.out.println("Hora extra de: " + hour + " a " + scheduleEntryHour);
-						} else if(hour > scheduleEntryHour) {
-							System.out.println("Atraso de: " + hour + " a " + scheduleEntryHour);
-						}
-					} else {
-						if(hour < scheduleEntryHour) {
-							System.out.println("Atraso de: " + hour + " a " + scheduleEntryHour);
-						} else if(hour > scheduleEntryHour) {
-							System.out.println("Hora extra de: " + hour + " a " + scheduleEntryHour);
-						}
-					}	
-					hour++;
-					ultimaMarcacaoVerificada = hour;
-				} else {
+			int horarioDeEntrada = Integer.parseInt(schedule.getEntryHour().split(":")[0]);
+			int minutoDeEntrada = Integer.parseInt(schedule.getEntryHour().split(":")[1]);
+			
+			int horarioDeSaida = Integer.parseInt(schedule.getDepartureTime().split(":")[0]);
+			int minutoDeSaida = Integer.parseInt(schedule.getDepartureTime().split(":")[1]);
+			
+			lastMinute = minutoDeSaida;
+			
+			
+			/**
+			 * Jornada de Trabalho do funcionário
+			 * 
+			 * Se hour for == 0, então quer dizer que ele iniciou o cálculo agora, mas caso já exista um valor, continua de onde parou
+			 * Casos como uma jornada que passa de um turno para o outro por exemplo....
+			 */
+			for(hour = hour == 0 ? markerEntryHour : hour; hour <= markerDepartureHour; hour++) {
+				if(hour == horarioDeSaida) {
+					/**
+					 * Isto marca a chegada ao final do expediente, então passa para o próximo horário, caso exista
+					 * Se não sai fora do loop, e caso ainda existam horas "em haver" considera como hora extra
+					 */
 					break;
 				}
-			}	
-			System.out.println("ULTIMA VERIFICACAO -> " + ultimaMarcacaoVerificada);
-			
-		}	
+				
+				/**
+				 * Se passou o dia, o cálculo vai precisar ser um pouco diferente...
+				 * Pois precisaremos pegar o horário de início, de término e verificar 
+				 * quanto o funcionário se atrasou
+				 * 
+				 * Se for maior, quer dizer que passou de um dia para o outro
+				 * Ex: 22:00 05:00 | 19:00 01:00 | 18:00 02:00
+				 */
+				if(horarioDeEntrada > horarioDeSaida) {
+					//Aqui verifica se eu cheguei antes ou depois do horário
+					GregorianCalendar calendar = new GregorianCalendar();
+					
+					LocalDateTime dataHoraDeEntrada =  LocalDateTime.of(calendar.get(GregorianCalendar.YEAR), 
+							  calendar.get(GregorianCalendar.MONTH)+1, 
+							  calendar.get(GregorianCalendar.DAY_OF_MONTH), 
+							  horarioDeEntrada, 
+							  minutoDeEntrada);
+					
+					LocalDateTime dataHoraMarcacao =  LocalDateTime.of(calendar.get(GregorianCalendar.YEAR), 
+							  calendar.get(GregorianCalendar.MONTH)+1, //Iguala
+							  calendar.get(GregorianCalendar.DAY_OF_MONTH), 
+							  markerEntryHour, 
+							  markerEntryMinute);
+					
+					
+					/**
+					 * Como não foi fornecido um campo de data para fazer a comparação se passou de um dia para o outro, 
+					 * sempre que for um valor muito menor que a o horário de entrada, vou assumir que será um novo dia...
+					 */
+					
+			        long diferencaEmHoras = Math.abs(ChronoUnit.HOURS.between(dataHoraDeEntrada, dataHoraMarcacao));
+			        if(diferencaEmHoras > 6) { //"Permite" até 6 horas de extra....
+			        	if (dataHoraMarcacao.isBefore(dataHoraDeEntrada)) {
+			        		dataHoraMarcacao = dataHoraMarcacao.plusDays(1);
+			        	}
+			        }
+					
+			        /**
+			         * Verificando as datas, e aqui será levado em consideração o dia....
+			         */
+					if (dataHoraMarcacao.isAfter(dataHoraDeEntrada)) {
+						if(!horaDeAtrasoAntecipadaDetectada) {
+							horaDeAtrasoAntecipadaDetectada = true;
+				           horaAtraso = schedule.getEntryHour() + " "+ formatIntToHourFormat(markerEntryHour) + ":" + formatIntToHourFormat(markerEntryMinute);
+				           newSummaries.add(new SummaryHour.Builder()
+				        		   						   .setTotalHours(horaAtraso)
+				        		   						   .setHourType(HourType.LATE.getCod())
+				        		   						   .build());
+				           System.out.println("Você se atrasou! " + horaAtraso);
+						}
+			        } else if(dataHoraMarcacao.isBefore(dataHoraDeEntrada)){
+			        	horaExtra = formatIntToHourFormat(markerEntryHour) + ":" + formatIntToHourFormat(markerEntryMinute) + " " + schedule.getEntryHour();
+			        	newSummaries.add(new SummaryHour.Builder()
+		   						   .setTotalHours(horaExtra)
+		   						   .setHourType(HourType.OVERTIME.getCod())
+		   						   .build());
+			        	System.out.println("Você se antecipou! " + horaExtra);
+			        }
+
+				} else if(hour < horarioDeEntrada && hour < horarioDeSaida) {
+					/**
+					 * Entrou antes
+					 */
+					if(!horaExtraAntecipadaDetectada) {
+						horaExtraAntecipadaDetectada = true;
+						horaExtra = formatIntToHourFormat(hour) + ":" + formatIntToHourFormat(markerEntryMinute);
+					}
+				} else if(hour == horarioDeEntrada && hour < horarioDeSaida) {
+					/**
+					 * Entrou no horário
+					 */	
+					if(horaExtraAntecipadaDetectada) {
+						/**
+						 * Se tiver encontrado hora extra antesm quer dizer que tinha algo para colocar na variável
+						 */
+						horaExtra += " " + schedule.getEntryHour();
+						
+						newSummaries.add(new SummaryHour.Builder()
+		   						   .setTotalHours(horaExtra)
+		   						   .setHourType(HourType.OVERTIME.getCod())
+		   						   .build());
+						
+						System.out.println("Hora extra antes do expediente: " + horaExtra);
+					} else {
+						/**
+						 * Verifica os minutos
+						 */
+						//Hora Extra
+						if(markerEntryMinute < minutoDeEntrada) {
+							if(!horaExtraAntecipadaDetectada) {
+								horaExtra = formatIntToHourFormat(hour) + ":" + formatIntToHourFormat(markerEntryMinute) + " " + schedule.getEntryHour();
+								horaExtraAntecipadaDetectada = true;
+								
+								System.out.println("Entrou antecipado! " + horaExtra);
+								
+								newSummaries.add(new SummaryHour.Builder()
+				   						   .setTotalHours(horaExtra)
+				   						   .setHourType(HourType.OVERTIME.getCod())
+				   						   .build());	
+							}
+						//Atraso
+						} else if(markerEntryMinute > minutoDeEntrada) {
+							if(!horaDeAtrasoAntecipadaDetectada) {
+								horaAtraso = formatIntToHourFormat(hour) + ":" + formatIntToHourFormat(markerEntryMinute) + " " + schedule.getEntryHour();
+								horaDeAtrasoAntecipadaDetectada = true;
+								
+								System.out.println("Entrou atrasado! " + horaAtraso);
+								
+								newSummaries.add(new SummaryHour.Builder()
+				   						   .setTotalHours(horaAtraso)
+				   						   .setHourType(HourType.LATE.getCod())
+				   						   .build());	
+							}
+						//Entrou no horário
+						} else {
+							System.out.println("Entrou no horário");
+						}
+					}
+				
+				} else if(hour > horarioDeEntrada && hour < horarioDeSaida) {
+					//Se ele encontrou hora extra antes, quer dizer que o funcionário chegou antes do horário...
+					/**
+					 * Entrou Atrasado
+					 */
+					
+					if(hour > horarioDeEntrada && !horaExtraAntecipadaDetectada) {
+						/**
+						 * Se não, ele entrou atrasado
+						 */
+						if(!horaDeAtrasoAntecipadaDetectada) {
+							horaDeAtrasoAntecipadaDetectada = true;
+							horaAtraso = formatIntToHourFormat(hour) + ":" + formatIntToHourFormat(markerEntryMinute);
+						} else {
+							horaAtraso += " " + schedule.getDepartureTime();
+							
+							newSummaries.add(new SummaryHour.Builder()
+			   						   .setTotalHours(horaAtraso)
+			   						   .setHourType(HourType.LATE.getCod())
+			   						   .build());
+							
+							System.out.println("Entrou atrasado: " + horaAtraso);
+						}
+					} else if(hour == markerDepartureHour) {
+						/* Se a hora for igual ao horário de saída marcado, então quer dizer que 
+						 * o funcionário saiu, mas ainda deveria estar no expediente dele e será considerado 
+						 * um atraso
+						 */
+						horaDeAtrasoAposDetectado = true;
+						horaAtraso = formatIntToHourFormat(hour) + ":" + formatIntToHourFormat(markerDepartureMinute) + " " + schedule.getDepartureTime();
+						
+						newSummaries.add(new SummaryHour.Builder()
+		   						   .setTotalHours(horaAtraso)
+		   						   .setHourType(HourType.LATE.getCod())
+		   						   .build());
+						
+						System.out.println("Saiu mais cedo: " + horaAtraso);
+					}
+				
+				} else if(hour > horarioDeEntrada && hour > horarioDeSaida) {
+					/**
+					 * Saiu depois do horário
+					 */	
+					if(!horaExtraAposDetectado) {
+						/**
+						 * Pega o início da hora extra
+						 */
+						horaExtraAposDetectado = true;
+						horaExtra = schedule.getDepartureTime();
+					} else {
+						/**
+						 * Fica atualizando até achar o final da hora extra
+						 */
+						horaExtra += " " + formatIntToHourFormat(hour) + ":" + formatIntToHourFormat(markerDepartureMinute);
+						
+						newSummaries.add(new SummaryHour.Builder()
+		   						   .setTotalHours(horaExtra)
+		   						   .setHourType(HourType.OVERTIME.getCod())
+		   						   .build());
+						
+						System.out.println("Hora extra após o expediente: " + horaExtra);
+					}
+				}
+			}
+		}
 		
+		if(hour < markerDepartureHour) {
+			/**
+			 * Caso ainda tenham sobrado horas, serão horas extras após o expediente
+			 */
+			horaExtra = formatIntToHourFormat(hour) + ":" 
+					 + formatIntToHourFormat(lastMinute) + " "
+					 + formatIntToHourFormat(markerDepartureHour) + ":" 
+					 + formatIntToHourFormat(markerDepartureMinute);
+			
+			newSummaries.add(new SummaryHour.Builder()
+					   .setTotalHours(horaExtra)
+					   .setHourType(HourType.OVERTIME.getCod())
+					   .build());
+			
+			System.out.println("Hora extra após expediente: " + horaExtra);
+		}
+		
+		return newSummaries;
 		
 	}
 	
+	private String formatIntToHourFormat(int time) {
+		String formattedHour = "";
+
+		// 9 --> 09
+		if(time == 0) {
+			formattedHour += "00";
+		// 9 -> 09
+		} else if(time < 10) {
+			formattedHour = "0" + time;
+		} else {
+			formattedHour = time+"";
+		}
+		
+		return formattedHour;
+	}
 
 }

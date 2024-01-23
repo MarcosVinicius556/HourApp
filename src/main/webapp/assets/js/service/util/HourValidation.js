@@ -3,8 +3,8 @@
  * @param {Retorna false caso não seja válido} strHour 
  */
 const validateHour = (strHour) => {
-    let valid = true; 
-    if(strHour === ''){
+    let valid = true;
+    if(strHour.replace('_', '').length !== 5){
         valid = false;
     }
     

@@ -7,9 +7,6 @@
         </div>
         <div class="card-body">
 
-        <div class="form-check form-check"></div>
-        <div class="form-check form-check mb-1"></div>
-
         <label class="swal2-label">Horário de Entrada</label>
         <input type="text" id="schedule-entryHour" class="form-control" placeholder="hh:mm">
 

@@ -45,6 +45,7 @@ $(() => {
             <tr>
                 <td>${summary.summaryId}</td>
                 <td>${summary.totalHours}</td>
+                <td>${summary.hourType}</td>
                 <td>
                     <a class="text-lg text-danger summary-extra-delete" data-id='${summary.summaryId}'>
                         <i class="far fa-trash-alt"></i>
@@ -76,6 +77,7 @@ $(() => {
             <tr>
                 <td>${summary.summaryId}</td>
                 <td>${summary.totalHours}</td>
+                <td>${summary.hourType}</td>
                 <td>
                     <a class="text-lg text-danger summary-late-delete" data-id='{summary.summaryId}'>
                         <i class="far fa-trash-alt"></i>
@@ -138,7 +140,7 @@ $(() => {
         let schedules = await getSelectedSchedules();
         if(!schedules) return;
 
-        let calcMode = $('input[name="calculator-mode"]:checked').val();
+        let calcMode = 1;
 
         let dataToSend = JSON.stringify({
             scheduleIds: schedules,
@@ -156,12 +158,14 @@ $(() => {
                 throw new Error(`Erro na requisição. status: ${response.status}`)
             }
             return response.json();
-        }).then(async () => {
-            await Toast.fire({
+        }).then(() => {
+            
+            Toast.fire({
                 title: "Sucesso",
                 text: "O cálculo foi realizado com sucesso! Verifique o resultado nas tabelas abaixo...",
                 icon: "success"
             });
+
             findAllSummaries();
         }).catch(async (error) => {
             await Swal.fire({
