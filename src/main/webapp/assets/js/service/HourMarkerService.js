@@ -270,7 +270,6 @@ $(() => {
                 <tr>
                     <td>${hourMarker.markerId}</td>
                     <td>${hourMarker.entryHour}</td>
-                    <td>${hourMarker.entryHour}</td>
                     <td>${hourMarker.departureTime}</td>
                     <td>
                         <a class="btn me-3 text-lg text-success marker-update" data-id='${hourMarker.markerId}'>
