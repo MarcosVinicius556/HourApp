@@ -42,6 +42,17 @@ public interface BaseService<Entity extends BaseEntity>{
 			throw new RuntimeException("Não foi possível remover a entidade. Motivo: " + e.getMessage());
 		}
 	}
+	
+	/**
+	 * @param BaseEntity
+	 */
+	default void removeAll(String className) {
+		try {
+			getRepository().removeAll(className);
+		} catch (Exception e) {
+			throw new RuntimeException("Não foi possível remover a entidade. Motivo: " + e.getMessage());
+		}
+	}
 
 	/**
 	 * @param BaseEntity

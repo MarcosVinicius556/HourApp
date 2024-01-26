@@ -12,8 +12,6 @@
                         <tr>
                             <th>#</th>
                             <th>Período</th>
-                            <th>Tipo</th>
-                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle" id="summary-late-table"></tbody>

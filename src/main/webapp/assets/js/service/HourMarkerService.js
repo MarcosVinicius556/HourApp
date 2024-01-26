@@ -45,12 +45,6 @@ $(() => {
             <tr>
                 <td>${summary.summaryId}</td>
                 <td>${summary.totalHours}</td>
-                <td>${summary.hourType}</td>
-                <td>
-                    <a class="text-lg text-danger summary-extra-delete" data-id='${summary.summaryId}'>
-                        <i class="far fa-trash-alt"></i>
-                    </a>
-                </td>
             <tr>
             `;
         });
@@ -77,12 +71,6 @@ $(() => {
             <tr>
                 <td>${summary.summaryId}</td>
                 <td>${summary.totalHours}</td>
-                <td>${summary.hourType}</td>
-                <td>
-                    <a class="text-lg text-danger summary-late-delete" data-id='{summary.summaryId}'>
-                        <i class="far fa-trash-alt"></i>
-                    </a>
-                </td>
             <tr>
             `;
         });

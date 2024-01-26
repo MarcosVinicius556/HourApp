@@ -6,7 +6,7 @@
             <h5 class="card-heading">Marcações de Horário</h5>
         </div>
         <div class="card-body">
-            <div class="table-responsive" style="min-height: 500px; max-height: 500px;">
+            <div class="table-responsive" style="min-height: 300px; max-height: 300px;">
                 <table class="table table-borderless table-hover mb-0">
                     <thead class="light">
                         <tr>

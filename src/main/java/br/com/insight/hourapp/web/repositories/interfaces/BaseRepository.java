@@ -137,6 +137,17 @@ public interface BaseRepository {
 		}
 		return lastId;
 	}
+
+
+	default void removeAll(String className) {
+		MemoryStorage memory = new MemoryStorage();
+		try {
+			memory.removeAllFromMemory(className);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+		}
+	}
 	
 
 }

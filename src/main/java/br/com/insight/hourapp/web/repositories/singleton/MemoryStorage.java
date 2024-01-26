@@ -45,6 +45,10 @@ public class MemoryStorage {
 		MemoryStorage.MEMMORY_DATABASE.get(className).remove(data);
 	}
 	
+	public void removeAllFromMemory(String className) throws Exception {
+		MemoryStorage.MEMMORY_DATABASE.remove(className);
+	}
+	
 	public List<Object> readAllIntoMemory(String className) {
 		if(MemoryStorage.MEMMORY_DATABASE.get(className) == null) {
 			System.out.println("Nenhuma 'Tabela' com o nome " + className + " encontrada! Criando tabela...");

@@ -73,7 +73,9 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 					newSummaries = new ArrayList<>();
 					break;
 			}		
-			
+			//Remove todos os registros
+			removeAll(SummaryHour.class.getName());
+			//Insere apenas os novos
 			newSummaries.forEach(s -> insert(s));  
 			newSummariesDTO = newSummaries.stream().map(s -> new SummaryHourDTO(s)).collect(Collectors.toList());
 			
@@ -129,7 +131,8 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 		
 		//Percorro os horários de trabalho
 		for (WorkSchedule schedule : schedules) {
-			boolean horaExtraAntecipadaDetectada = false;
+			boolean entrouNoHorario = false;
+ 			boolean horaExtraAntecipadaDetectada = false;
 			boolean horaDeAtrasoAntecipadaDetectada = false;
 			
 			boolean horaExtraAposDetectado = false;
@@ -274,6 +277,7 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 							}
 						//Entrou no horário
 						} else {
+							entrouNoHorario = true;
 							System.out.println("Entrou no horário");
 						}
 					}
@@ -284,7 +288,7 @@ private static final Logger logger = Logger.getLogger(HourMarker.class);
 					 * Entrou Atrasado
 					 */
 					
-					if(hour > horarioDeEntrada && !horaExtraAntecipadaDetectada) {
+					if(hour > horarioDeEntrada && !horaExtraAntecipadaDetectada && !entrouNoHorario) {
 						/**
 						 * Se não, ele entrou atrasado
 						 */
